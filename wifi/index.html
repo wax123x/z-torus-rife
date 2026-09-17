@@ -6,7 +6,15 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Z-TORUS RİFE — Frekans & Rife Sistemi</title>
-  <script src="capacitor.js"></script>
+  <!-- capacitor.js: sadece yerel uygulama içinde var, web sunucusunda yoksa sessizce geçilir -->
+  <script>
+    (function() {
+      var s = document.createElement('script');
+      s.src = 'capacitor.js';
+      s.onerror = function() { console.log('[Z-TORUS] Web modu - Capacitor native yok, devam ediliyor.'); };
+      document.head.appendChild(s);
+    })();
+  </script>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0b0f19">
   <meta name="mobile-web-app-capable" content="yes">
