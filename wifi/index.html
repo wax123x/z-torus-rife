@@ -1463,6 +1463,50 @@
     </div>
   </div>
 
+  <!-- Modal: iPhone WiFi Bağlantı Rehberi -->
+  <div class="modal-overlay" id="iphoneWifiModal">
+    <div class="modal-card" style="max-width:480px; padding:28px;">
+      <div style="text-align:center; margin-bottom:16px;">
+        <div style="font-size:44px; margin-bottom:8px;">📱📶</div>
+        <div style="font-size:18px; font-weight:900; color:#f59e0b; margin-bottom:6px;">iPhone WiFi Bağlantısı</div>
+        <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">iPhone'da BLE desteklenmez. ESP32'nin WiFi ağına bağlanarak kontrol edebilirsiniz.</div>
+      </div>
+
+      <div style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.25); border-radius:14px; padding:16px; margin-bottom:16px;">
+        <div style="font-size:13px; font-weight:700; color:#f59e0b; margin-bottom:10px;">📋 3 Adımda Bağlantı:</div>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:13px; color:var(--text-muted); line-height:1.4;">
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <span style="background:rgba(245,158,11,0.2); border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-weight:900; color:#f59e0b; flex-shrink:0; font-size:12px;">1</span>
+            <span>iPhone Ayarlar → <strong style="color:#f8fafc;">WiFi</strong> → <strong style="color:#f59e0b;">Z-TORUS-PEMF</strong> ağına bağlanın <em>(şifre yok)</em></span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <span style="background:rgba(245,158,11,0.2); border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-weight:900; color:#f59e0b; flex-shrink:0; font-size:12px;">2</span>
+            <span>Bu uygulamaya dönün (Safari'de açık tutun)</span>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <span style="background:rgba(245,158,11,0.2); border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; font-weight:900; color:#f59e0b; flex-shrink:0; font-size:12px;">3</span>
+            <span>Aşağıdaki <strong style="color:#34d399;">"Bağlan"</strong> butonuna basın</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;">ESP32 IP Adresi (genelde değiştirmeyin):</div>
+        <input id="wifiApIpInput" type="text" value="192.168.4.1"
+          style="width:100%; background:#0f172a; border:1px solid rgba(245,158,11,0.4); border-radius:10px; padding:10px 14px; color:#f8fafc; font-size:14px; font-weight:700; outline:none;">
+      </div>
+
+      <button onclick="connectViaWiFiAP()"
+        style="width:100%; padding:14px; border-radius:14px; border:none; background:linear-gradient(135deg,#f59e0b,#d97706); color:#000; font-size:15px; font-weight:900; cursor:pointer; margin-bottom:10px;">
+        📶 WiFi Üzerinden Bağlan
+      </button>
+      <button onclick="closeIPhoneWiFiModal()"
+        style="width:100%; padding:12px; border-radius:14px; border:1px solid rgba(255,255,255,0.1); background:transparent; color:var(--text-muted); font-size:13px; cursor:pointer;">
+        İptal
+      </button>
+    </div>
+  </div>
+
   <div class="view-container">
 
     <!-- ════════════════════════════════════════════════════
@@ -1550,6 +1594,11 @@
           <div class="ble-status-pill" id="blePill" onclick="toggleBLE()">
             <div class="ble-dot"></div>
             <span id="bleLabel">Sisteme Bağlan</span>
+          </div>
+          <!-- iPhone için WiFi Bağlantı Butonu (sadece iPhone'da görünür) -->
+          <div id="wifiApBtn" onclick="openIPhoneWiFiModal()"
+            style="display:none; align-items:center; gap:6px; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.4); padding:7px 14px; border-radius:20px; font-size:12px; font-weight:700; color:#f59e0b; cursor:pointer;">
+            📶 WiFi ile Bağlan
           </div>
         </div>
       </div>
@@ -4073,9 +4122,69 @@
       return false;
     }
 
+    // ── iPhone Tespiti ──
+    const isIPhoneDevice = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    // iPhone için WiFi butonunu göster, BLE butonunu gizle
+    window.addEventListener('DOMContentLoaded', () => {
+      if (isIPhoneDevice) {
+        const bleBtn = document.getElementById('blePill');
+        const wifiBtn = document.getElementById('wifiApBtn');
+        if (bleBtn) bleBtn.style.display = 'none';
+        if (wifiBtn) wifiBtn.style.display = 'flex';
+      }
+    });
+
+    // ── iPhone WiFi Bağlantı Modalı ──
+    function openIPhoneWiFiModal() {
+      const m = document.getElementById('iphoneWifiModal');
+      if (m) m.classList.add('show');
+    }
+    function closeIPhoneWiFiModal() {
+      const m = document.getElementById('iphoneWifiModal');
+      if (m) m.classList.remove('show');
+    }
+
+    async function connectViaWiFiAP() {
+      const ip = (document.getElementById('wifiApIpInput') && document.getElementById('wifiApIpInput').value.trim()) || '192.168.4.1';
+      const wsUrl = `ws://${ip}:81`;
+      showToast('WiFi ile bağlanılıyor...', 'ok');
+      closeIPhoneWiFiModal();
+      try {
+        ws = new WebSocket(wsUrl);
+        ws.onopen = () => {
+          isConnected = true;
+          isWiFiConnected = true;
+          bleDevice = { name: `Z-TORUS (${ip})` };
+          updateBLEUI();
+          const wifiBtn = document.getElementById('wifiApBtn');
+          if (wifiBtn) { wifiBtn.style.background = 'rgba(16,185,129,0.2)'; wifiBtn.style.borderColor = 'rgba(16,185,129,0.5)'; wifiBtn.style.color = '#34d399'; wifiBtn.textContent = '📶 WiFi Bağlı'; }
+          showToast('✅ WiFi ile ESP32 Cihazına Bağlandı!', 'ok');
+          speakTurkish('Cihazınıza WiFi üzerinden bağlantı kuruldu.');
+          setTimeout(() => sendCmd('STATUS'), 300);
+        };
+        ws.onmessage = (e) => handleDeviceMessage(e.data);
+        ws.onerror = () => {
+          isConnected = false; isWiFiConnected = false; ws = null;
+          showToast('WiFi bağlantı hatası! ESP32 WiFi ağına bağlı mısınız? (Z-TORUS-PEMF)', 'err');
+          updateBLEUI();
+        };
+        ws.onclose = () => {
+          if (isWiFiConnected) {
+            isConnected = false; isWiFiConnected = false; ws = null;
+            updateBLEUI();
+            showToast('WiFi bağlantısı kesildi.', 'ok');
+          }
+        };
+      } catch(e) {
+        showToast('WebSocket bağlantı hatası: ' + e.message, 'err');
+      }
+    }
+
     // ── BLE Bluetooth Bağlantı Butonu (Hem Mobil Uygulama Hem Web Bluetooth) ──
     async function toggleBLE() {
       if (isConnected) {
+        if (ws) { try { ws.close(); } catch(e){} ws = null; }
         if (bleDevice && bleDevice.gatt && bleDevice.gatt.connected) {
           try { bleDevice.gatt.disconnect(); } catch(e){}
         }
@@ -4083,9 +4192,17 @@
         if (capBle && nativeBleDevice) {
           try { await capBle.disconnect({ deviceId: nativeBleDevice.deviceId }); } catch(e){}
         }
-        isConnected = false; bleDevice = null; writeChar = null; nativeBleDevice = null;
+        isConnected = false; isWiFiConnected = false; bleDevice = null; writeChar = null; nativeBleDevice = null;
+        const wifiBtn = document.getElementById('wifiApBtn');
+        if (wifiBtn && isIPhoneDevice) { wifiBtn.style.cssText = 'display:flex; align-items:center; gap:6px; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.4); padding:7px 14px; border-radius:20px; font-size:12px; font-weight:700; color:#f59e0b; cursor:pointer;'; wifiBtn.innerHTML = '📶 WiFi ile Bağlan'; }
         updateBLEUI();
-        showToast('Bluetooth Bağlantısı Kesildi', 'ok');
+        showToast('Bağlantı Kesildi', 'ok');
+        return;
+      }
+
+      // iPhone ise WiFi modalını aç
+      if (isIPhoneDevice) {
+        openIPhoneWiFiModal();
         return;
       }
 
