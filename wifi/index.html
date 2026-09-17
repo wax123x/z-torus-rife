@@ -6,6 +6,7 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Z-TORUS RİFE — Frekans & Rife Sistemi</title>
+  <script src="capacitor.js"></script>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0b0f19">
   <meta name="mobile-web-app-capable" content="yes">
@@ -3985,7 +3986,15 @@
     // ── ESP32 Ortak Mesaj İşleyici (BLE Notify & WiFi WebSocket) ──
     function handleDeviceMessage(msg) {
       console.log('[ESP32 Mesajı]:', msg);
-        }
+      if (!msg) return;
+
+      if (msg === 'DONE' || msg === 'STOPPED' || msg.startsWith('DONE')) {
+        const banner = document.getElementById('esp32Banner');
+        if (banner) banner.style.display = 'none';
+        showToast('🎉 Frekans Terapisi Tamamlandı!', 'ok');
+        speakTurkish('Frekans terapisi tamamlandı.');
+        triggerVibration([200, 100, 200, 100, 400]);
+        notifyTherapyComplete('Frekans seansınız başarıyla bitti.');
       } else if (msg.startsWith('STATUS:')) {
         const parts = msg.split(',');
         if (parts.length >= 4) {
