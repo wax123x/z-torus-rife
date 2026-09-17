@@ -3296,19 +3296,25 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function initZtorusApp() {
       loadFullDatabase();
 
-      // Sayfa Yenilendiğinde veya Linkle Gelindiğinde Mevcut Ekranı Koru
       const savedScreen = localStorage.getItem('ztorus_active_screen');
+      const accepted = localStorage.getItem('ztorus_disclaimer_accepted');
       const currentHash = window.location.hash;
 
-      if (currentHash === '#app' || savedScreen === 'app') {
+      if ((currentHash === '#app' || savedScreen === 'app') && accepted === 'true') {
         showAppScreen(false);
       } else {
         showWelcomeScreen(false);
       }
-    });
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(initZtorusApp, 10);
+    } else {
+      document.addEventListener('DOMContentLoaded', initZtorusApp);
+    }
 
     window.addEventListener('hashchange', () => {
       if (window.location.hash === '#app') {
@@ -3386,6 +3392,7 @@
     function showAppScreen(updateHash = true) {
       const accepted = localStorage.getItem('ztorus_disclaimer_accepted');
       if (accepted !== 'true') {
+        showWelcomeScreen(false);
         openDisclaimerModal();
         return;
       }
