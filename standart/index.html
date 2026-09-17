@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Z-Torus Standart</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0D0F21">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="images/logo_popup.webp">
+  <link rel="stylesheet" href="home.css?v=2.4.0">
+  <link rel="preload" href="images/o_logo_optimized.webp" as="image">
+  <link rel="preload" href="images/quantum_banner.webp" as="image">
+  <script src="z_vault_core.js?v=2.5.1"></script>
+  <style>
+    .brand-atom {
+      font-size: 28px !important;
+      animation: atomSpin 2s linear infinite !important;
+      display: inline-block !important;
+      background: linear-gradient(135deg, #a855f7, #fbbf24) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+    }
+    @keyframes atomSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .brand-name {
+      font-family: 'Outfit', sans-serif !important;
+      font-size: 20px !important;
+      font-weight: 800 !important;
+      letter-spacing: 2px !important;
+      background: linear-gradient(135deg, #FFD700 0%, #FFF3B0 50%, #B8860B 100%) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      background-clip: text !important;
+      white-space: nowrap !important;
+      text-shadow: 0 10px 20px rgba(0,0,0,0.3) !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- MARKA BAŞLIĞI -->
+    <div class="brand-title">
+      <span class="brand-atom">⚛</span>
+      <span class="brand-name">Z-TORUS STANDART</span>
+    </div>
+
+    <div class="lang-selector-hub">
+      <button class="lang-btn-hub" id="langBtnHub" onclick="toggleLangDropdownHub()">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+      </button>
+      <div class="lang-dropdown-hub" id="langDropdownHub">
+        <div class="lang-option" data-value="tr-TR" data-flag="tr" onclick="selectLangHub(this)">
+          <img src="https://flagcdn.com/w40/tr.webp"> <span>Türkçe</span>
+        </div>
+        <div class="lang-option" data-value="en-US" data-flag="us" onclick="selectLangHub(this)">
+          <img src="https://flagcdn.com/w40/us.webp"> <span>English</span>
+        </div>
+        <div class="lang-option" data-value="de-DE" data-flag="de" onclick="selectLangHub(this)">
+          <img src="https://flagcdn.com/w40/de.webp"> <span>Deutsch</span>
+        </div>
+        <div class="lang-option" data-value="ru-RU" data-flag="ru" onclick="selectLangHub(this)">
+          <img src="https://flagcdn.com/w40/ru.webp"> <span>Русский</span>
+        </div>
+        <div class="lang-option" data-value="fr-FR" data-flag="fr" onclick="selectLangHub(this)">
+          <img src="https://flagcdn.com/w40/fr.webp"> <span>Français</span>
+        </div>
+        <div class="lang-option" data-value="es-ES" data-flag="es" onclick="selectLangHub(this)">
+          <img src="https://flagcdn.com/w40/es.webp"> <span>Español</span>
+        </div>
+        <div class="lang-option" data-value="it-It" data-flag="it" onclick="selectLangHub(this)">
+          <img src="https://flagcdn.com/w40/it.webp"> <span>Italiano</span>
+        </div>
+        <div class="lang-option" data-value="pt-PT" data-flag="pt" onclick="selectLangHub(this)">
+          <img src="https://flagcdn.com/w40/pt.webp"> <span>Português (PT)</span>
+        </div>
+        <div class="lang-option" data-value="pt" data-flag="br" onclick="selectLangHub(this)">
+          <img src="https://flagcdn.com/w40/br.webp"> <span>Português (BR)</span>
+        </div>
+        <div class="lang-option" data-value="is-IS" data-flag="is" onclick="selectLangHub(this)">
+          <img src="https://flagcdn.com/w40/is.webp"> <span>Íslenska</span>
+        </div>
+        <div class="lang-option" data-value="ar-SA" data-flag="sa" onclick="selectLangHub(this)">
+          <img src="https://flagcdn.com/w40/sa.webp"> <span>العربية</span>
+        </div>
+        <div class="lang-option" data-value="az-AZ" data-flag="az" onclick="selectLangHub(this)">
+          <img src="https://flagcdn.com/w40/az.webp"> <span>Azərbaycan</span>
+        </div>
+      </div>
+    </div>
+
+    <main class="menu-grid home-grid">
+      <!-- BANNER KARTI -->
+      <div class="menu-card banner-card">
+        <div class="card-bg" style="background-image: url('images/quantum_banner.webp')"></div>
+        <div class="card-overlay"></div>
+      </div>
+
+      <!-- UYGULAMA KARTI -->
+      <a href="player.html" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/menu_app_bg.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2z"/></svg>
+            <span data-i18n="hub_card_app_title">PEMF Uygulaması</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_app_subtitle">Hücresel Frekans Terapisi & Rife Motoru</p>
+        </div>
+      </a>
+
+
+      
+      <!-- ÇAKRALAR KARTI -->
+      <a href="player.html?q=Çakra,Pineal,Epifiz" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/menu_chakras.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/></svg>
+            <span data-i18n="hub_card_chakras_title">Çakralar & Pineal</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_chakras_subtitle">Enerji Merkezleri & Epifiz Aktivasyonu</p>
+        </div>
+      </a>
+
+      <!-- DETOKS KARTI -->
+      <a href="player.html?q=Detoks" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/menu_detox.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            <span data-i18n="hub_card_detox_title">Detoks</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_detoks_subtitle">Hücresel Temizlik & Arınma</p>
+        </div>
+      </a>
+
+      <!-- KİLO KONTROL KARTI -->
+      <a href="player.html?q=Kilo" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/menu_weight.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14 4.14 5.57 2 7.71 3.43 9.14 2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22 14.86 20.57 16.29 22 18.43 19.86 19.86 21.29 21.29 19.86 19.86 18.43 22 16.29 20.57 14.86z"/></svg>
+            <span data-i18n="hub_card_weight_title">Kilo Kontrol</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_weight_subtitle">Metabolizma & Form Yönetimi</p>
+        </div>
+      </a>
+
+      <!-- CİLT SAĞLIĞI KARTI -->
+      <a href="player.html?q=Cilt" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/menu_skin.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span data-i18n="hub_card_skin_title">Cilt Sağlığı</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_skin_subtitle">Cilt Yenileme & Parlaklık</p>
+        </div>
+      </a>
+
+      <!-- ALLERJİ KARTI -->
+      <a href="player.html?q=Alerji" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/menu_allergies.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.47 4.34-3.1 8.16-7 9.43V11.99H5V6.3l7-3.11v8.8z"/></svg>
+            <span data-i18n="hub_card_allergy_title">Allerjiler</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_allergy_subtitle">Bağışıklık Desteği & Rahatlama</p>
+        </div>
+      </a>
+
+      <!-- GENEL İYİLEŞME KARTI -->
+      <a href="player.html?q=İyileşme" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/menu_general.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.36 12.3l-1.41 1.41L12 13.41l-1.95 1.95-1.41-1.41L10.59 12l-1.95-1.95 1.41-1.41L12 10.59l1.95-1.95 1.41 1.41L13.41 12l1.95 1.95z"/></svg>
+            <span data-i18n="hub_card_healing_title">Genel İyileşme</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_healing_subtitle">Vücut Onarımı & Vitalite</p>
+        </div>
+      </a>
+
+      <!-- AĞRI YÖNETİMİ KARTI -->
+      <a href="player.html?q=Ağrı" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/menu_pain.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M10.5 20c.2 0 .4-.1.5-.2l5.4-5.4c.5-.5.5-1.3 0-1.8l-5.4-5.4c-.1-.1-.3-.2-.5-.2s-.4.1-.5.2L4.6 12.6c-.5.5-.5 1.3 0 1.8l5.4 5.4c.1.1.3.2.5.2zM12 2L4 5v6c0 5.5 3.8 10.7 9 12s9-6.5 9-12V5l-8-3z"/></svg>
+            <span data-i18n="hub_card_pain_title">Ağrı Yönetimi</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_pain_subtitle">Kronik & Bölgesel Rahatlama</p>
+        </div>
+      </a>
+
+      <!-- OMURGA SAĞLIĞI KARTI -->
+      <a href="player.html?q=Omurga" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/menu_spine.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 3c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 14c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-7c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-7 2c0-1.1-.9-2-2-2s-2 .9-2 2 .9 2 2 2 2-.9 2-2zm14 0c0-1.1.9-2 2-2s2 .9-2 2-.9 2 2 2 2-.9 2-2z"/></svg>
+            <span data-i18n="hub_card_spine_title">Omurga Sağlığı</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_spine_subtitle">Bel, Boyun & Eklem Desteği</p>
+        </div>
+      </a>
+
+      <!-- SAÇ BAKIMI KARTI -->
+      <a href="player.html?q=Saç" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/menu_hair.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span data-i18n="hub_card_hair_title">Saç Bakımı</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_hair_subtitle">Saç Kökü & Kafa Derisi Sağlığı</p>
+        </div>
+      </a>
+
+      <!-- KALP SAĞLIĞI KARTI -->
+      <a href="player.html?q=Kalp" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/menu_heart.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <span data-i18n="hub_card_heart_title">Kalp Sağlığı</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_heart_subtitle">Kardiyovasküler Destek & Ritim</p>
+        </div>
+      </a>
+
+      <!-- PSİKOLOJİK BAKIM KARTI -->
+      <a href="player.html?q=Depresyon" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/menu_psych.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10zm1-11h2v2h-2v2h-2v-2H9v-2h2V9h2v2z"/></svg>
+            <span data-i18n="hub_card_psych_title">Psikolojik Bakım</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_psych_subtitle">Zihinsel Denge & Stres Yönetimi</p>
+        </div>
+      </a>
+
+
+
+      <!-- BLOKAJ KALDIRMA KARTI -->
+      <a href="player.html?q=Blokaj" class="menu-card" onclick="return handleAppClick(event)">
+        <div class="card-bg" style="background-image: url('images/hub_blockage_v1.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"/></svg>
+            <span data-i18n="hub_card_blockage_title">Blokaj Kaldırma</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_blockage_subtitle">Enerjik Arınma & Temizleme</p>
+        </div>
+      </a>
+
+
+
+      <!-- WEB SİTESİ KARTI -->
+      <a href="https://www.z-torusenergy.com" target="_blank" class="menu-card">
+        <div class="card-bg" style="background-image: url('images/menu_site_bg.gif')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+            <span data-i18n="hub_card_site_title">Ürünlerimizi İnceleyin</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_site_subtitle">Yeni Nesil Enerji Cihazları Mağazası</p>
+        </div>
+      </a>
+
+      <!-- BİLGİ KARTI -->
+      <a href="info.html" class="menu-card">
+        <div class="card-bg" style="background-image: url('images/menu_info_bg.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            <span data-i18n="hub_card_info_title">Bilgi & Eğitim</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_info_subtitle">PEMF Rehberleri ve Frekans Uzmanlığı</p>
+        </div>
+      </a>
+
+      <!-- DESTEK KARTI -->
+      <a href="https://api.whatsapp.com/send?phone=+905357443436" target="_blank" class="menu-card">
+        <div class="card-bg" style="background-image: url('images/menu_support_bg.webp')"></div>
+        <div class="card-overlay"></div>
+        <div class="card-content">
+          <h2 class="card-title">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+            <span data-i18n="hub_card_support_title">Destek ve İletişim</span>
+          </h2>
+          <p class="card-subtitle" data-i18n="hub_card_support_subtitle">Uzman Ekibimizle Hemen Bağlanın</p>
+        </div>
+      </a>
+    </main>
+
+    <footer class="footer-info">
+      <p class="info-text" data-i18n="hub_footer">Frekansların Gücüne Dokun!</p>
+      
+      <!-- Kurulum Rehberi Linki -->
+      <a href="kurulum.html?v=1.2" data-i18n="btn_how_to_install" style="display: inline-block; margin: 10px 5px; color: var(--accent-purple); text-decoration: none; font-size: 14px; font-weight: 600; border: 1px solid var(--accent-purple); padding: 8px 20px; border-radius: 20px; transition: all 0.3s; background: transparent;" onmouseover="this.style.background='var(--accent-purple)'; this.style.color='white'" onmouseout="this.style.background='transparent'; this.style.color='var(--accent-purple)'">
+        NASIL KURULUR?
+      </a>
+      <button id="notifyToggle" onclick="toggleNotifications()" data-i18n="btn_notifications" style="display: inline-block; margin: 10px 5px; color: var(--text-dim); text-decoration: none; font-size: 14px; font-weight: 600; border: 1px solid rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 20px; transition: all 0.3s; background: transparent; cursor: pointer;" onmouseover="this.style.borderColor='var(--accent-purple)'; this.style.color='white'" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)'; this.style.color='var(--text-dim)'">
+        BİLDİRİMLER
+      </button>
+ 
+      <div class="version-label">v2.5.1</div>
+      <!-- Native Engine Ready -->
+      <div class="social-links">
+        <a href="https://www.instagram.com/bioenerji_kozmik_enerji_anteni/" target="_blank" class="social-icon" title="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="#" class="social-icon" title="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+        </a>
+        <a href="#" class="social-icon" title="YouTube">
+          <svg viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+        </a>
+      </div>
+      <p class="info-text">© 2026 Z-Torus Energy</p>
+    </footer>
+  </div>
+
+  <script src="translations.js"></script>
+  <script>
+    function toggleLangDropdownHub() {
+      document.getElementById('langDropdownHub').classList.toggle('open');
+    }
+
+    function selectLangHub(el) {
+      const val = el.dataset.value;
+      localStorage.setItem('zlang', val);
+      translateHub();
+      setupNotifications(); // Dili değiştirince bildirim butonunu da tazele
+      document.getElementById('langDropdownHub').classList.remove('open');
+      document.documentElement.dir = (val === 'ar-SA') ? 'rtl' : 'ltr';
+    }
+
+    function handleAppClick(e) {
+      if (!window.ZVault || !window.ZVault.isActivated()) {
+        if (e) e.preventDefault();
+        if (window.ZVault) window.ZVault.init();
+        return false;
+      }
+      return true;
+    }
+
+    function translateHub() {
+      const lang = localStorage.getItem('zlang') || 'tr-TR';
+      const dict = i18n[lang] || i18n['en-US'];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        // Bildirim butonunu translateHub'ın ezmesine izin verme, setupNotifications halledecek
+        if (el.id === 'notifyToggle') return; 
+        if (dict[key]) el.textContent = dict[key];
+      });
+      // Update active state in dropdown
+      document.querySelectorAll('#langDropdownHub .lang-option').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.value === lang);
+      });
+    }
+
+    window.addEventListener('load', () => {
+      translateHub();
+    });
+
+    window.addEventListener('click', (e) => {
+      if (!document.getElementById('langBtnHub').contains(e.target)) {
+        document.getElementById('langDropdownHub').classList.remove('open');
+      }
+    });
+
+    // PWA Service Worker APK içinde devre dışı bırakıldı.
+
+    // --- PWA KURULUM BANNERI ---
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      // Kurulum bannerını göster (3 saniye gecikmeli)
+      setTimeout(showInstallBanner, 3000);
+    });
+
+    function showInstallBanner() {
+      const banner = document.createElement('div');
+      banner.id = 'pwaBanner';
+      banner.style.cssText = `
+        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+        width: 90%; max-width: 400px; background: linear-gradient(135deg, #1A1D3A, #0D0F21);
+        color: white; padding: 20px; border-radius: 24px; z-index: 10001;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.8); backdrop-filter: blur(20px);
+        border: 1px solid rgba(184, 133, 245, 0.5); display: flex; flex-direction: column; gap: 15px;
+        animation: bannerSlideDown 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      `;
+      banner.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <img src="images/logo_popup.webp" style="width: 50px; height: 50px; border-radius: 12px; box-shadow: 0 5px 15px rgba(184, 133, 245, 0.3);">
+          <div style="flex: 1;">
+            <h4 style="margin: 0; font-size: 16px; font-weight: 700;">Z-TORUS Standart</h4>
+            <p style="margin: 3px 0 0 0; font-size: 12px; color: rgba(255,255,255,0.7);">Daha hızlı erişim için ana ekrana ekleyin</p>
+          </div>
+          <button onclick="dismissPwaBanner()" style="background: none; border: none; color: white; font-size: 20px; cursor: pointer;">&times;</button>
+        </div>
+        <button id="pwaInstallBtn" style="background: #B885F5; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14px; box-shadow: 0 4px 15px rgba(184, 133, 245, 0.4);">UYGULAMAYI YÜKLE</button>
+      `;
+      document.body.appendChild(banner);
+
+      document.getElementById('pwaInstallBtn').addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          const btn = document.getElementById('pwaInstallBtn');
+          btn.style.pointerEvents = 'none';
+          btn.innerHTML = `
+            YÜKLENİYOR...
+            <div style="margin-top: 8px; width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; overflow: hidden;">
+              <div style="height: 100%; background: #FFF; animation: loadingBar 3s ease-out forwards;"></div>
+            </div>
+          `;
+          setTimeout(() => {
+            btn.innerHTML = 'YÜKLENDİ ✔';
+            btn.style.background = '#10B981'; // Yeşil renk
+            setTimeout(() => dismissPwaBanner(), 1500);
+          }, 3000);
+        }
+      });
+    }
+
+    function dismissPwaBanner() {
+      const banner = document.getElementById('pwaBanner');
+      if (banner) {
+        banner.style.animation = 'bannerSlideUp 0.4s ease-in forwards';
+        setTimeout(() => banner.remove(), 400);
+      }
+      localStorage.setItem('pwa_prompt_dismissed_v2', 'true');
+    }
+
+    function dismissNotifyBanner() {
+      const banner = document.getElementById('notifyBanner');
+      if (banner) {
+        banner.style.animation = 'bannerSlideUp 0.4s ease-in forwards';
+        setTimeout(() => banner.remove(), 400);
+      }
+      localStorage.setItem('notify_prompt_dismissed_v1', 'true');
+    }
+
+    // iOS İÇİN ÖZEL YARDIM (Sadece Safari'de ise)
+    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+    if (isIos && !isStandalone && !localStorage.getItem('pwa_prompt_dismissed_v2')) {
+      setTimeout(() => {
+        const iosBanner = document.createElement('div');
+        iosBanner.id = 'pwaBanner';
+        iosBanner.style.cssText = `
+          position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+          width: 90%; max-width: 400px; background: rgba(26, 29, 58, 0.98);
+          color: white; padding: 20px; border-radius: 24px; z-index: 10001;
+          box-shadow: 0 -10px 40px rgba(0,0,0,0.6); backdrop-filter: blur(20px);
+          border: 1px solid rgba(184, 133, 245, 0.4); text-align: center;
+          animation: bannerSlideUpIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        `;
+        iosBanner.innerHTML = `
+          <h4 style="margin: 0 0 10px 0;">iPhone'a Yükleyin</h4>
+          <p style="font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.8); margin-bottom: 15px;">
+            Bu uygulamayı ana ekrana eklemek için alttaki <b>Paylaş</b> butonuna basın ve ardından <b>Ana Ekrana Ekle</b>'yi seçin.
+          </p>
+          <button onclick="dismissPwaBanner()" style="width: 100%; background: #B885F5; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer;">TAMAM</button>
+        `;
+        document.body.appendChild(iosBanner);
+      }, 3000);
+    }
+
+    // Animasyon CSS'lerini ekle
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes bannerSlideDown { from { top: -200px; opacity: 0; } to { top: 20px; opacity: 1; } }
+      @keyframes bannerSlideUp { from { top: 20px; opacity: 1; } to { top: -200px; opacity: 0; } }
+      @keyframes bannerSlideUpIn { from { bottom: -200px; opacity: 0; } to { bottom: 20px; opacity: 1; } }
+      @keyframes loadingBar { 0% { width: 0%; } 50% { width: 70%; } 100% { width: 100%; } }
+    `;
+    document.head.appendChild(style);
+
+    // --- BİLDİRİM YÖNETİMİ ---
+    function setupNotifications() {
+      if (!("Notification" in window)) return;
+      const btn = document.getElementById('notifyToggle');
+      if (!btn) return;
+
+      const lang = localStorage.getItem('zlang') || 'tr-TR';
+      const dict = i18n[lang] || i18n['en-US'];
+      const baseText = dict['btn_notifications'] || 'BİLDİRİMLER';
+
+      // localStorage'dan durumu al (varsayılan: açık/false)
+      const isMuted = localStorage.getItem('notifications_muted') === 'true';
+
+      if (Notification.permission === "granted") {
+        if (isMuted) {
+          // TAMAMEN KAPALI DURUMU
+          btn.style.background = "rgba(255, 255, 255, 0.05)";
+          btn.style.borderColor = "rgba(255, 255, 255, 0.2)";
+          btn.style.color = "rgba(255, 255, 255, 0.5)";
+          btn.style.opacity = "0.7";
+          btn.textContent = baseText + ": " + (dict['notify_off'] || 'KAPALI');
+        } else {
+          // TAMAMEN AÇIK DURUMU
+          btn.style.background = "rgba(184, 133, 245, 0.1)";
+          btn.style.borderColor = "var(--accent-purple)";
+          btn.style.color = "#FFFFFF";
+          btn.style.opacity = "1";
+          btn.textContent = baseText + ": " + (dict['notify_on'] || 'AÇIK');
+        }
+      } else if (Notification.permission === "denied") {
+        btn.style.borderColor = "#ff4444";
+        btn.style.background = "rgba(255, 68, 68, 0.1)";
+        btn.style.color = "#ff4444";
+        btn.textContent = baseText + ": " + (dict['notify_blocked'] || 'ENGELLENDİ');
+      } else {
+        btn.textContent = baseText;
+      }
+    }
+
+    async function toggleNotifications() {
+      try {
+        if (!("Notification" in window)) return;
+
+        if (Notification.permission === "default") {
+          const permission = await Notification.requestPermission();
+          if (permission === "granted") {
+            localStorage.setItem('notifications_muted', 'false');
+          }
+        } else if (Notification.permission === "granted") {
+          const isMutedNow = localStorage.getItem('notifications_muted') === 'true';
+          localStorage.setItem('notifications_muted', isMutedNow ? 'false' : 'true');
+        } else {
+          alert("Bildirimler engellenmiş. Lütfen tarayıcı ayarlarından izin verin.");
+        }
+        setupNotifications();
+      } catch (e) {
+        console.error("Notify toggle error:", e);
+      }
+    }
+
+    function showLocalNotification(title, body) {
+      const isMuted = localStorage.getItem('notifications_muted') === 'true';
+      if (isMuted || Notification.permission !== "granted") return;
+
+      new Notification(title, { 
+        body: body,
+        icon: "images/logo_popup.webp"
+      });
+    }
+
+    window.addEventListener('load', () => {
+      setupNotifications();
+      
+      // BİLDİRİM İZNİ POP-UP'I (10 saniye sonra)
+      setTimeout(() => {
+        if ("Notification" in window && Notification.permission === "default" && localStorage.getItem('notify_prompt_dismissed_v1') !== 'true') {
+          const notifyBanner = document.createElement('div');
+          notifyBanner.id = 'notifyBanner';
+          notifyBanner.style.cssText = `
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; background: rgba(26, 29, 58, 0.95);
+            color: white; padding: 20px; border-radius: 24px; z-index: 10000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+            border: 1px solid rgba(184, 133, 245, 0.4); display: flex; flex-direction: column; gap: 15px;
+            animation: bannerSlideDown 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+          `;
+          notifyBanner.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 15px;">
+              <div style="font-size: 28px;">🔔</div>
+              <div style="flex: 1;">
+                <h4 style="margin: 0; font-size: 15px; font-weight: 700;">Bildirimleri Açın</h4>
+                <p style="margin: 3px 0 0 0; font-size: 12px; color: rgba(255,255,255,0.8); line-height: 1.4;">Yeni frekanslardan ve önemli güncellemelerden anında haberdar olmak ister misiniz?</p>
+              </div>
+              <button onclick="dismissNotifyBanner()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            <button id="notifyEnableBtn" style="background: #B885F5; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14px;">EVET, İZİN VER</button>
+          `;
+          document.body.appendChild(notifyBanner);
+
+          document.getElementById('notifyEnableBtn').addEventListener('click', async () => {
+            dismissNotifyBanner();
+            const permission = await Notification.requestPermission();
+            if (permission === "granted") {
+              localStorage.setItem('notifications_muted', 'false');
+              setupNotifications();
+            }
+          });
+        }
+      }, 10000); // 10 saniye bekle
+      
+      // SERVICE WORKER KAYDI VE GÜNCELLEME KONTROLÜ
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').then(reg => {
+          console.log('SW Registered:', reg.scope);
+          
+          // Yeni sürüm kontrolü
+          reg.onupdatefound = () => {
+            const installingWorker = reg.installing;
+            installingWorker.onstatechange = () => {
+              if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                console.log('Yeni sürüm algılandı, güncelleniyor...');
+              }
+            };
+          };
+        });
+
+        // Yeni SW aktif olduğunda sayfayı otomatik yenile
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

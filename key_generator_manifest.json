@@ -1,0 +1,21 @@
+{
+  "name": "Z-Torus Key",
+  "short_name": "KeyGen",
+  "description": "Z-Torus Özel Lisans Anahtarı Üretici",
+  "start_url": "key.html",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#7c3aed",
+  "icons": [
+    {
+      "src": "ztorus_key_icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "ztorus_key_icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

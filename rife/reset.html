@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z-Vault Sistem Sıfırlayıcı</title>
+    <style>
+        body { background: #0D0F21; color: white; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+        .card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); max-width: 400px; }
+        button { background: #AD5AE2; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 16px; }
+        .log { margin-top: 20px; font-size: 12px; color: #4ade80; text-align: left; background: black; padding: 10px; border-radius: 5px; height: 100px; overflow-y: auto; display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2 style="color: #FFD700;">Z-VAULT KURTARMA</h2>
+        <p>Tarayıcıdaki tüm önbellek ve eski anahtarlar temizlenecektir.</p>
+        <button onclick="nukeEverything()">SİSTEMİ SIFIRLA VE BAŞLAT</button>
+        <div id="logBox" class="log"></div>
+    </div>
+
+    <script>
+        async function nukeEverything() {
+            const logBox = document.getElementById('logBox');
+            logBox.style.display = 'block';
+            const log = (msg) => { logBox.innerHTML += "> " + msg + "<br>"; };
+
+            log("Temizlik başlatıldı...");
+
+            // 1. LocalStorage Temizliği
+            localStorage.clear();
+            log("Cihaz ID ve Anahtarlar silindi.");
+
+            // 2. Service Worker Temizliği
+            if ('serviceWorker' in navigator) {
+                try {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    for (let registration of registrations) {
+                        await registration.unregister();
+                        log("Service Worker kaldırıldı.");
+                    }
+                } catch (e) { log("SW hatası: " + e); }
+            }
+
+            // 3. Cache Storage Temizliği
+            if ('caches' in window) {
+                const names = await caches.keys();
+                for (let name of names) {
+                    await caches.delete(name);
+                    log("Cache silindi: " + name);
+                }
+            }
+
+            log("BİTTİ! 3 saniye içinde ana sayfaya yönlendiriliyorsunuz...");
+            
+            setTimeout(() => {
+                window.location.replace('index.html');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

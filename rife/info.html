@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Z-Torus Academy | Bilgi & Eğitim</title>
+  <link rel="stylesheet" href="info.css">
+  <script src="z_vault_core.js?v=2.5.1"></script>
+
+  <script src="translations.js"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <div class="lang-selector-hub">
+      <button class="lang-btn-hub" id="langBtnHub" onclick="toggleLangDropdownHub()">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+      </button>
+      <div class="lang-dropdown-hub" id="langDropdownHub">
+        <!-- Languages populated later via script or hardcoded same as index.html -->
+        <div class="lang-option" data-value="tr-TR" onclick="selectLangHub(this)"><img src="https://flagcdn.com/w40/tr.png"> <span>Türkçe</span></div>
+        <div class="lang-option" data-value="en-US" onclick="selectLangHub(this)"><img src="https://flagcdn.com/w40/us.png"> <span>English</span></div>
+        <div class="lang-option" data-value="de-DE" onclick="selectLangHub(this)"><img src="https://flagcdn.com/w40/de.png"> <span>Deutsch</span></div>
+        <div class="lang-option" data-value="fr-FR" onclick="selectLangHub(this)"><img src="https://flagcdn.com/w40/fr.png"> <span>Français</span></div>
+        <div class="lang-option" data-value="es-ES" onclick="selectLangHub(this)"><img src="https://flagcdn.com/w40/es.png"> <span>Español</span></div>
+        <div class="lang-option" data-value="it-It" onclick="selectLangHub(this)"><img src="https://flagcdn.com/w40/it.png"> <span>Italiano</span></div>
+        <div class="lang-option" data-value="pt-PT" onclick="selectLangHub(this)"><img src="https://flagcdn.com/w40/pt.png"> <span>Português (PT)</span></div>
+        <div class="lang-option" data-value="pt" onclick="selectLangHub(this)"><img src="https://flagcdn.com/w40/br.png"> <span>Português (BR)</span></div>
+        <div class="lang-option" data-value="is-IS" onclick="selectLangHub(this)"><img src="https://flagcdn.com/w40/is.png"> <span>Íslenska</span></div>
+        <div class="lang-option" data-value="ar-SA" onclick="selectLangHub(this)"><img src="https://flagcdn.com/w40/sa.png"> <span>العربية</span></div>
+      </div>
+    </div>
+
+    <div class="info-container">
+      
+      <div class="back-header">
+        <a href="index.html" class="back-btn">
+          <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+          <span data-i18n="info_nav_back">Ana Sayfaya Dön</span>
+        </a>
+      </div>
+
+      <header>
+        <h1 class="page-title">Z-Torus Academy</h1>
+        <p class="page-subtitle" data-i18n="info_page_subtitle">PEMF Teknolojisi ve Hücresel Şifa Hakkında Her Şey</p>
+      </header>
+
+      <section class="info-sections">
+        
+        <!-- PEMF NEDİR KARTI -->
+        <div class="info-card">
+          <div class="info-card-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2zm0-6h2v4h-2z"/></svg>
+          </div>
+          <h2 class="info-card-title" data-i18n="info_pemf_card_title">PEMF Nedir?</h2>
+          <p class="info-card-text" data-i18n="info_pemf_card_text">
+            Darbeli Elektro-Manyetik Alan (PEMF) terapisi, hücreleri uyarmak ve egzersiz yaptırmak için teknolojiyi kullanarak hücresel işlev bozukluklarının giderilmesine yardımcı olur. Hücreleriniz için bir pil şarjı gibi davranan bu yöntem, vücudun doğal enerjisini güçlendirir ve iyileşme mekanizmalarını tetikler.
+          </p>
+          <div class="info-card-benefits">
+            <h3 style="font-size: 14px; color: var(--accent-purple); margin-bottom: 8px;" data-i18n="info_benefits_title">Temel Faydaları:</h3>
+            <ul style="font-size: 13px; color: var(--text-dim); padding-left: 20px; line-height: 1.6;">
+              <li data-i18n="info_benefit_1">Doğal İyileşme Mekanizması</li>
+              <li data-i18n="info_benefit_2">Hücresel Fonksiyon Onarımı</li>
+              <li data-i18n="info_benefit_3">Ağrı ve İltihap Yönetimi</li>
+              <li data-i18n="info_benefit_4">Zindelik ve Performans Artışı</li>
+            </ul>
+          </div>
+          <button class="learn-more-btn" onclick="openModal()" style="margin-top: 20px; background:none; border:none; cursor:pointer;" data-i18n="info_btn_details">Teknik Detayları Gör →</button>
+        </div>
+
+        <!-- CİHAZ KURULUMU -->
+        <div class="info-card">
+          <div class="info-card-icon">
+            <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+          </div>
+          <h2 class="info-card-title" data-i18n="info_guide_card_title">Kullanım Rehberi</h2>
+          <p class="info-card-text" data-i18n="info_guide_card_text">Z-Torus cihazınızı nasıl kuracağınızı, Bluetooth bağlantısını ve ilk test adımlarını öğrenin.</p>
+          <button class="learn-more-btn" onclick="openUsageModal()" style="background:none; border:none; cursor:pointer;" data-i18n="info_btn_setup">Kurulum Adımlarını Gör →</button>
+        </div>
+
+      </section>
+
+      <section class="faq-section">
+        <h2 class="page-title" style="font-size: 24px;" data-i18n="info_faq_title">Sıkça Sorulan Sorular</h2>
+        
+        <!-- KATEGORİ 1: GÜVENLİK -->
+        <h3 class="faq-category-title" data-i18n="info_faq_cat_safety">
+          <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2zm0-6h2v4h-2z"/></svg>
+          Kontrendikasyonlar ve Güvenlik
+        </h3>
+        
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <div class="faq-question">
+            <span data-i18n="info_faq_q1">Kalp pili olanlar kullanabilir mi?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="faq-answer" data-i18n="info_faq_a1">
+            Hayır. Kalp pili, defibrilatör veya diğer implante edilmiş elektronik cihazları olanların PEMF cihazlarını kullanması önerilmez; manyetik alan bu aygıtların çalışmasını bozabilir.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <div class="faq-question">
+            <span data-i18n="info_faq_q2">Hamilelikte kullanım uygun mudur?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="faq-answer" data-i18n="info_faq_a2">
+            Hamile bireyler üzerinde yeterli klinik veri bulunmadığı için hamilelik döneminde kullanımı tavsiye edilmez.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <div class="faq-question">
+            <span data-i18n="info_faq_q3">Vücutta metal implant olması engel midir?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="faq-answer" data-i18n="info_faq_a3">
+            Ortopedik metal plakalar veya vidalar genellikle engel teşkil etmez ancak cihazı direkt olarak bu bölgelerin üzerine yerleştirmeden önce doktorunuza danışmanız önerilir.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <div class="faq-question">
+            <span data-i18n="info_faq_q4">Başkaları için risk oluşturur mu?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="faq-answer" data-i18n="info_faq_a4">
+            Manyetik alan cihazın çok yakınında (birkaç santimetre) etkilidir. Yanınızda oturan ancak cihazı kullanmayan kişiler için bir risk teşkil etmez.
+          </div>
+        </div>
+
+        <!-- KATEGORİ 2: BİYOLOJİK ETKİLER -->
+        <h3 class="faq-category-title" data-i18n="info_faq_cat_bio">
+          <svg viewBox="0 0 24 24"><path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"/></svg>
+          Biyolojik ve Fizyolojik Etkiler
+        </h3>
+
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <div class="faq-question">
+            <span data-i18n="info_faq_q5">Ağrı kesici etkisi nasıl çalışır?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="faq-answer" data-i18n="info_faq_a5">
+            PEMF, sinir hücrelerinin sinyal iletimini düzenleyerek ve inflamasyonu azaltarak anlık rahatlama sağlar. Ayrıca endorfin salınımını tetikleyebilir.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <div class="faq-question">
+            <span data-i18n="info_faq_q6">Şişlik ve ödem üzerinde etkili midir?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="faq-answer" data-i18n="info_faq_a6">
+            Evet. Mikro sirkülasyonu hızlandırarak kan akışını artırır ve hücreler arasındaki fazla sıvının (ödemin) daha hızlı atılmasına yardımcı olur.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <div class="faq-question">
+            <span data-i18n="info_faq_q7">Uyku kalitesini artırır mı?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="faq-answer" data-i18n="info_faq_a7">
+            Özellikle düşük frekanslı programlar, melatonin üretimini destekleyerek ve stres seviyesini düşürerek daha derin ve dinlendirici bir uyku sağlar.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <div class="faq-question">
+            <span data-i18n="info_faq_q8">Bağışıklık sistemini destekler mi?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="faq-answer" data-i18n="info_faq_a8">
+            Hücresel düzeyde oksijenlenmeyi artırarak ve lenfatik drenajı hızlandırarak vücudun savunma mekanizmasını güçlendirmeye yardımcı olur.
+          </div>
+        </div>
+
+        <!-- KATEGORİ 3: KULLANIM REHBERİ -->
+        <h3 class="faq-category-title" data-i18n="info_faq_cat_guide">
+          <svg viewBox="0 0 24 24"><path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/></svg>
+          Kullanım İpuçları
+        </h3>
+
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <div class="faq-question">
+            <span data-i18n="info_faq_q9">Bir seans ne kadar sürmeli?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="faq-answer" data-i18n="info_faq_a9">
+            İdeal seans süresi 15 ila 30 dakika arasındadır. Akut durumlarda günde 2-3 seans, genel sağlık için ise günde 1 seans yeterlidir.
+          </div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('active')">
+          <div class="faq-question">
+            <span data-i18n="info_faq_q10">Yan etkisi var mıdır?</span>
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="faq-answer" data-i18n="info_faq_a10">
+            PEMF non-invaziv bir yöntemdir ve bilinen zararlı bir yan etkisi yoktur. İlk seanslarda çok nadir olarak hafif karıncalanma veya detoks etkisine bağlı susuzluk hissedilebilir.
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+
+  <!-- KULLANIM REHBERİ MODALI -->
+  <div id="usageModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeUsageModal()">✕</button>
+      <h2 class="modal-title" data-i18n="info_modal_usage_title">Hızlı Kurulum ve Kullanım Kılavuzu</h2>
+      <div class="modal-body-text">
+        <div class="usage-step">
+          <h4 data-i18n="info_usage_s1_t">1. Donanım Kurulumu</h4>
+          <p data-i18n="info_usage_s1_p">Adaptörü prize takın ve amplifikatörünüze bağlayın. Ardından Z-Torus enerji bobinini amplifikatöre takın. Amplifikatör üzerindeki ses düğmesini sonuna kadar (maksimum) çevirin.</p>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_usage_s2_t">2. Bluetooth Bağlantısı</h4>
+          <p data-i18n="info_usage_s2_p1">Telefonunuzun Bluetooth ayarlarından arama yaparak amplifikatörü bulun. Bağlantı kuracağınız cihaz adı genellikle <strong>Z-TorusEnergy</strong> veya <strong>Wuzhi Audio</strong> olarak görünecektir.</p>
+          <p style="color: var(--accent-purple); font-size: 13px;"><em data-i18n="info_usage_s2_p2">*ÖNEMLİ: Yakında açık olan diğer Bluetooth cihazları bağlantıyı engelleyebilir. Bağlantı kurana kadar diğer cihazları pasif tutun.</em></p>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_usage_s3_t">3. Frekansları Çalmak</h4>
+          <p data-i18n="info_usage_s3_p">Önerilen Z-app uygulamasını veya web oynatıcımızı kullanarak frekansları başlatabilirsiniz. Uygulama içinde seans sürelerini ayarlayabilir ve kendi listelerinizi oluşturabilirsiniz. Telefon sesinin de maksimumda olduğundan emin olun.</p>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_usage_s4_t">4. Çalışma Testi</h4>
+          <p data-i18n="info_usage_s4_p">Cihazın çalışıp çalışmadığını paketten çıkan <strong>manyetik test topu</strong> ile kontrol edebilirsiniz. Test için <strong>20-30 Hz</strong> arası düşük bir frekans çalın. Yüksek frekanslarda titreşim çok hızlı olduğu için topun hareketini göremeyebilirsiniz.</p>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_usage_s5_t">5. Önemli Uyarılar</h4>
+          <ul>
+            <li data-i18n="info_usage_s5_li1"><strong>Isınma:</strong> Yüksek frekanslarda bobin ısınabilir. Aşırı ısı hissederseniz ses düğmesini kullanarak gücü biraz kısabilirsiniz.</li>
+            <li data-i18n="info_usage_s5_li2"><strong>Ses:</strong> Çok yüksek frekanslarda bobinden veya cihazdan hafif bir ses/vızıltı gelmesi normaldir.</li>
+            <li data-i18n="info_usage_s5_li3"><strong>Bağlantı Sorunu:</strong> Eğer Bluetooth bağlantısı kurulamazsa, amplifikatörü kapatıp açın ve tekrar deneyin.</li>
+          </ul>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid var(--accent-purple);">
+          <p style="margin:0; font-weight: 600;" data-i18n="info_support_title">Destek & İletişim:</p>
+          <a href="https://wa.me/905357443436" target="_blank" style="margin:8px 0 0; font-size: 15px; color: #25D366; text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: 600; width: fit-content;">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            <span data-i18n="info_support_btn">Hemen WhatsApp'tan Yaz</span>
+          </a>
+        </div>
+
+        <hr style="margin: 40px 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);">
+        
+        <h2 class="modal-title" style="color: var(--accent-purple);">Tavsiyeler ve Bilimsel Arkaplan</h2>
+        
+        <hr style="margin: 40px 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);">
+
+        <hr style="margin: 40px 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);">
+        
+        <h2 class="modal-title" style="color: var(--accent-purple);" data-i18n="info_modal_rife_guide_title">RIFE TEKNOLOJİSİ REHBERİ (TAM METİN)</h2>
+        
+        <div class="usage-step">
+          <h4 data-i18n="info_rife_hist_t">RIFE FREKANS JENERATÖRÜ Tarihçesi</h4>
+          <p data-i18n="info_rife_hist_p"><strong>1920-1930:</strong> Dr. Royal Raymond Rife tarafından geliştirildi. Kanser hücrelerinin rezonans frekansını keşfetmiş, elektromanyetik frekanslarla hastalıkları tedavi etmeyi başarmıştır. Orijinal cihaz biyolojik rezonans prensibi ile çalışır.</p>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_rife_how_t">NASIL ÇALIŞIR?</h4>
+          <ul style="font-size: 14px; line-height: 1.8;">
+            <li data-i18n="info_rife_how_li1"><strong>1. Doğal Frekans Belirleme:</strong> Her hücrenin/mikroorganizmanın kendine özgü bir frekansı vardır.</li>
+            <li data-i18n="info_rife_how_li2"><strong>2. Frekans Gönderimi:</strong> Uygun frekans gönderildiğinde rezonans oluşur.</li>
+            <li data-i18n="info_rife_how_li3"><strong>3. Fiziksel Etki:</strong> Hücre/mikroorganizma sallanır ve hasar görür.</li>
+            <li data-i18n="info_rife_how_li4"><strong>4. Temizlik:</strong> Vücudun bağışıklık sistemi hasarlı yapıları temizler.</li>
+          </ul>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_rife_types_t">FREKANS TÜRLERİ</h4>
+          <p data-i18n="info_rife_types_p"><strong>1. CARRIER (Taşıyıcı) = Ana Dalga:</strong> 2000-4000 Hz (Kare dalga). Grafik gösterimi içindir.<br>
+          <strong>2. MODULATION (Modülasyon) = Tedavi Frekansı:</strong> 20 Hz - 20000 Hz arası. Hedef hastalığı etkileyen, Rife tarafından keşfedilen frekanslardır.</p>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_rife_list_t">RIFE FREKANS TARİFELERİ (Detaylı Liste)</h4>
+          <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; color: var(--text-dim);">
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); text-align: left;">
+              <th style="padding: 8px;" data-i18n="info_table_disease">Hastalık</th>
+              <th style="padding: 8px;" data-i18n="info_table_freq">Frekans</th>
+              <th style="padding: 8px;" data-i18n="info_table_proto">Protokol</th>
+            </tr>
+            <tr><td style="padding: 6px;" data-i18n="info_d1">Streptokokus</td><td style="padding: 6px;">464 Hz</td><td style="padding: 6px;" data-i18n="info_p1">3 dk (3:1 burst)</td></tr>
+            <tr><td style="padding: 6px;" data-i18n="info_d2">Klasik Rife</td><td style="padding: 6px;">727 Hz</td><td style="padding: 6px;" data-i18n="info_p2">5-10 dk</td></tr>
+            <tr><td style="padding: 6px;" data-i18n="info_d3">Standart</td><td style="padding: 6px;">728 Hz</td><td style="padding: 6px;" data-i18n="info_p3">10 dk</td></tr>
+            <tr><td style="padding: 6px;" data-i18n="info_d4">Lyme Hastalığı</td><td style="padding: 6px;">1550 Hz</td><td style="padding: 6px;" data-i18n="info_p4">5 dk x 2 gün</td></tr>
+            <tr><td style="padding: 6px;" data-i18n="info_d5">Bacillus</td><td style="padding: 6px;">584 Hz</td><td style="padding: 6px;" data-i18n="info_p5">3-5 dk</td></tr>
+            <tr><td style="padding: 6px;" data-i18n="info_d6">Stafilo-kok</td><td style="padding: 6px;">727.5 Hz</td><td style="padding: 6px;" data-i18n="info_p6">5 dk</td></tr>
+            <tr><td style="padding: 6px;" data-i18n="info_d7">E-coli</td><td style="padding: 6px;">726 Hz</td><td style="padding: 6px;" data-i18n="info_p7">3-7 dk</td></tr>
+            <tr><td style="padding: 6px;" data-i18n="info_d8">Genel Toksin</td><td style="padding: 6px;">880 Hz</td><td style="padding: 6px;" data-i18n="info_p8">10 dk</td></tr>
+            <tr><td style="padding: 6px;" data-i18n="info_d9">Parazit Genel</td><td style="padding: 6px;">20 Hz</td><td style="padding: 6px;" data-i18n="info_p9">5 dk</td></tr>
+            <tr><td style="padding: 6px;" data-i18n="info_d10">Herpes</td><td style="padding: 6px;">1900 Hz</td><td style="padding: 6px;" data-i18n="info_p10">10 dk</td></tr>
+            <tr><td style="padding: 6px;" data-i18n="info_d11">Kandida</td><td style="padding: 6px;">1250 Hz</td><td style="padding: 6px;" data-i18n="info_p11">3 dk x 7 gün</td></tr>
+            <tr><td style="padding: 6px;" data-i18n="info_d12">İnfluenza</td><td style="padding: 6px;">1045 Hz</td><td style="padding: 6px;" data-i18n="info_p12">5 dk</td></tr>
+          </table>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_rife_proto_t">KULLANIM ŞEKİLLERİ (PROTOKOLLER)</h4>
+          <ul style="font-size: 14px; line-height: 1.8;">
+            <li data-i18n="info_rife_proto_li1"><strong>STANDART PROTOKOL:</strong> 727-728 Hz | 10-15 dk | 3 gün tedavi, 3 gün ara (3:3 döngü). 3 hafta seans, 1 hafta mola.</li>
+            <li data-i18n="info_rife_proto_li2"><strong>SWEEP (Tarama) Modu:</strong> 700 - 800 Hz | 15-20 dk | Tek frekansa dirençli mikropları yakalamak için.</li>
+            <li data-i18n="info_rife_proto_li3"><strong>YOĞUN TEDAVİ:</strong> Hastalığa özel | 3-5 dk | Günde 2-3 kez. Akut vakalarda uygulanır.</li>
+            <li data-i18n="info_rife_proto_li4"><strong>DUAL FREKANS:</strong> Önce Microbial (hastalık), ardından Detox (toksin atılımı) frekansı uygulanır. Arada 5 dk mola verilir.</li>
+          </ul>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_rife_phases_t">TEDAVİ SÜRECİ (AŞAMALI)</h4>
+          <div style="font-size: 14px;">
+            <p data-i18n="info_rife_ph1"><strong>SAFHA-1: HERX REAKSİYONU (Gün 1-5):</strong> Baş ağrısı, şiddetli yorgunluk, sıvı atışında artış olabilir. Toksinlerin atıldığını gösterir.</p>
+            <p data-i18n="info_rife_ph2"><strong>SAFHA-2: HERXDICH KRİZİ (Hafta 1-2):</strong> Belirtiler geçici olarak kötüleşebilir (Ateş, bulantı). Hücre ölümü sırasında ortaya çıkan doğal bir süreçtir, 3-7 günde geçer.</p>
+            <p data-i18n="info_rife_ph3"><strong>SAFHA-3: TOPARLANMA (Hafta 2-4):</strong> Belirtiler azalmaya başlar, enerji artar ve uyku kalitesi iyileşir.</p>
+            <p data-i18n="info_rife_ph4"><strong>SAFHA-4: İYİLEŞME (Hafta 4-8):</strong> Önemli iyileşme sağlanır, semptomlar kaybolur ve vücut genel olarak güçlenir.</p>
+          </div>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_rife_todo_t">DİKKAT EDİLECEKLER</h4>
+          <p><strong data-i18n="info_rife_do">✅ YAPILMASI GEREKENLER:</strong><br>
+          <span data-i18n="info_rife_do_li">- <strong>Detoks:</strong> Bol su (3-4 lt/gün), tuzlu banyo, sauna. - <strong>Beslenme:</strong> Organik gıda, az şeker/glüten, fermente gıdalar (kombucha), probiyotik. - <strong>Uyku:</strong> En az 8 saat (vücut onarım yapar). - <strong>Sakinleşme:</strong> Meditasyon, Yoga.</span></p>
+          <p><strong data-i18n="info_rife_dont">❌ YAPILMAMASI GEREKENLER:</strong> <span data-i18n="info_rife_dont_li">Alkol, işlenmiş gıdalar, eşzamanlı antibiyotik, aşırı spor ve EMF maruziyeti.</span></p>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_rife_devs_t">CİHAZ TÜRLERİ</h4>
+          <p data-i18n="info_rife_devs_p"><strong>1. Tablet Jeneratör:</strong> Uygun maliyetli, taşınabilir, hızlı kurulum, yüksek çıkışlı, doğrudan vücut teması sağlar.<br>
+          <strong>2. Profesyonel Electrotherapy:</strong> Çok güçlü, doğru frekans (kalibrasyon), elektrotlar vücuda temas eder. (Maliyetli ve bulunması zordur).<br>
+          <strong>3. Plasma Tüp Sistemi:</strong> Rife'ın orijinalidir. En etkili yöntemdir, elektromanyetik alan yaratır. (Çok pahalıdır).</p>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_rife_steps_t">UYGULAMA KULLANIM ADIMLARI</h4>
+          <p data-i18n="info_rife_steps_p">1. <strong>Frekans Seç:</strong> Hastalığa göre tablodan belirleyin.<br>
+          2. <strong>Hazırlık:</strong> Su için, rahatlayın, cihazı hasta bölgeye veya yakınına koyun.<br>
+          3. <strong>Başlat:</strong> Manuel veya otomatik başlatın, Patlama (Burst 3:1) modu seçin.<br>
+          4. <strong>Süreler:</strong> Akut (10-15 dk), Kronik (5-30 dk), Koruyucu (Haftalık 10 dk).<br>
+          5. <strong>Monitörleme:</strong> Günlük belirtileri not edin, Herx reaksiyonuna hazır olun.</p>
+        </div>
+
+        <div class="usage-step" style="background: rgba(170, 108, 241, 0.05); border: 1px solid var(--accent-purple);">
+          <h4 data-i18n="info_rife_ex_t">ÖRNEK KLİNİK KULLANIM</h4>
+          <p data-i18n="info_rife_ex_p"><strong>Streptokokus İçin:</strong> Günde 3 kez 10'ar dakika (4 saat mola ile). 7 günde önemli iyileşme gözlenir.<br>
+          <strong>Lyme Hastalığı İçin:</strong> Günde 1 kez 5 dakika. 1. hafta şiddetli Herx beklenebilir, 2. hafta iyileşme başlar.</p>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_rife_other_t">DİĞER ÖNEMLİ BİLGİLER</h4>
+          <p data-i18n="info_rife_other_p"><strong>Frekans Bulma Yolları:</strong> Referans tabloları, biyorezonans analizi, deneme-yanılma, biofeedback.<br>
+          <strong>Ne Zaman Durmalı?</strong> Semptomlar bittiğinde, enerji normale döndüğünde veya ciddi bir yan etki görüldüğünde durulmalıdır. Her zaman doktor tavsiyesini takip edin.</p>
+        </div>
+
+        <div class="usage-step">
+          <h4 data-i18n="info_rife_sum_t">ÖZET (TEMEL MANTIK)</h4>
+          <p data-i18n="info_rife_sum_p">1. Hastalık frekansını belirle > 2. Frekansı gönder (rezonans) > 3. Hücreleri sars (hasar) > 4. Bağışıklık temizliği > 5. Toksin atılımı (Herx) > 6. İyileşme.</p>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 12px; color: #fca5a5; font-size: 12px; line-height: 1.6;">
+          <strong style="color: #ef4444; display: block; margin-bottom: 5px;" data-i18n="info_disclaimer_t">⚠️ ÖNEMLİ YASAL UYARI:</strong>
+          <span data-i18n="info_disclaimer_p">İlgili yasa ve reklam yönetmelik kurallarına uyularak yaptığımız çalışmalar sağlık tavsiyeleri içermez. Tedavi veya terapi kapsamında değerlendirilemez. Metinlerimiz sadece bilinçlendirme amaçlıdır. Bir rahatsızlığınız olduğundan şüpheleniyorsanız lütfen aile hekiminize veya bir uzman doktora müracaat ediniz.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="infoModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()">✕</button>
+      <h2 class="modal-title" data-i18n="info_modal_pemf_title">Darbeli Elektro-Manyetik Alan (PEMF) Terapisi</h2>
+      <div class="modal-body-text">
+        <p data-i18n="info_pemf_p1"><strong>Darbeli Elektro-Manyetik Alan (PEMF) terapisi</strong>, hücresel işlev bozukluğunun giderilmesine ve genel sağlığın desteklenmesine yardımcı olmak amacıyla hücreleri uyarmak ve egzersiz yapmak için teknolojiyi kullanır. Terapötik etkileri nedeniyle dünya genelinde birçok uzman tarafından tavsiye edilmektedir.</p>
+        
+        <h4 data-i18n="info_pemf_h1">Darbeli PEMF tedavisi nedir?</h4>
+        <p data-i18n="info_pemf_p2">Darbeli PEMF tedavisi hücrelerinize pil gibi davranır. Yavaş yavaş enerjilerinin tükenmesi yaygındır. Günün sonunda bedeniniz ve zihniniz yorgun ve bitkin hissedebilir. PEMF teknolojisinin yardımcı olabileceği yer burasıdır. Bu yöntem, invaziv bir prosedür olmadan hücrelerinizde enerji üretmek için kullanılır. Bu, doğal enerjinizi güçlendirir ve vücudunuzun daha etkili çalışmasını teşvik eder. Düşük alanlı manyetik stimülasyon olarak da bilinen bu yöntem, hücresel işlev bozukluğuna yardımcı olmak için elektromanyetik alanları kullanır.</p>
+        
+        <h4 data-i18n="info_pemf_h2">PEMF tedavisi nasıl çalışır?</h4>
+        <p data-i18n="info_pemf_p3">Darbeli PEMF tedavisi vücuda manyetik enerji gönderir. Bu enerji dalgaları iyileşmeyi iyileştirmek için vücudunuzun doğal manyetik alanıyla birlikte çalışır. Manyetik alanlar elektrolitleri ve iyonları artırmanıza yardımcı olur. Bu doğal olarak hücresel düzeyde elektriksel değişiklikleri etkiler ve hücresel metabolizmayı etkiler. Kronik ağrıyı hafifletmeye yardımcı olmak için vücudunuzun kendi iyileşme süreçleriyle birlikte çalışır. Hepsinden iyisi, tamamen güvenlidir.</p>
+        
+        <p data-i18n="info_pemf_p4">Sonuçta insan vücudu, vücuda ve beyninize sinyal göndermek için elektriğe ihtiyaç duyar. PEMF tedavisi hücrelerinizdeki elektriği etkili bir şekilde yeniden düzenleyebilir. Bir hücre uyarıldığında, pozitif yüklerin açık bir İYON kanalından hücreye girmesine izin verir. Bu hücrenin içi pozitif yüklü hale gelir ve bu da diğer elektrik akımlarını tetikleyerek darbelere dönüşür. Bu, hareketi, iyileşmeyi ve sinyallerin gönderilmesini olumlu yönde etkileyebilir. Elektrik akımlarındaki herhangi bir kesinti, işlev bozukluğuna veya hastalığa yol açabilir. Darbeli PEMF tedavisi, elektrik akımındaki bu bozulmanın normal duruma getirilmesine yardımcı olur ve bu da genel sağlığı artırır.</p>
+
+        <h4 data-i18n="info_pemf_h3">Pulslu PEMF tedavisini kimlere öneriyoruz?</h4>
+        <p data-i18n="info_pemf_p5">Bu tedaviyi özellikle ağrı veya işlev bozukluğu olan bölgeler için (Ayak bilekleri, Sırt, Dirsekler, Kalçalar, Dizler, Omuzlar) ve aşağıdaki rahatsızlıklardan muzdarip olan hastalar için öneriyoruz:</p>
+        <ul>
+          <li data-i18n="info_pemf_li1">Eklemlerde veya yumuşak dokularda kronik inflamasyon</li>
+          <li data-i18n="info_pemf_li2">Kronik yorgunluk belirtileri veya kronik yorgunluk sendromu</li>
+          <li data-i18n="info_pemf_li3">Periferik nöropati</li>
+          <li data-i18n="info_pemf_li4">Osteopeni veya osteoporoz</li>
+          <li data-i18n="info_pemf_li5">Kötü yara iyileşmesi</li>
+        </ul>
+
+        <h4 data-i18n="info_pemf_h4">PEMF tedavisinin faydaları</h4>
+        <p data-i18n="info_pemf_p6">Bu yenilikçi tedavinin en yaygın faydalarından bazıları şunlardır:</p>
+        <ul>
+          <li data-i18n="info_pemf_b1">Vücudun doğal iyileşme sürecini geliştirir</li>
+          <li data-i18n="info_pemf_b2">Vücuttaki hücresel fonksiyon bozukluklarını düzeltir</li>
+          <li data-i18n="info_pemf_b3">Hücreleri yeniden şarj etmek için hücreleri uyarır ve çalıştırır</li>
+          <li data-i18n="info_pemf_b4">Doğal olarak daha fazla enerji verir</li>
+          <li data-i18n="info_pemf_b5">Atletik performansı artırır</li>
+          <li data-i18n="info_pemf_b6">İltihabı ve ağrıyı azaltır</li>
+          <li data-i18n="info_pemf_b7">Bir yaralanmadan daha hızlı kurtulmanıza yardımcı olur</li>
+        </ul>
+
+        <p><strong data-i18n="info_pemf_final">Darbeli PEMF tedavisi ile hücrelerinizi yeniden şarj edin, iltihabı ve ağrıyı azaltın.</strong> <span data-i18n="info_pemf_final_2">Artık acı veya rahatsızlık içinde yaşamak zorunda değilsiniz. Bu rahatlamayı invaziv cerrahi olmadan başarabilirsiniz.</span></p>
+
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);">
+
+        <h3 style="color: var(--accent-purple); margin-bottom: 20px;" data-i18n="info_pemf_areas_t">PEMF Teknolojisinin Kullanım Alanları</h3>
+
+        <p><strong data-i18n="info_area1_t">Sağlıklı Yaşamı İnvaziv Olmadan Optimize Edin:</strong> <span data-i18n="info_area1_p">PEMF, tıbbi olarak invaziv prosedürler olmadan hücresel düzeyde enerji üretir. Pulse'un özel aksesuar serisi, cildin altına herhangi bir aparat sokmadan vücuda etkili bir şekilde darbeli elektromanyetik alan uygulamak için anatomi dikkate alınarak üretilmiştir. Anatomik olarak, doğal enerjinin arttırılması vücudun genel sağlık açısından daha etkin çalışmasını teşvik eder.</span></p>
+
+        <p><strong data-i18n="info_area2_t">Vücudun Doğal İyileşme Sürecini Geliştirin:</strong> <span data-i18n="info_area2_p">PEMF, vücudun zekasından ve inanılmaz kendi kendini iyileştirme yeteneklerinden faydalanarak, doğal enerjiye sahip hücreleri birçok işlevini daha iyi yerine getirmeye teşvik eder. Tüm vücut PEMF'si daha uzun vadeli bir sağlıklı yaşam çözümü sağlar ve çoğu zaman beklenmedik faydalar sağlar!</span></p>
+
+        <p><strong data-i18n="info_area3_t">Egzersiz Sonrası Kas Yorgunluğuna ve Rahatsızlığa Yardımcı Olun:</strong> <span data-i18n="info_area3_p">Çalışmalar PEMF'nin algılanan kas ağrısında bir azalmayı tetiklediğini göstermiştir ve kullanıcılar sıklıkla rapor etmektedir. Bu, kullanıcının enerji seviyeleri üzerindeki etkisiyle birlikte PEMF'yi yüksek performanslı profesyonel sporcular ve hafta sonu savaşçıları için antrenman programlarının mükemmel bir tamamlayıcısı haline getiriyor.</span></p>
+
+        <p><strong data-i18n="info_area4_t">Genel Gevşemeyi Destekleyin:</strong> <span data-i18n="info_area4_p">Birçok kişi PEMF'yi rahatlatıcı, onarıcı bir yöntem olarak deneyimliyor. Aslında araştırmalar PEMF'nin parasempatik sinir sistemini (vücudun "dinlenme ve sindirme" tepkisi) manuel akupunkturla aynı düzende uyarma yeteneğine sahip olduğunu göstermiştir.</span></p>
+
+        <p><strong data-i18n="info_area5_t">Doğal Olarak Daha Fazla Enerjiyi Deneyimleyin:</strong> <span data-i18n="info_area5_p">Yapılan araştırmalara göre vücudun hücreleri pillere benzer. Yük taşırlar ve zamanla çevresel stres etkenleri nedeniyle enerjileri tükenebilir. PEMF, enerjiyi doğrudan hücreye uygular ve vücudun bütünsel doğası, bu hücresel enerjiyi tüm vücut enerjisi için bir katalizör olarak kullanır.</span></p>
+
+        <p><strong data-i18n="info_area6_t">Atletik Performansı Artırın:</strong> <span data-i18n="info_area6_p">Daha az kas yorgunluğu, gelişmiş iyileşme, daha fazla enerji ve rahatlatıcı, canlandırıcı PEMF seanslarıyla vücudunuzun neler yapabileceğini hayal edin. PEMF, sporcuların antrenman ve performans hedeflerini desteklemek için doğal enerjinin gücünden yararlanmalarına olanak tanır. Yüksek performanslı sporcular, Pulse PEMF'nin pasif iyileşme faydasını en üst düzeye çıkarırken kesinti süresini en aza indirme becerisine sahip olduğunu belirtmiştir.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Language Sync Logic (v1)
+    function toggleLangDropdownHub() {
+      document.getElementById('langDropdownHub').classList.toggle('open');
+    }
+
+    function selectLangHub(el) {
+      const val = el.dataset.value;
+      localStorage.setItem('zlang', val);
+      translateInfo();
+      document.getElementById('langDropdownHub').classList.remove('open');
+      document.documentElement.dir = (val === 'ar-SA') ? 'rtl' : 'ltr';
+    }
+
+    function translateInfo() {
+      const lang = localStorage.getItem('zlang') || 'tr-TR';
+      const dict = i18n[lang] || i18n['en-US'];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (dict[key]) el.innerHTML = dict[key]; // Use innerHTML to allow parantheses and formatting
+      });
+      // Update active state in dropdown
+      document.querySelectorAll('#langDropdownHub .lang-option').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.value === lang);
+      });
+    }
+
+    window.addEventListener('load', translateInfo);
+    window.addEventListener('click', (e) => {
+      const btn = document.getElementById('langBtnHub');
+      if (btn && !btn.contains(e.target)) {
+        document.getElementById('langDropdownHub').classList.remove('open');
+      }
+    });
+
+    function openModal() {
+      document.getElementById('infoModal').classList.add('active');
+    }
+    function closeModal() {
+      document.getElementById('infoModal').classList.remove('active');
+    }
+    
+    function openUsageModal() {
+      document.getElementById('usageModal').classList.add('active');
+    }
+    function closeUsageModal() {
+      document.getElementById('usageModal').classList.remove('active');
+    }
+
+    // Modal dışına tıklayınca kapatma
+    window.onclick = function(event) {
+      const infoModal = document.getElementById('infoModal');
+      const usageModal = document.getElementById('usageModal');
+      
+      if (event.target == infoModal) closeModal();
+      if (event.target == usageModal) closeUsageModal();
+    }
+  </script>
+</body>
+</html>

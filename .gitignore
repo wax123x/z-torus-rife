@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+wifi/www/
+wifi/android/app/build/
+wifi/ios/App/build/
+wifi/ios/App/Pods/

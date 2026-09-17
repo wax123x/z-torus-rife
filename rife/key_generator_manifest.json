@@ -1,0 +1,17 @@
+{
+  "name": "Z-Torus Key Üretici",
+  "short_name": "ZTorus Key",
+  "description": "Z-Torus Rife Premium aktivasyon anahtarı üretici",
+  "start_url": "./z-ke.html",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#7c3aed",
+  "icons": [
+    {
+      "src": "ztorus_key_icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

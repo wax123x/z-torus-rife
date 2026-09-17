@@ -1,0 +1,3240 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Z-TorusEnergy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="z_vault_core.js?v=2.5.1"></script>
+  <script src="translations.js"></script>
+  <style>
+    :root {
+      --primary: #303E6C;
+      --primary-light: #45517b;
+      --secondary: #856E83;
+      --tertiary: #AD5AE2;
+      --tertiary-dark: #984fc7;
+      --success: #69967c;
+      --warning: #e68544;
+      --danger: #f44336;
+      --bg: #F3F5EB;
+      --bg-card: #F3F5EB;
+      --text-primary: #1a1a2e;
+      --text-secondary: #555577;
+      --text-muted: #9299b8;
+      --border: #e0e4f0;
+      --shadow: 0 2px 12px rgba(48, 62, 108, 0.10);
+      --shadow-lg: 0 8px 32px rgba(48, 62, 108, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      min-height: 100%;
+      height: auto !important;
+      overflow-y: visible !important;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #F3F5EB !important;
+      color: #1a1a2e !important;
+      -webkit-overflow-scrolling: touch !important;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    /* Ana Taşıyıcı */
+    .screen {
+      display: none;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: #F3F5EB;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.05);
+      animation: screenFade 0.4s ease-out;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes screenFade {
+      from {
+        opacity: 0;
+        filter: blur(15px) !important;
+        transform: scale(0.96) !important;
+      }
+
+      to {
+        opacity: 1;
+        filter: blur(0) !important;
+        transform: scale(1) !important;
+      }
+    }
+
+    /* ===== TOP BAR ===== */
+    .topbar {
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 18px 16px 14px 16px;
+      padding-top: max(env(safe-area-inset-top, 0px) + 14px, 22px);
+      min-height: 64px;
+      height: auto;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .topbar-title {
+      font-size: 20px;
+      font-weight: 700;
+      flex: 1;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+    }
+
+    .topbar-subtitle {
+      font-size: 12px;
+      opacity: 0.7;
+      font-weight: 300;
+      pointer-events: none;
+    }
+
+    .topbar-back {
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: white;
+      font-size: 26px;
+      cursor: pointer;
+      margin-right: 12px;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .topbar-back:hover, .topbar-back:active {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .topbar-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .topbar-icon-btn {
+      background: none;
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .topbar-icon-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* ===== SEARCH BAR ===== */
+    .search-bar {
+      background: var(--primary);
+      padding: 8px 16px 12px;
+      flex-shrink: 0;
+    }
+
+    .search-input-wrap {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      gap: 8px;
+    }
+
+    .search-input-wrap svg {
+      fill: rgba(255, 255, 255, 0.7);
+      flex-shrink: 0;
+    }
+
+    .search-input {
+      background: none;
+      border: none;
+      outline: none;
+      color: white;
+      font-size: 15px;
+      flex: 1;
+      font-family: 'Roboto', sans-serif;
+      min-width: 0;
+    }
+
+    .search-clear {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      padding: 4px;
+    }
+
+    .search-clear:hover {
+      opacity: 1;
+    }
+
+    .search-clear svg {
+      fill: white;
+    }
+
+    .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* ===== FILTER TABS ===== */
+    .filter-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 10px 8px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      overflow: hidden;
+      /* Kaydırmayı kapattık */
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-tab {
+      flex: 1;
+      padding: 6px 2px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: white;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      font-family: 'Roboto', sans-serif;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .filter-tab.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .filter-tab:hover:not(.active) {
+      background: #eef1f9;
+    }
+
+    /* ===== PROGRAM LIST ===== */
+    .program-list {
+      padding: 8px 0 100px 0;
+    }
+
+    .program-item {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+      background: var(--bg-card);
+    }
+
+    .program-item:hover,
+    .program-item.active {
+      background: var(--primary);
+    }
+
+    .program-item:hover .program-item-name,
+    .program-item.active .program-item-name,
+    .program-item:hover .program-item-meta,
+    .program-item.active .program-item-meta,
+    .program-item:hover .program-item-arrow,
+    .program-item.active .program-item-arrow {
+      color: white !important;
+    }
+
+    .program-item:hover .source-badge,
+    .program-item.active .source-badge {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .program-item-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 14px;
+      flex-shrink: 0;
+      font-size: 18px;
+      color: white;
+    }
+
+    .program-item-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .program-item-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 3px;
+    }
+
+    .program-item-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .source-badge {
+      background: rgba(48, 62, 108, 0.1);
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .program-item-arrow {
+      color: var(--text-muted);
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+
+    /* ===== PLAYER SCREEN ===== */
+    .player-screen {
+      background: var(--bg);
+    }
+
+    /* ===== PLAYER CONTENT (SCREEN 2) ===== */
+    .player-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 20px 100px;
+    }
+
+    /* Visualizer */
+    .visualizer-wrap {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 8px 0 20px;
+    }
+
+    .pulse-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid rgba(173, 90, 226, 0.2);
+      /* Animation moved to .playing */
+    }
+
+    .pulse-ring:nth-child(1) {
+      width: 220px;
+      height: 220px;
+      animation-delay: 0s;
+    }
+
+    .pulse-ring:nth-child(2) {
+      width: 190px;
+      height: 190px;
+      animation-delay: 0.5s;
+    }
+
+    .pulse-ring:nth-child(3) {
+      width: 160px;
+      height: 160px;
+      animation-delay: 1s;
+    }
+
+    .pulse-ring.playing {
+      border-color: rgba(173, 90, 226, 0.5);
+      animation: pulseRing 2s ease-out infinite;
+    }
+
+    @keyframes pulseRing {
+      0% {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
+
+      50% {
+        transform: scale(1.03);
+        opacity: 0.4;
+      }
+
+      100% {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
+    }
+
+    .freq-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(173, 90, 226, 0.4);
+      z-index: 2;
+      position: relative;
+    }
+
+    .freq-circle .freq-value {
+      font-size: 30px;
+      font-weight: 700;
+      color: white;
+      line-height: 1;
+    }
+
+    .freq-circle .freq-unit {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 2px;
+    }
+
+    .freq-circle.playing {
+      animation: circlePulse 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes circlePulse {
+      from {
+        box-shadow: 0 0 32px rgba(173, 90, 226, 0.4);
+      }
+
+      to {
+        box-shadow: 0 0 64px rgba(173, 90, 226, 1), 0 0 100px rgba(173, 90, 226, 0.4);
+      }
+    }
+
+    /* Program info */
+    .player-program-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .player-program-source {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    /* Progress */
+    .progress-section {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .freq-dots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+      margin-bottom: 10px;
+      max-height: 40px;
+      overflow: hidden;
+    }
+
+    .freq-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+
+    .freq-dot.done {
+      background: var(--tertiary-dark);
+      opacity: 0.5;
+    }
+
+    .freq-dot.current {
+      background: var(--tertiary);
+      transform: scale(1.4);
+    }
+
+    .time-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .progress-track {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--tertiary));
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.5s linear;
+    }
+
+    /* Controls */
+    .controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin: 20px 0 16px;
+    }
+
+    .ctrl-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      color: var(--tertiary);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      padding: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .ctrl-btn:hover {
+      background: var(--tertiary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(173, 90, 226, 0.3);
+    }
+
+    .ctrl-btn:active {
+      transform: scale(0.95);
+    }
+
+    .ctrl-btn svg {
+      width: 28px;
+      height: 28px;
+      fill: currentColor;
+    }
+
+    .play-btn {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 100%);
+      border: none;
+      cursor: pointer;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(173, 90, 226, 0.4);
+      transition: all 0.2s;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.06);
+      box-shadow: 0 6px 28px rgba(173, 90, 226, 0.5);
+    }
+
+    .play-btn:active {
+      transform: scale(0.97);
+    }
+
+    .play-btn svg {
+      width: 32px;
+      height: 32px;
+      fill: white;
+    }
+
+    /* Volume */
+    .volume-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .volume-row svg {
+      fill: var(--text-muted);
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    input[type=range] {
+      flex: 1;
+      height: 4px;
+      appearance: none;
+      background: var(--border);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--tertiary);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(173, 90, 226, 0.4);
+    }
+
+    /* Wave selector */
+    .wave-section {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .wave-section-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .wave-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .wave-tab {
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1.5px solid var(--border);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .wave-tab.active {
+      background: var(--tertiary);
+      color: white;
+      border-color: var(--tertiary);
+      box-shadow: 0 2px 8px rgba(173, 90, 226, 0.3);
+    }
+
+    /* Description accordion */
+    .desc-accordion {
+      width: 100%;
+    }
+
+    .desc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border-radius: 12px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      margin-bottom: 4px;
+    }
+
+    .desc-header span {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .desc-header svg {
+      fill: var(--text-muted);
+      transition: transform 0.3s;
+    }
+
+    .desc-header.open svg {
+      transform: rotate(180deg);
+    }
+
+    .desc-body {
+      background: var(--bg-card);
+      border-radius: 0 0 12px 12px;
+      padding: 0 16px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s;
+      border: 1px solid var(--border);
+      border-top: none;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .desc-body.open {
+      max-height: 2000px;
+      padding: 12px 16px 100px;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      flex: 1;
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 12px 16px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .stat-card .stat-val {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-card .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Lang selector – Custom Dropdown */
+    .lang-row {
+      position: relative;
+    }
+
+    .lang-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Roboto', sans-serif;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .lang-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .lang-btn .arrow {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+
+    .lang-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      min-width: 180px;
+    }
+
+    .lang-dropdown.open {
+      display: block;
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-primary);
+      transition: background 0.15s;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .lang-option:last-child {
+      border-bottom: none;
+    }
+
+    .lang-option:hover {
+      background: rgba(48, 62, 108, 0.08);
+    }
+
+    .lang-option.active {
+      background: rgba(173, 90, 226, 0.1);
+      color: var(--tertiary);
+      font-weight: 600;
+    }
+
+    .lang-option .flag {
+      width: 22px;
+      height: 16px;
+      object-fit: cover;
+      border-radius: 2px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .lang-btn .flag-btn-img {
+      width: 20px;
+      height: 14px;
+      object-fit: cover;
+      border-radius: 2px;
+    }
+
+    .lang-option .lname {
+      font-size: 13px;
+    }
+
+    /* Empty state */
+    .empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      padding: 40px;
+    }
+
+    .empty-state svg {
+      fill: var(--border);
+      margin-bottom: 12px;
+    }
+
+    .empty-state p {
+      font-size: 15px;
+      text-align: center;
+    }
+
+    .status-log {
+      position: fixed;
+      bottom: 8px;
+      left: 8px;
+      right: 8px;
+      background: rgba(48, 62, 108, 0.88);
+      color: #aef;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: none;
+      font-family: monospace;
+      z-index: 999;
+      max-height: 40px;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+
+    .status-log.visible {
+      display: block;
+    }
+
+    /* Turbo Power Mode */
+    .turbo-btn {
+      background: rgba(48, 62, 108, 0.1);
+      border: 1.5px solid var(--border);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .turbo-btn.active {
+      background: #ff4757;
+      color: white;
+      border-color: #ff4757;
+      box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+      transform: scale(1.05);
+    }
+
+    .turbo-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+      transition: transform 0.3s;
+    }
+
+    .turbo-btn.active svg {
+      transform: scale(1.2) rotate(15deg);
+    }
+
+    /* Full screen width on mobile devices, desktop simulator frame only on PC (>1024px) */
+    @media (min-width: 1025px) and (pointer: fine) {
+      body {
+        align-items: center;
+        background: #0b0f19;
+      }
+
+      .screen {
+        width: 100%;
+        max-width: 480px;
+        min-height: 100vh;
+        height: auto !important;
+        border-radius: 24px;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+        margin: 0 auto;
+      }
+    }
+
+    /* ===== FAVORITES & LIBRARY ===== */
+    .program-item-fav {
+      padding: 10px;
+      margin-left: auto;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      border-radius: 50%;
+    }
+
+    .program-item-fav:hover {
+      background: rgba(173, 90, 226, 0.1);
+      color: var(--tertiary);
+    }
+
+    .program-item-fav.active {
+      color: #ff4757;
+    }
+
+    .program-item-fav svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .library-header {
+      padding: 16px;
+      background: white;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .profile-bar {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+      align-items: center;
+      padding-right: 20px;
+    }
+
+    .profile-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .profile-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      min-width: 60px;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .profile-item:active {
+      transform: scale(0.9);
+    }
+
+    .profile-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      font-size: 18px;
+      border: 3px solid transparent;
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+    }
+
+    .profile-item.active .profile-circle {
+      border-color: var(--tertiary);
+      transform: scale(1.1);
+    }
+
+    .profile-name {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      text-align: center;
+      width: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .profile-delete {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: var(--danger);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      box-shadow: 0 2px 6px rgba(244, 67, 54, 0.3);
+      border: 1px solid white;
+      z-index: 5;
+    }
+
+    .profile-item {
+      position: relative;
+    }
+
+
+    .add-profile-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px dashed var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-left: 4px;
+      flex-shrink: 0;
+    }
+
+    .add-profile-btn:hover {
+      border-color: var(--tertiary);
+      color: var(--tertiary);
+      background: rgba(173, 90, 226, 0.05);
+    }
+
+    .lib-section-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: white;
+      /* Beyaz yazı */
+      padding: 14px 16px;
+      background: var(--primary);
+      /* Koyu lacivert arka plan */
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 5px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .lib-section-title .filter-tab {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+      border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .lib-create-btn {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      width: auto;
+      flex-shrink: 0;
+      margin-left: 20px;
+      /* Başlıktan uzaklaştırmak için */
+      transition: all 0.2s;
+    }
+
+    .lib-create-btn:active {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(0.95);
+    }
+
+    .lib-empty {
+      padding: 30px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* Modal Generic */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      backdrop-filter: blur(4px);
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: white;
+      width: 100%;
+      max-width: 320px;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+      animation: modalIn 0.3s ease-out;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 20px;
+    }
+
+    .modal-input:focus {
+      border-color: var(--tertiary);
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .m-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .m-btn-cancel {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+    }
+
+    .m-btn-confirm {
+      background: var(--primary);
+      color: white;
+    }
+
+    .m-btn-confirm:hover {
+      background: var(--primary-light);
+    }
+
+    /* RTL OVERRIDES */
+    html[dir="rtl"] .topbar-back {
+      margin-right: 0;
+      margin-left: 12px;
+      transform: scaleX(-1);
+    }
+
+    html[dir="rtl"] .program-item-icon {
+      margin-right: 0;
+      margin-left: 14px;
+    }
+
+    html[dir="rtl"] .program-item-arrow {
+      margin-left: 0;
+      margin-right: 8px;
+      transform: scaleX(-1);
+    }
+
+    html[dir="rtl"] .lang-dropdown {
+      right: auto;
+      left: 0;
+    }
+
+    html[dir="rtl"] .search-input-wrap svg {
+      margin-right: 0;
+      margin-left: 8px;
+    }
+
+    html[dir="rtl"] .search-clear {
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    html[dir="rtl"] .program-item-fav {
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    /* Custom List Modal Enhancements */
+    .modal-card.wide {
+      max-width: 380px;
+    }
+
+    .freq-input-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      align-items: flex-end;
+    }
+
+    .wave-mini-tabs {
+      display: flex;
+      gap: 4px;
+      flex: 1;
+      margin-bottom: 20px;
+    }
+
+    .wave-mini-tab {
+      flex: 1;
+      padding: 6px 2px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+    }
+
+    .wave-mini-tab.active {
+      background: var(--tertiary);
+      color: white;
+      border-color: var(--tertiary);
+    }
+
+    .pending-freqs-container {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-height: 180px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .pending-freq-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .pending-freq-item:last-child {
+      border-bottom: none;
+    }
+
+    .pending-freq-info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pending-freq-val {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .pending-freq-wave {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--primary-light);
+      color: white;
+      text-transform: uppercase;
+    }
+
+    .pending-freq-del {
+      color: var(--danger);
+      cursor: pointer;
+      padding: 4px;
+      font-weight: bold;
+    }
+
+    /* ===== PREMIUM QUANTUM LOADING OVERLAY ===== */
+    #loadingOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: radial-gradient(circle at center, #162040 0%, #0D0F21 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(20px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #loadingOverlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-logo {
+      color: white;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 40px;
+      letter-spacing: 3px;
+      font-family: 'Roboto', sans-serif;
+      text-transform: uppercase;
+      text-shadow: 0 0 20px rgba(173, 90, 226, 0.5);
+      animation: loaderLogoGlow 3s infinite ease-in-out;
+    }
+
+    @keyframes loaderLogoGlow {
+
+      0%,
+      100% {
+        opacity: 0.8;
+        transform: scale(1);
+        filter: blur(0px);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.05);
+        filter: blur(0.5px);
+      }
+    }
+
+    /* ÇİFT HALKALI QUANTUM SPINNER */
+    .loader-ring {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+
+    .loader-ring::before,
+    .loader-ring::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 3px solid transparent;
+    }
+
+    /* Mevcut loader-ring class'ı için ana gövde */
+    .loader-ring {
+      border: 3px solid rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+
+    /* Dış Halkalama */
+    .loader-ring::before {
+      border-top-color: var(--tertiary);
+      border-right-color: var(--tertiary);
+      animation: spinLoader 1.2s linear infinite;
+      box-shadow: 0 0 20px rgba(173, 90, 226, 0.3);
+    }
+
+    /* İç Halkalama (Zıt Yönde) */
+    .loader-ring::after {
+      inset: 12px;
+      border-bottom-color: var(--accent-blue, #5BA4FF);
+      border-left-color: var(--accent-blue, #5BA4FF);
+      animation: spinLoaderReverse 1.5s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes spinLoader {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spinLoaderReverse {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(-360deg);
+      }
+    }
+
+    .loader-text {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 11px;
+      margin-top: 25px;
+      font-family: 'Roboto', sans-serif;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+  </style>
+</head>
+
+<body data-zvault-block>
+
+  <!-- ===== LOADING OVERLAY ===== -->
+  <div id="loadingOverlay">
+    <div class="loader-logo">Z-Torus Standart</div>
+    <div class="loader-ring"></div>
+    <div class="loader-text" id="loaderText">Yükleniyor...</div>
+  </div>
+
+  <!-- ===== SCREEN 1: PROGRAM LIST ===== -->
+  <div id="listScreen" class="screen active">
+    <div class="topbar">
+      <div id="logoTitle">
+        <div class="topbar-title">Z-Torus Standart</div>
+        <div class="topbar-subtitle" data-i18n="app_subtitle">Premium Frekans Terapisi</div>
+      </div>
+      <div class="topbar-actions" style="margin-left:auto; display:flex; align-items:center; gap:8px;">
+        <button class="topbar-icon-btn" onclick="showHistory()" title="History">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+        </button>
+        <button class="topbar-icon-btn" onclick="window.location.href='index.html'" title="Home">
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor" />
+          </svg>
+        </button>
+        <div class="lang-row" id="langRow">
+          <button class="lang-btn" id="langBtn" onclick="toggleLangDropdown()">
+            <img id="langBtnFlag" class="flag-btn-img" src="https://flagcdn.com/w40/tr.png" alt="TR">
+            <span id="langBtnName">Türkçe</span>
+            <span class="arrow">▼</span>
+          </button>
+          <div class="lang-dropdown" id="langDropdown">
+            <div class="lang-option active" data-value="tr-TR" data-flag="tr" onclick="selectLang(this)">
+              <img class="flag" src="https://flagcdn.com/w40/tr.png"> <span class="lname">Türkçe</span>
+            </div>
+            <div class="lang-option" data-value="en-US" data-flag="us" onclick="selectLang(this)">
+              <img class="flag" src="https://flagcdn.com/w40/us.png"> <span class="lname">English</span>
+            </div>
+            <div class="lang-option" data-value="de-DE" data-flag="de" onclick="selectLang(this)">
+              <img class="flag" src="https://flagcdn.com/w40/de.png"> <span class="lname">Deutsch</span>
+            </div>
+            <div class="lang-option" data-value="ru-RU" data-flag="ru" onclick="selectLang(this)">
+              <img class="flag" src="https://flagcdn.com/w40/ru.png"> <span class="lname">Русский</span>
+            </div>
+            <div class="lang-option" data-value="fr-FR" data-flag="fr" onclick="selectLang(this)">
+              <img class="flag" src="https://flagcdn.com/w40/fr.png"> <span class="lname">Français</span>
+            </div>
+            <div class="lang-option" data-value="es-ES" data-flag="es" onclick="selectLang(this)">
+              <img class="flag" src="https://flagcdn.com/w40/es.png"> <span class="lname">Español</span>
+            </div>
+            <div class="lang-option" data-value="it-It" data-flag="it" onclick="selectLang(this)">
+              <img class="flag" src="https://flagcdn.com/w40/it.png"> <span class="lname">Italiano</span>
+            </div>
+            <div class="lang-option" data-value="pt-PT" data-flag="pt" onclick="selectLang(this)">
+              <img class="flag" src="https://flagcdn.com/w40/pt.png"> <span class="lname">Português (PT)</span>
+            </div>
+            <div class="lang-option" data-value="pt" data-flag="br" onclick="selectLang(this)">
+              <img class="flag" src="https://flagcdn.com/w40/br.png"> <span class="lname">Português (BR)</span>
+            </div>
+            <div class="lang-option" data-value="is-IS" data-flag="is" onclick="selectLang(this)">
+              <img class="flag" src="https://flagcdn.com/w40/is.png"> <span class="lname">Íslenska</span>
+            </div>
+            <div class="lang-option" data-value="az-AZ" data-flag="az" onclick="selectLang(this)">
+              <img class="flag" src="https://flagcdn.com/w40/az.png"> <span class="lname">Azərbaycanca</span>
+            </div>
+            <div class="lang-option" data-value="ar-SA" data-flag="sa" onclick="selectLang(this)">
+              <img class="flag" src="https://flagcdn.com/w40/sa.png"> <span class="lname">العربية</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <div class="search-input-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <path
+            d="M15.5 14h-.79l-.28-.27A6.5 6.5 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+        </svg>
+        <input id="searchInput" class="search-input" type="text" placeholder="Program ara... (Örn: Apse, Akne)"
+          data-i18n-ph="search_placeholder">
+        <div id="clearSearch" class="search-clear">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path
+              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-source="all" data-i18n="filter_all">Tümü</button>
+      <button class="filter-tab" data-source="CAFL">CAFL</button>
+      <button class="filter-tab" data-source="Rife Handbook">Handbook</button>
+      <button class="filter-tab" data-source="library" data-i18n="filter_library">Kütüphanem</button>
+    </div>
+
+    <div class="program-list" id="programList">
+      <div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24">
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+        </svg>
+        <p>Yükleniyor...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN 2: PLAYER ===== -->
+  <div id="playerScreen" class="screen">
+    <div class="topbar">
+      <button class="topbar-back" id="backBtn">
+        <svg width="24" height="24" viewBox="0 0 24 24">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="white" />
+        </svg>
+      </button>
+      <div style="flex:1; min-width:0;">
+        <div class="topbar-title" id="playerTitle" style="font-size:16px;">Program</div>
+        <div class="topbar-subtitle" id="playerSource"><span data-i18n="source_label">Kaynak</span>: ---</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-icon-btn" onclick="showHistory()" title="History" style="margin-right:8px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+        </button>
+        <button class="topbar-icon-btn" onclick="window.location.href='index.html'" title="Home">
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="player-content">
+      <!-- Visualizer -->
+      <div class="visualizer-wrap" id="visualizerWrap">
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="freq-circle" id="freqCircle">
+          <span class="freq-value" id="currentFreq">---</span>
+          <span class="freq-unit">Hz</span>
+        </div>
+      </div>
+
+      <!-- Stats & Duration Setting -->
+      <div class="stats-row">
+        <div class="stat-card" style="flex: 0.8;">
+          <div class="stat-val" id="statFreqCount">0</div>
+          <div class="stat-label" data-i18n="freq_label">Frekans</div>
+        </div>
+        <div class="stat-card"
+          style="flex: 2; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 10px 14px;">
+          <div class="stat-label" data-i18n="duration_setting_label"
+            style="font-size: 10px; margin-bottom: 6px; color: var(--text-muted);">SÜRE AYARI</div>
+          <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+            <input type="range" id="durationSlider" min="60" max="900" step="30" value="180"
+              style="flex: 1; height: 5px; accent-color: var(--tertiary);">
+            <div style="text-align: right; min-width: 55px; white-space: nowrap;">
+              <span id="durationValDisplay" style="color:var(--primary); font-weight:700; font-size: 17px;">3.0</span>
+              <span style="font-size: 12px; color: var(--text-muted); font-weight: 400; margin-left: 2px;"
+                data-i18n="minute_short">dk</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-section">
+        <div class="freq-dots" id="freqDots"></div>
+        <div class="time-row">
+          <span id="timeCurr">00:00</span>
+          <span id="timeTotal">00:00</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls-row">
+        <button class="ctrl-btn" id="prevBtn" title="Önceki">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
+          </svg>
+        </button>
+        <button class="play-btn" id="playBtn" title="Oynat/Durdur">
+          <svg class="play-icon" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+          <svg class="pause-icon" viewBox="0 0 24 24" style="display:none;">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+          </svg>
+        </button>
+        <button class="ctrl-btn" id="nextBtn" title="Sonraki">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Volume -->
+      <div class="volume-row">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5zm7-.17v6.34L9.83 13H7v-2h2.83L12 8.83z" />
+        </svg>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.02" value="1" style="flex:1;">
+        <button id="turboBtn" class="turbo-btn" onclick="toggleTurbo()" title="Ultra Power Boost">
+          <svg viewBox="0 0 24 24">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          <span data-i18n="btn_turbo">ULTRA</span>
+        </button>
+      </div>
+
+      <!-- Wave Selector -->
+      <div class="wave-section">
+        <div class="wave-section-label" data-i18n="wave_type_label">DALGA TİPİ</div>
+        <div class="wave-tabs">
+          <button class="wave-tab active" data-wave="square" data-i18n="wave_square">Kare</button>
+          <button class="wave-tab" data-wave="sine" data-i18n="wave_sine">Sinüs</button>
+          <button class="wave-tab" data-wave="sawtooth" data-wave="sawtooth" data-i18n="wave_sawtooth">Testere</button>
+          <button class="wave-tab" data-wave="pulse" data-i18n="wave_pulse">Darbe </button>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="desc-accordion">
+        <div class="desc-header" id="descHeader">
+          <span data-i18n="desc_header">Program Açıklaması</span>
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path d="M7 10l5 5 5-5z" />
+          </svg>
+        </div>
+        <div class="desc-body" id="descBody">
+          Program seçin.
+        </div>
+      </div>
+
+    </div><!-- end player-content -->
+  </div><!-- end playerScreen -->
+
+  <!-- Status log -->
+  <div class="status-log" id="statusLog"></div>
+
+  <!-- Modals -->
+  <div id="profileModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-title" data-i18n="modal_profile_name">Profil İsmi</div>
+      <input type="text" id="profileInput" class="modal-input" placeholder="Örn: Ayşe">
+      <div class="modal-btns">
+        <button class="m-btn m-btn-cancel" onclick="closeModal('profileModal')" data-i18n="btn_cancel">İptal</button>
+        <button class="m-btn m-btn-confirm" onclick="saveProfile()" data-i18n="btn_save">Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="listModal" class="modal-overlay">
+    <div class="modal-card wide">
+      <div class="modal-title" data-i18n="modal_list_name">Liste İsmi</div>
+      <input type="text" id="listNameInput" class="modal-input" placeholder="Örn: Rahatlama"
+        style="margin-bottom: 12px;">
+
+      <div class="modal-title" style="font-size:14px;" data-i18n="modal_add_freq">Frekans + Dalga Tipi</div>
+      <div class="freq-input-group">
+        <div style="flex: 1;">
+          <input type="number" id="listFreqInput" class="modal-input" placeholder="Hz" style="margin-bottom: 0;">
+        </div>
+        <button class="m-btn m-btn-confirm" onclick="addFreqToPending()" style="flex: 0 0 60px; padding: 12px 0;"
+          data-i18n="btn_add">Ekle</button>
+      </div>
+
+      <div class="wave-mini-tabs" id="modalWaveTabs">
+        <div class="wave-mini-tab active" data-wave="square" onclick="setModalWave(this)" data-i18n="wave_square">Kare
+        </div>
+        <div class="wave-mini-tab" data-wave="sine" onclick="setModalWave(this)" data-i18n="wave_sine">Sinüs</div>
+        <div class="wave-mini-tab" data-wave="sawtooth" onclick="setModalWave(this)" data-i18n="wave_sawtooth">Testere
+        </div>
+        <div class="wave-mini-tab" data-wave="pulse" onclick="setModalWave(this)" data-i18n="wave_pulse">Pulse</div>
+      </div>
+
+      <div class="modal-title" style="font-size:12px; color: var(--text-muted); margin-bottom: 6px;"
+        data-i18n="modal_added_list">Eklenen Listeler</div>
+      <div class="pending-freqs-container" id="pendingFreqsList">
+        <!-- Freqs will be listed here -->
+      </div>
+
+      <div class="modal-btns">
+        <button class="m-btn m-btn-cancel" onclick="closeModal('listModal')" data-i18n="btn_cancel">İptal</button>
+        <button class="m-btn m-btn-confirm" onclick="saveCustomList()" data-i18n="btn_save">Kaydet</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="favPickerModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-title" data-i18n="modal_select_profile">Kime eklensin?</div>
+      <div id="favProfileList" class="fav-profile-list"
+        style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+        <!-- Profiles injected here -->
+      </div>
+      <div class="modal-btns">
+        <button class="m-btn m-btn-cancel" onclick="closeModal('favPickerModal')" data-i18n="btn_cancel">İptal</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    (function () {
+      // =========================================
+      // STATE
+      // =========================================
+      const state = {
+        data: [],
+        filteredData: [],
+        lang: localStorage.getItem('zlang') || 'tr-TR',
+        activeProgram: null,
+        activeFreqIndex: 0,
+        elapsedInFreq: 0,
+        durationPerFreq: 180,
+        isPlaying: false,
+        volume: 1.0,
+        powerBoost: localStorage.getItem('z_ultra') === 'true',
+        activeWave: 'square',
+        timer: null,
+        pendingClone: null,
+        wakeLock: null,
+        pendingCustomFreqs: [],
+        userWaveOverride: null,
+        modalWave: 'square',
+        editingListIndex: null, // NEW: track list being edited
+        ctx: null,
+        gainNode: null,
+        oscillator: null,
+        pulseSource: null,
+        history: JSON.parse(localStorage.getItem('zapp_history') || '[]'),
+        myData: (() => {
+          try {
+            const d = JSON.parse(localStorage.getItem('zapp_my_data'));
+            if (d && typeof d === 'object' && d.profiles) return d;
+          } catch (e) { }
+          return {
+            profiles: [{ id: 'p' + Date.now(), name: 'Genel', lists: [], favorites: [], color: '#303E6C' }],
+            activeProfileId: null
+          };
+        })()
+      };
+
+      if (state.myData.profiles && Array.isArray(state.myData.profiles)) {
+        state.myData.profiles.forEach(p => { if (!p.favorites) p.favorites = []; });
+      }
+      if (!state.myData.activeProfileId && state.myData.profiles && state.myData.profiles.length > 0) {
+        state.myData.activeProfileId = state.myData.profiles[0].id;
+      }
+
+      const $ = id => document.getElementById(id);
+      const dom = {
+        listScreen: $('listScreen'),
+        playerScreen: $('playerScreen'),
+        programList: $('programList'),
+        searchInput: $('searchInput'),
+        clearSearch: $('clearSearch'),
+        logoTitle: $('logoTitle'),
+        langRow: $('langRow'),
+        langDropdown: $('langDropdown'),
+        langBtnFlag: $('langBtnFlag'),
+        langBtnName: $('langBtnName'),
+        backBtn: $('backBtn'),
+        playBtn: $('playBtn'),
+        prevBtn: $('prevBtn'),
+        nextBtn: $('nextBtn'),
+        currentFreq: $('currentFreq'),
+        playerTitle: $('playerTitle'),
+        playerSource: $('playerSource'),
+        freqDots: $('freqDots'),
+        timeCurr: $('timeCurr'),
+        timeTotal: $('timeTotal'),
+        progressFill: $('progressFill'),
+        statFreqCount: $('statFreqCount'),
+        durationSlider: $('durationSlider'),
+        durationValDisplay: $('durationValDisplay'),
+        volumeSlider: $('volumeSlider'),
+        turboBtn: $('turboBtn'),
+        descHeader: $('descHeader'),
+        descBody: $('descBody'),
+        visualizerWrap: $('visualizerWrap'),
+        freqCircle: $('freqCircle'),
+        statusLog: $('statusLog'),
+        profileModal: $('profileModal'),
+        profileInput: $('profileInput'),
+        listModal: $('listModal'),
+        listNameInput: $('listNameInput'),
+        listFreqInput: $('listFreqInput'),
+        pendingFreqsList: $('pendingFreqsList'),
+        favPickerModal: $('favPickerModal'),
+        favProfileList: $('favProfileList')
+      };
+
+      // =========================================
+      // LOG
+      // =========================================
+      let logTimer;
+      function log(msg) {
+        dom.statusLog.textContent = msg;
+        dom.statusLog.classList.add('visible');
+        clearTimeout(logTimer);
+        logTimer = setTimeout(() => dom.statusLog.classList.remove('visible'), 3000);
+      }
+
+      // =========================================
+      // INIT
+      // =========================================
+      function init() {
+        try {
+          // Z-Vault Security Check
+          if (window.ZVault && !window.ZVault.isActivated()) {
+            console.log("Security: Activation required.");
+            dom.programList.innerHTML = '<div class="empty-state"><p>Bu kütüphaneyi görmek için sistemi aktif etmelisiniz.</p></div>';
+            window.ZVault.init(); // Ensure UI is shown
+            return;
+          }
+
+          // Load and Decrypt Data
+          if (window.RIFE_DATA_ENCRYPTED) {
+            const decrypted = window.ZVault.decryptData(window.RIFE_DATA_ENCRYPTED);
+            if (decrypted && decrypted.programs) {
+              const trToLower = (str) => str.replace(/İ/g, 'i').replace(/I/g, 'ı').toLowerCase();
+              const isForbidden = (name) => {
+                const n = trToLower(name);
+                if (n.includes('manevi') || n.includes('bolluk') || n.includes('bereket')) return true;
+                if (n.includes('hayvan') || n.includes('veterin') || n.includes('kedi') || n.includes('köpek')) return true;
+                if (n.includes('kuş') && !n.includes('kuşpalazı')) return true;
+                const words = n.split(/[^a-zçğıöşü0-9]+/);
+                if (words.includes('at') || n.includes('at:')) return true;
+                return false;
+              };
+              state.data = decrypted.programs.filter(prog => {
+                return !isForbidden(prog.name_tr || prog.name_en || prog.name || '');
+              });
+            } else {
+              throw new Error("Kasa verisi çözülemedi veya anahtar hatalı.");
+            }
+          } else if (window.RIFE_DATA && window.RIFE_DATA.programs) {
+            // Legacy support (fallback)
+            const trToLower = (str) => str.replace(/İ/g, 'i').replace(/I/g, 'ı').toLowerCase();
+            const isForbidden = (name) => {
+              const n = trToLower(name);
+              if (n.includes('manevi') || n.includes('bolluk') || n.includes('bereket')) return true;
+              if (n.includes('hayvan') || n.includes('veterin') || n.includes('kedi') || n.includes('köpek')) return true;
+              if (n.includes('kuş') && !n.includes('kuşpalazı')) return true;
+              const words = n.split(/[^a-zçğıöşü0-9]+/);
+              if (words.includes('at') || n.includes('at:')) return true;
+              return false;
+            };
+            state.data = window.RIFE_DATA.programs.filter(prog => {
+              return !isForbidden(prog.name_tr || prog.name_en || prog.name || '');
+            });
+          } else {
+            throw new Error("Veri kaynağı (data.js) bulunamadı.");
+          }
+
+          // Sort state.data in Turkish alphabetical order
+          if (state.data && Array.isArray(state.data)) {
+            state.data.sort((a, b) => {
+              const nameA = (a.names && a.names['tr-TR']) || a.name_tr || a.name_en || '';
+              const nameB = (b.names && b.names['tr-TR']) || b.name_tr || b.name_en || '';
+              return nameA.localeCompare(nameB, 'tr', { sensitivity: 'base' });
+            });
+          }
+
+          // --- FREQUENCY OVERRIDE FOR PINEAL BEZ ATEŞİ ---
+          if (state.data && Array.isArray(state.data)) {
+            state.data.forEach(p => {
+              const isPinealFire = (p.name_en === "Pineal Gland Fire" ||
+                p.name_tr === "Pineal Bez Ateşi" ||
+                (p.names && (p.names['tr-TR'] === "Pineal Bez Ateşi" || p.names['en-US'] === "Pineal Gland Fire")));
+              if (isPinealFire) {
+                p.frequencies = [963, 852, 20, 537, 632];
+              }
+            });
+          }
+          // ----------------------------------------------
+
+          state.filteredData = [...state.data];
+
+          // Sync Turbo UI
+          if (state.powerBoost) {
+            dom.turboBtn.classList.add('active');
+            dom.volumeSlider.max = "2";
+          }
+
+          updateLangUI();
+          translateUI();
+          setupEvents();
+
+          // URL Parameter Check (Categorical Filters from Hub)
+          const urlParams = new URLSearchParams(window.location.search);
+          const query = urlParams.get('q');
+          if (query) {
+            dom.searchInput.value = query;
+            dom.clearSearch.style.display = 'flex';
+            const qNorm = query.toLocaleLowerCase('tr-TR').trim();
+
+            // --- KÜRATORLÜ LİSTELER (ÖZEL KARTLAR) KONTROLÜ ---
+            const CURATED_LISTS = {
+              "Bolluk": [
+                "Hızlı Para/Refah Akışı",
+                "Şans ve Eşzamanlılık",
+                "Bolluk Bilinci (Jüpiter Frekansı)",
+                "Zihinsel Engelleri Kaldırma",
+                "Bolluk",
+                "Ani para",
+                "Mucize",
+                "Kum gibi para",
+                "Kolaylıklı gelir",
+                "Şans"
+              ],
+              "Çakra": [
+                "7 Çakra",
+                "Aura Temizliği",
+                "Epifiz Bezi / Pineal Gland Aktivasyonu",
+                "Chakra Root (Kök Çakra)",
+                "Chakra Sacral (Sakral Çakra)",
+                "Chakra Solar Plexus (Solar Pleksus Çakrası)",
+                "Chakra Heart (Kalp Çakrası)",
+                "Chakra Throat (Boğaz Çakrası)",
+                "Chakra Third Eye (Üçüncü Göz Çakrası)",
+                "Chakra Crown (Taç Çakra)",
+                "Çakra taban kökü"
+              ]
+            };
+
+            // Eğer sorgu virgül içeriyorsa parçala, yoksa tekli dizi yap
+            const queryTerms = query.includes(',') ? query.split(',') : [query];
+            let allResults = [];
+
+            queryTerms.forEach(qItem => {
+              const qTrimmed = qItem.trim();
+              const qNorm = qTrimmed.toLocaleLowerCase('tr-TR');
+
+              if (CURATED_LISTS[qTrimmed]) {
+                const targetNames = CURATED_LISTS[qTrimmed].map(n => n.toLocaleLowerCase('tr-TR').trim());
+                targetNames.forEach(tName => {
+                  const match = state.data.find(p => {
+                    const nameTr = (p.name_tr || (p.names && p.names['tr-TR']) || "").toLocaleLowerCase('tr-TR').trim();
+                    return nameTr === tName;
+                  });
+                  if (match && !allResults.includes(match)) allResults.push(match);
+                });
+              } else {
+                // Akıllı Arama
+                let searchTerms = [qNorm];
+                const langData = i18n[state.lang];
+                if (langData && langData.category_keywords && langData.category_keywords[qTrimmed]) {
+                  searchTerms = langData.category_keywords[qTrimmed];
+                }
+
+                const GENERIC_KEYWORDS = ['metabolizma', 'metabolism', 'iyileşme', 'healing', 'genel', 'general', 'destek', 'support', 'tedavi', 'treatment', 'diyet', 'diet', 'sağlık', 'health', 'hastalık', 'disease', 'program'];
+
+                const results = state.data
+                  .map(p => {
+                    let score = 0;
+                    searchTerms.forEach(term => {
+                      const termNorm = term.toLocaleLowerCase('tr-TR').trim();
+                      const regex = new RegExp(`(^|\\s|[^a-zA-Z0-9çğıöşüÇĞİÖŞÜ])${termNorm}($|\\s|[^a-zA-Z0-9çğıöşüÇĞİÖŞÜ])`, 'i');
+                      const name = (p.names && p.names[state.lang]) ? p.names[state.lang] : '';
+                      if (regex.test(name)) {
+                        score += 10;
+                      } else if (!GENERIC_KEYWORDS.includes(termNorm)) {
+                        const desc = (p.descriptions && p.descriptions[state.lang]) ? p.descriptions[state.lang] : '';
+                        if (regex.test(desc)) score += 1;
+                      }
+                    });
+                    return { ...p, matchScore: score };
+                  })
+                  .filter(p => p.matchScore > 0);
+
+                results.forEach(r => {
+                  if (!allResults.find(existing => existing.name_en === r.name_en)) {
+                    allResults.push(r);
+                  }
+                });
+              }
+            });
+
+            state.filteredData = allResults.sort((a, b) => {
+              if ((b.matchScore || 0) !== (a.matchScore || 0)) return (b.matchScore || 0) - (a.matchScore || 0);
+              const aIsSpecial = a.source === 'Özel Liste';
+              const bIsSpecial = b.source === 'Özel Liste';
+              if (aIsSpecial && !bIsSpecial) return -1;
+              if (bIsSpecial && !aIsSpecial) return 1;
+              return 0;
+            });
+          }
+
+          renderList();
+          if (navigator.storage && navigator.storage.persist) {
+            navigator.storage.persist().then(granted => {
+              if (granted) console.log("Persistent storage granted.");
+            });
+          }
+          log((i18n[state.lang] ? i18n[state.lang].ready : 'Ready') + '. ' + state.data.length + ' programs.');
+        } catch (err) {
+          console.error(err);
+          dom.programList.innerHTML = `<div class="empty-state"><p style="color:red">Sistem Başlatılamadı: ${err.message}</p></div>`;
+        }
+      }
+
+      // =========================================
+      // EVENTS
+      // =========================================
+      function setupEvents() {
+        // Custom dropdown handles language changes via selectLang function
+
+        dom.searchInput.addEventListener('input', e => {
+          const q = e.target.value.toLocaleLowerCase('tr-TR').trim();
+          dom.clearSearch.style.display = q ? 'flex' : 'none';
+          if (!q) {
+            state.filteredData = filterBySource(currentSource());
+          } else {
+            state.filteredData = filterBySource(currentSource()).filter(p => {
+              // Manuel aramada daha esnek ama yine de güvenli regex kullan
+              const regex = new RegExp(`(^|\\s|[^a-zA-Z0-9çğıöşüÇĞİÖŞÜ])${q}($|\\s|[^a-zA-Z0-9çğıöşüÇĞİÖŞÜ])`, 'i');
+              const name = (p.names && p.names[state.lang]) ? p.names[state.lang] : '';
+              const desc = (p.descriptions && p.descriptions[state.lang]) ? p.descriptions[state.lang] : '';
+              return regex.test(name) || regex.test(desc);
+            });
+          }
+          state.filteredData.sort((a, b) => {
+            const aIsSpecial = a.source === 'Özel Liste';
+            const bIsSpecial = b.source === 'Özel Liste';
+            if (aIsSpecial && !bIsSpecial) return -1;
+            if (bIsSpecial && !aIsSpecial) return 1;
+            return 0;
+          });
+          renderList();
+        });
+
+        dom.clearSearch.addEventListener('click', () => {
+          dom.searchInput.value = '';
+          dom.clearSearch.style.display = 'none';
+          state.filteredData = filterBySource(currentSource());
+          renderList();
+          dom.searchInput.focus();
+        });
+
+        // Logo click now just resets the view, but the Home button (above) handles index.html
+        dom.logoTitle.addEventListener('click', () => {
+          // Filtre dışı sekmelerden (Kütüphane vb.) ana sekmeye (Tümü) dön
+          const allTab = document.querySelector('.filter-tab[data-source="all"]');
+          if (allTab) {
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            allTab.classList.add('active');
+            document.querySelector('.search-bar').style.display = 'block';
+          }
+
+          dom.searchInput.value = '';
+          dom.clearSearch.style.display = 'none';
+          state.filteredData = filterBySource('all');
+          renderList();
+          dom.programList.scrollTop = 0;
+          log(i18n[state.lang].ready || 'Home');
+        });
+
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            const isLib = tab.dataset.source === 'library';
+            // Arama çubuğu artık kütüphanede de görünüyor
+            document.querySelector('.search-bar').style.display = 'block';
+
+            const q = dom.searchInput.value.toLocaleLowerCase('tr-TR').trim();
+            state.filteredData = filterBySource(tab.dataset.source).filter(p => {
+              if (!q) return true;
+              // Search strictly in the currently selected language
+              return (p.names && p.names[state.lang] && p.names[state.lang].toLocaleLowerCase('tr-TR').includes(q));
+            });
+            renderList();
+          });
+        });
+
+        dom.backBtn.addEventListener('click', () => {
+          if (state.isPlaying) togglePlay();
+          else stopAudio();
+          showScreen('list');
+        });
+
+        dom.playBtn.addEventListener('click', () => togglePlay());
+        dom.prevBtn.addEventListener('click', () => navigateFreq(-1));
+        dom.nextBtn.addEventListener('click', () => navigateFreq(1));
+
+        dom.volumeSlider.addEventListener('input', e => {
+          state.volume = parseFloat(e.target.value);
+          if (state.gainNode) state.gainNode.gain.setValueAtTime(state.volume, state.ctx.currentTime);
+        });
+
+        document.querySelectorAll('.wave-tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+            document.querySelectorAll('.wave-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            state.activeWave = tab.dataset.wave;
+            state.userWaveOverride = tab.dataset.wave;
+            log('Dalga: ' + state.activeWave);
+            if (state.isPlaying) playFrequency();
+          });
+        });
+
+        dom.descHeader.addEventListener('click', () => {
+          dom.descHeader.classList.toggle('open');
+          dom.descBody.classList.toggle('open');
+        });
+
+        dom.durationSlider.addEventListener('input', e => {
+          state.durationPerFreq = parseInt(e.target.value);
+          dom.durationValDisplay.textContent = (state.durationPerFreq / 60).toFixed(1);
+
+          // Update displays if program active
+          if (state.activeProgram) {
+            dom.timeTotal.textContent = formatTime(state.durationPerFreq);
+          }
+        });
+
+        window.addEventListener('click', (e) => {
+          if (!dom.langRow.contains(e.target)) {
+            dom.langDropdown.classList.remove('open');
+          }
+        });
+      }
+
+      // =========================================
+      // LANG FUNCTIONS
+      // =========================================
+      window.toggleLangDropdown = function () {
+        dom.langDropdown.classList.toggle('open');
+      }
+
+      window.selectLang = function (el) {
+        const val = el.dataset.value;
+        state.lang = val;
+        localStorage.setItem('zlang', val);
+
+        document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('active'));
+        el.classList.add('active');
+
+        updateLangUI();
+        translateUI();
+
+        // Toggle RTL
+        document.documentElement.dir = (val === 'ar-SA') ? 'rtl' : 'ltr';
+
+        dom.langDropdown.classList.remove('open');
+        renderList();
+        if (state.activeProgram) updatePlayerUI(state.activeProgram);
+      }
+
+      function updateLangUI() {
+        const activeOpt = document.querySelector(`.lang-option[data-value="${state.lang}"]`);
+        if (activeOpt) {
+          dom.langBtnFlag.src = activeOpt.querySelector('img').src;
+          dom.langBtnName.textContent = activeOpt.querySelector('.lname').textContent;
+          document.querySelectorAll('.lang-option').forEach(opt => opt.classList.remove('active'));
+          activeOpt.classList.add('active');
+        }
+      }
+
+      function translateUI() {
+        const lang = state.lang;
+        const dict = i18n[lang] || i18n['en-US'];
+        if (!dict) return;
+
+        // Update textContent
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.dataset.i18n;
+          if (dict[key]) el.textContent = dict[key];
+        });
+
+        // Update placeholders
+        document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+          const key = el.dataset.i18nPh;
+          if (dict[key]) el.placeholder = dict[key];
+        });
+      }
+
+      // i18n object removed, now using translations.js
+
+      // =========================================
+      // LIBRARY & PROFILE LOGIC
+      // =========================================
+      function saveData() {
+        localStorage.setItem('zapp_my_data', JSON.stringify(state.myData));
+      }
+
+      window.closeModal = function (id) {
+        dom[id].classList.remove('active');
+        if (id === 'listModal') {
+          state.pendingCustomFreqs = [];
+          state.modalWave = 'square';
+          state.editingListIndex = null;
+        }
+      };
+
+      window.openModal = function (id, isHistory = false) {
+        dom[id].classList.add('active');
+        const input = dom[id].querySelector('input');
+        if (input) {
+          input.value = '';
+          input.focus();
+        }
+        // Fix: Only reset and render pending freqs if NOT opening history
+        if (id === 'listModal' && state.editingListIndex === null && !isHistory) {
+          state.pendingCustomFreqs = [];
+          state.modalWave = 'square';
+          renderPendingFreqs();
+          // Reset wave tabs in modal
+          document.querySelectorAll('.wave-mini-tab').forEach(t => t.classList.toggle('active', t.dataset.wave === 'square'));
+        }
+      };
+
+      // NEW: Custom List Creation Helpers
+      window.setModalWave = function (el) {
+        state.modalWave = el.dataset.wave;
+        document.querySelectorAll('.wave-mini-tab').forEach(t => t.classList.toggle('active', t === el));
+      };
+
+      window.addFreqToPending = function () {
+        const val = parseFloat(dom.listFreqInput.value);
+        if (!val || isNaN(val)) return;
+        state.pendingCustomFreqs.push({ f: val, w: state.modalWave });
+        dom.listFreqInput.value = '';
+        renderPendingFreqs();
+      };
+
+      window.removeFreqFromPending = function (idx) {
+        state.pendingCustomFreqs.splice(idx, 1);
+        renderPendingFreqs();
+      };
+
+      function renderPendingFreqs() {
+        const dict = i18n[state.lang] || i18n['en-US'];
+        if (state.pendingCustomFreqs.length === 0) {
+          dom.pendingFreqsList.innerHTML = `<div class="lib-empty" style="padding:15px; font-size:12px;">${dict.modal_list_empty}</div>`;
+          return;
+        }
+        dom.pendingFreqsList.innerHTML = state.pendingCustomFreqs.map((item, i) => `
+      <div class="pending-freq-item">
+        <div class="pending-freq-info">
+          <span class="pending-freq-val">${item.f} Hz</span>
+          <span class="pending-freq-wave">${item.w}</span>
+        </div>
+        <div class="pending-freq-del" onclick="removeFreqFromPending(${i})">✕</div>
+      </div>
+    `).join('');
+      }
+
+      window.saveProfile = function () {
+        const name = dom.profileInput.value.trim();
+        if (!name) return;
+        const newProfile = {
+          id: 'p' + Date.now(),
+          name: name,
+          lists: [],
+          favorites: [],
+          color: `hsl(${Math.random() * 360}, 60%, 50%)`
+        };
+        state.myData.profiles.push(newProfile);
+        state.myData.activeProfileId = newProfile.id;
+        saveData();
+        closeModal('profileModal');
+        renderList();
+      };
+
+      window.switchProfile = function (id) {
+        state.myData.activeProfileId = id;
+        saveData();
+        renderList();
+      };
+
+      window.deleteProfile = function (e, id) {
+        e.stopPropagation();
+        if (state.myData.profiles.length <= 1) return;
+
+        // Protection: Do not allow deleting the "Genel" profile
+        const profile = state.myData.profiles.find(p => p.id === id);
+        if (profile && profile.name === 'Genel') {
+          log('Genel profil silinemez / General profile cannot be deleted');
+          return;
+        }
+
+        if (confirm('Bu profili ve tüm listelerini silmek istediğinize emin misiniz?')) {
+          const idx = state.myData.profiles.findIndex(p => p.id === id);
+          if (idx > -1) {
+            state.myData.profiles.splice(idx, 1);
+            if (state.myData.activeProfileId === id) {
+              state.myData.activeProfileId = state.myData.profiles[0].id;
+            }
+            saveData();
+            renderList();
+          }
+        }
+      };
+
+      window.saveCustomList = function () {
+        const name = dom.listNameInput.value.trim();
+        if (!name || state.pendingCustomFreqs.length === 0) return;
+
+        const newList = {
+          name_en: name,
+          source: 'Özel',
+          frequencies: [...state.pendingCustomFreqs],
+          descriptions: { "tr-TR": "Özel oluşturulmuş liste.", "en-US": "Custom created list." }
+        };
+
+        const profile = getActiveProfile();
+        if (profile) {
+          if (state.editingListIndex !== null) {
+            profile.lists[state.editingListIndex] = newList;
+          } else {
+            profile.lists.push(newList);
+          }
+          saveData();
+        }
+        closeModal('listModal');
+        renderList();
+      };
+
+      window.editCustomList = function (e, i) {
+        e.stopPropagation();
+        const profile = getActiveProfile();
+        const list = profile.lists[i];
+        if (!list) return;
+
+        state.editingListIndex = i;
+        state.pendingCustomFreqs = JSON.parse(JSON.stringify(list.frequencies));
+        state.modalWave = 'square';
+
+        openModal('listModal');
+        dom.listNameInput.value = list.name_en || '';
+        renderPendingFreqs();
+      };
+
+      function getActiveProfile() {
+        return state.myData.profiles.find(p => p.id === state.myData.activeProfileId) || state.myData.profiles[0];
+      }
+
+      window.toggleFavorite = function (e, programNameEn, source) {
+        e.stopPropagation();
+        state.pendingFav = { name_en: programNameEn, source: source };
+        state.pendingClone = null;
+
+        // Check if it's already in the currently active UI profile
+        const activeProf = getActiveProfile();
+        const id = programNameEn + '|' + (source || '');
+        if (activeProf.favorites.includes(id)) {
+          // Toggle off if already in current profile? 
+          // Or show modal to allow adding/removing from others?
+          // User said: "sadece bir isme tıklayıp hemen eklenmesi yeterli"
+          // Let's stick to opening modal to choose.
+        }
+
+        // Populate Modal
+        dom.favProfileList.innerHTML = state.myData.profiles.map(p => `
+      <button class="m-btn" style="background: white; color: var(--primary); border: 1px solid var(--border); width: 100%; justify-content: flex-start; text-align: left;" onclick="addFavToProfile('${p.id}')">
+        <div class="profile-circle" style="width:24px; height:24px; font-size:10px; margin-right:8px; display:inline-flex; background:${p.color}">${p.name[0].toUpperCase()}</div>
+        ${p.name}
+      </button>
+    `).join('');
+
+        openModal('favPickerModal');
+      };
+
+      window.removeFavoriteFromCurrent = function (e, programNameEn, source) {
+        e.stopPropagation();
+        if (confirm('Bu programı kütüphanenizden silmek istediğinize emin misiniz?')) {
+          const activeProf = getActiveProfile();
+          const id = programNameEn + '|' + (source || '');
+          const idx = activeProf.favorites.indexOf(id);
+          if (idx > -1) {
+            activeProf.favorites.splice(idx, 1);
+            saveData();
+            renderList();
+          }
+        }
+      };
+
+      window.toggleCloneCustomList = function (e, i) {
+        e.stopPropagation();
+        const activeProf = getActiveProfile();
+        state.pendingClone = activeProf.lists[i];
+        state.pendingFav = null;
+
+        // Populate Modal
+        dom.favProfileList.innerHTML = state.myData.profiles.map(p => `
+      <button class="m-btn" style="background: white; color: var(--primary); border: 1px solid var(--border); width: 100%; justify-content: flex-start; text-align: left;" onclick="addFavToProfile('${p.id}')">
+        <div class="profile-circle" style="width:24px; height:24px; font-size:10px; margin-right:8px; display:inline-flex; background:${p.color}">${p.name[0].toUpperCase()}</div>
+        ${p.name}
+      </button>
+    `).join('');
+
+        openModal('favPickerModal');
+      };
+
+      window.addFavToProfile = function (profileId) {
+        const prof = state.myData.profiles.find(p => p.id === profileId);
+        if (!prof) return;
+
+        if (state.pendingClone) {
+          // Clone custom list
+          const newList = JSON.parse(JSON.stringify(state.pendingClone));
+          prof.lists.push(newList);
+          saveData();
+        } else if (state.pendingFav) {
+          // Add favorite
+          const id = state.pendingFav.name_en + '|' + (state.pendingFav.source || '');
+          const idx = prof.favorites.indexOf(id);
+          if (idx > -1) {
+            prof.favorites.splice(idx, 1);
+          } else {
+            prof.favorites.push(id);
+          }
+          saveData();
+        }
+
+        const dict = i18n[state.lang] || i18n['en-US'];
+        closeModal('favPickerModal');
+        state.pendingFav = null;
+        state.pendingClone = null;
+        renderList();
+        log(dict.log_saved || 'Kaydedildi / Saved');
+      };
+
+      function currentSource() {
+        const active = document.querySelector('.filter-tab.active');
+        return active ? active.dataset.source : 'all';
+      }
+
+      function filterBySource(src) {
+        return src === 'all' ? [...state.data] : state.data.filter(p => p.source === src);
+      }
+
+      // =========================================
+      // SCREENS
+      // =========================================
+      function showScreen(name) {
+        dom.listScreen.classList.toggle('active', name === 'list');
+        dom.playerScreen.classList.toggle('active', name === 'player');
+      }
+
+      // =========================================
+      // RENDER LIST
+      // =========================================
+      const icons = ['🧬', '🌿', '⚡', '🔬', '💊', '🩺', '🧠', '❤️', '🦷', '👁️', '🫁', '🦴'];
+      function getIcon(i) { return icons[i % icons.length]; }
+
+          function formatSourceBadge(src) {
+      if (!src) return 'XTRA';
+      const s = src.trim();
+      if (s === 'CAFL') return 'CAFL';
+      if (s === 'Rife Handbook') return 'Rife Handbook';
+      return 'XTRA';
+    }
+
+    function renderList() {
+        const dict = i18n[state.lang] || i18n['en-US'];
+        const src = currentSource();
+
+        if (src === 'library') {
+          const activeProf = getActiveProfile();
+          let html = `
+        <div class="library-header">
+          <div class="profile-bar">
+            ${state.myData.profiles.map(p => `
+              <div class="profile-item ${p.id === activeProf.id ? 'active' : ''}" onclick="switchProfile('${p.id}')">
+                ${(state.myData.profiles.length > 1 && p.name !== 'Genel') ? `<div class="profile-delete" onclick="deleteProfile(event, '${p.id}')">✕</div>` : ''}
+                <div class="profile-circle" style="background:${p.color}">${p.name[0].toUpperCase()}</div>
+                <div class="profile-name">${p.name === 'Genel' ? (dict.profile_general || 'Genel') : p.name}</div>
+              </div>
+            `).join('')}
+            <div class="add-profile-btn" onclick="openModal('profileModal')">
+              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/></svg>
+            </div>
+          </div>
+        </div>
+      `;
+
+          // 1. Favorites Header with "Create List" button moved to top for accessibility
+          html += `
+        <div class="lib-section-title">
+          ${dict.lib_favs}
+          <button class="lib-create-btn" onclick="openModal('listModal')">${dict.lib_create_list}</button>
+        </div>
+      `;
+          const favs = state.data.filter(p => activeProf.favorites.includes(p.name_en + '|' + (p.source || '')));
+          if (favs.length === 0) {
+            html += `<div class="lib-empty">${dict.empty_library}</div>`;
+          } else {
+            html += favs.map((p, i) => renderItemHtml(p, i, true)).join('');
+          }
+
+          // 2. Custom Lists Header (Simplified)
+          html += `
+        <div class="lib-section-title">
+          ${dict.lib_my_lists}
+        </div>
+      `;
+          if (!activeProf.lists || activeProf.lists.length === 0) {
+            html += `<div class="lib-empty">Henüz özel liste oluşturulmadı.</div>`;
+          } else {
+            html += activeProf.lists.map((p, i) => renderItemHtml(p, i, false, true)).join('');
+          }
+
+          dom.programList.innerHTML = html;
+          return;
+        }
+
+        // Normal List
+        if (!state.filteredData.length) {
+          dom.programList.innerHTML = `<div class="empty-state"><svg width="48" height="48" viewBox="0 0 24 24"><path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg><p>${dict.no_results}</p></div>`;
+          return;
+        }
+        dom.programList.innerHTML = state.filteredData.map((p, i) => renderItemHtml(p, i)).join('');
+      }
+
+      function renderItemHtml(p, i, isFavView = false, isCustom = false) {
+        const dict = i18n[state.lang] || i18n['en-US'];
+        const activeProf = getActiveProfile();
+        const name = (p.names && p.names[state.lang]) || p.name_en || p.name_tr || 'Bilinmiyor';
+        const isActive = state.activeProgram && state.activeProgram.name_en === p.name_en && state.activeProgram.source === p.source;
+        const freqCount = p.frequencies ? p.frequencies.length : 0;
+        const isFav = activeProf.favorites.includes(p.name_en + '|' + (p.source || ''));
+
+        let iconHtml = p.custom_icon
+          ? `<img src="${p.custom_icon}" style="width:30px; height:30px; object-fit:contain; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));">`
+          : getIcon(i);
+
+        // Otomatik Çakra İkon Eşleştirme (APK uyumlu yol)
+        const n = name.toLowerCase();
+        if (n.includes('kök') || n.includes('root')) iconHtml = `<img src="icons/chakra1.png" style="width:32px; height:32px; object-fit:contain;">`;
+        else if (n.includes('sakral') || n.includes('sacral')) iconHtml = `<img src="icons/chakra2.png" style="width:32px; height:32px; object-fit:contain;">`;
+        else if (n.includes('pleksus') || n.includes('plexus')) iconHtml = `<img src="icons/chakra3.png" style="width:32px; height:32px; object-fit:contain;">`;
+        else if (n.includes('kalp') || n.includes('heart')) iconHtml = `<img src="icons/chakra4.png" style="width:32px; height:32px; object-fit:contain;">`;
+        else if (n.includes('boğaz') || n.includes('throat')) iconHtml = `<img src="icons/chakra5.png" style="width:32px; height:32px; object-fit:contain;">`;
+        else if (n.includes('üçüncü göz') || n.includes('third eye') || n.includes('pineal')) iconHtml = `<img src="icons/chakra6.png" style="width:32px; height:32px; object-fit:contain;">`;
+        else if (n.includes('taç') || n.includes('crown')) iconHtml = `<img src="icons/chakra7.png" style="width:32px; height:32px; object-fit:contain;">`;
+
+        const clickAttr = isCustom ? `selectCustomProgram(${i})` : (isFavView ? `selectFavoriteProgram('${p.name_en}', '${p.source}')` : `selectProgram(${i})`);
+
+        return `<div class="program-item${isActive ? ' active' : ''}" onclick="${clickAttr}">
+      <div class="program-item-icon">${iconHtml}</div>
+      <div class="program-item-body">
+        <div class="program-item-name">${name}</div>
+        <div class="program-item-meta">
+          <span class="source-badge">${formatSourceBadge(p.source)}</span>
+          <span>${freqCount} ${dict.frequencies_unit || 'frekans'}</span>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        ${!isCustom ? `
+          ${isFavView ? `
+          <div class="program-item-fav" onclick="removeFavoriteFromCurrent(event, '${p.name_en}', '${p.source}')" style="color:var(--danger)">
+            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+          </div>
+          ` : ''}
+          <div class="program-item-fav ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${p.name_en}', '${p.source}')">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+        ` : `
+          <div class="program-item-fav" onclick="editCustomList(event, ${i})" style="color:var(--tertiary)">
+            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+          </div>
+          <div class="program-item-fav" onclick="toggleCloneCustomList(event, ${i})">
+            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+          </div>
+          <div class="program-item-fav" onclick="deleteCustomList(event, ${i})" style="color:var(--danger)">
+            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+          </div>
+        `}
+      </div>
+      <div class="program-item-arrow">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+      </div>
+    </div>`;
+      }
+
+      window.selectFavoriteProgram = function (nameEn, source) {
+        const p = state.data.find(x => x.name_en === nameEn && x.source === source);
+        if (p) selectObjectProgram(p);
+      };
+
+      window.selectCustomProgram = function (i) {
+        const profile = getActiveProfile();
+        const p = profile.lists[i];
+        if (p) selectObjectProgram(p);
+      };
+
+      function selectObjectProgram(p) {
+        stopAudio();
+        state.activeProgram = p;
+        state.activeFreqIndex = 0;
+        state.elapsedInFreq = 0;
+        state.isPlaying = false;
+        updatePlayerUI(p);
+        renderList();
+        showScreen('player');
+      }
+
+      window.deleteCustomList = function (e, i) {
+        e.stopPropagation();
+        const profile = getActiveProfile();
+        if (profile && profile.lists) {
+          profile.lists.splice(i, 1);
+          saveData();
+        }
+        renderList();
+      };
+
+
+      // =========================================
+      // SELECT PROGRAM
+      // =========================================
+      window.selectProgram = function (i) {
+        const p = state.filteredData[i];
+        if (!p) return;
+
+        stopAudio();
+        state.activeProgram = p;
+        state.activeFreqIndex = 0;
+        state.elapsedInFreq = 0;
+        state.isPlaying = false;
+
+        updatePlayerUI(p);
+        renderList(); // update active state
+        showScreen('player');
+      };
+
+      function updatePlayerUI(p) {
+        const dict = i18n[state.lang] || i18n['en-US'];
+        const name = (p.names && p.names[state.lang]) || p.name_en || 'Program';
+        dom.playerTitle.textContent = name;
+
+        // Update source with translated prefix
+        const srcSpan = dom.playerSource.querySelector('[data-i18n="source_label"]');
+        if (srcSpan) {
+          dom.playerSource.innerHTML = `<span data-i18n="source_label">${dict.source_label}</span>: ${p.source || ''}`;
+        } else {
+          dom.playerSource.textContent = (dict.source_label || 'Source') + ': ' + (p.source || '');
+        }
+
+        const freqTotal = p.frequencies ? p.frequencies.length : 0;
+        dom.statFreqCount.textContent = freqTotal;
+
+        const firstData = p.frequencies && p.frequencies.length ? p.frequencies[0] : null;
+        const firstFreq = typeof firstData === 'object' ? firstData.f : firstData;
+        dom.currentFreq.textContent = firstFreq ? parseFloat(firstFreq).toFixed(2) : '---';
+        dom.timeTotal.textContent = formatTime(state.durationPerFreq);
+        dom.timeCurr.textContent = '00:00';
+        dom.progressFill.style.width = '0%';
+        updatePlayBtn(false);
+
+        // Description - Robust fallback with i18n
+        const descs = p.descriptions || {};
+        let desc = descs[state.lang];
+
+        // If empty or missing, try fallback chain
+        if (!desc || desc.trim() === "") {
+          desc = descs['en-US'] || descs['tr-TR'] || "";
+        }
+
+        // If still empty, show translatable default message
+        if (!desc || desc.trim() === "") {
+          desc = dict.no_description || "Description not available.";
+        }
+
+        dom.descBody.innerHTML = typeof desc === 'string' ? desc : (dict.no_description || 'No description.');
+
+        renderDots();
+      }
+
+      // =========================================
+      // DOTS
+      // =========================================
+      function renderDots() {
+        if (!state.activeProgram) return;
+        const freqs = state.activeProgram.frequencies;
+        const maxDots = Math.min(freqs.length, 40);
+        dom.freqDots.innerHTML = Array.from({ length: maxDots }, (_, i) => {
+          let cls = 'freq-dot';
+          if (i < state.activeFreqIndex) cls += ' done';
+          else if (i === state.activeFreqIndex) cls += ' current';
+          return `<div class="${cls}"></div>`;
+        }).join('');
+      }
+
+      // =========================================
+      // AUDIO ENGINE
+      // =========================================
+      function ensureAudioCtx() {
+        if (!state.ctx) {
+          state.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (state.ctx.state !== 'running') state.ctx.resume();
+        if (!state.gainNode) {
+          state.gainNode = state.ctx.createGain();
+
+          // Safety Compressor removed for maximum raw power (Rodin Coil mode)
+          state.gainNode.connect(state.ctx.destination);
+        }
+        state.gainNode.gain.setValueAtTime(state.volume, state.ctx.currentTime);
+      }
+
+      function stopAudio() {
+        // Android Native Stop
+        if (window.Android && typeof window.Android.stopNativeFrequency === 'function') {
+          window.Android.stopNativeFrequency();
+        }
+
+        if (state.oscillator) {
+          try { state.oscillator.stop(); } catch (e) { }
+          state.oscillator = null;
+        }
+        if (state.pulseSource) {
+          try { state.pulseSource.stop(); } catch (e) { }
+          state.pulseSource = null;
+        }
+      }
+
+      function playFrequency() {
+        if (!state.activeProgram || !state.isPlaying) return;
+
+        const freqs = state.activeProgram.frequencies;
+        if (!freqs || !freqs.length) return;
+
+        const currentData = freqs[state.activeFreqIndex];
+        let freq, forceWave;
+
+        if (typeof currentData === 'object') {
+          freq = parseFloat(currentData.f);
+          forceWave = currentData.w;
+        } else {
+          freq = parseFloat(currentData);
+          forceWave = null;
+        }
+
+        dom.currentFreq.textContent = freq.toFixed(2);
+        const dict = i18n[state.lang] || i18n['en-US'];
+
+        // Dynamic Waveform Selection
+        let wave = state.userWaveOverride || forceWave || state.activeWave;
+
+        // Auto-switch to pulse for sub-20Hz (APK 2.2.9 behavior)
+        if (!state.userWaveOverride && !forceWave) {
+          if (freq < 20 && wave !== 'pulse') {
+            wave = 'pulse';
+            state.activeWave = 'pulse';
+            document.querySelectorAll('.wave-tab').forEach(t => {
+              t.classList.toggle('active', t.dataset.wave === 'pulse');
+            });
+            log(dict.log_pulse || 'Low frequency → Pulse mode');
+          } else if (freq >= 20 && wave === 'pulse') {
+            wave = 'square';
+            state.activeWave = 'square';
+            document.querySelectorAll('.wave-tab').forEach(t => {
+              t.classList.toggle('active', t.dataset.wave === 'square');
+            });
+            log(dict.log_square_auto || 'Normal frequency → Square mode');
+          }
+        } else {
+          // If forced by custom list, update UI tabs to show what's playing
+          document.querySelectorAll('.wave-tab').forEach(t => {
+            t.classList.toggle('active', t.dataset.wave === wave);
+          });
+        }
+
+        // -------------------------------------------------------------
+
+        // --- ANDROID NATIVE BRIDGE (APK 2.2.9 Logic) ---
+        if (window.Android && typeof window.Android.playNativeFrequency === 'function') {
+          window.Android.playNativeFrequency(freq, wave, state.powerBoost);
+          dom.freqCircle.classList.add('playing');
+          dom.visualizerWrap.querySelectorAll('.pulse-ring').forEach(r => r.classList.add('playing'));
+          renderDots();
+          return;
+        }
+        // -----------------------------------------------
+
+        ensureAudioCtx();
+        stopAudio();
+
+        if (wave === 'pulse' || wave === 'square') {
+          // PHASE-ALIGNMENT LOGIC (Eliminates clicks)
+          // We calculate a buffer length that contains an exact number of periods
+          const sampleRate = state.ctx.sampleRate;
+          const numPeriods = Math.max(1, Math.round(freq)); // Target ~1 second of audio
+          const totalSamples = Math.round(numPeriods * sampleRate / freq);
+
+          const buffer = state.ctx.createBuffer(1, totalSamples, sampleRate);
+          const data = buffer.getChannelData(0);
+          const dutyCycle = (wave === 'pulse') ? 0.02 : 0.50;
+
+          for (let i = 0; i < totalSamples; i++) {
+            // Calculate phase based on the exact totalSamples to ensure perfect loop
+            const phase = (i * numPeriods / totalSamples) % 1;
+            let val;
+            if (state.powerBoost) {
+              val = (phase < dutyCycle) ? 1.0 : -1.0;
+            } else {
+              val = (phase < dutyCycle) ? 1.0 : 0.0;
+            }
+            data[i] = val;
+          }
+
+          state.pulseSource = state.ctx.createBufferSource();
+          state.pulseSource.buffer = buffer;
+          state.pulseSource.loop = true;
+          state.pulseSource.connect(state.gainNode);
+          state.pulseSource.start();
+        } else {
+          // For Sine and Sawtooth, we keep standard oscillators as they are naturally smooth
+          state.oscillator = state.ctx.createOscillator();
+          state.oscillator.type = wave;
+          state.oscillator.frequency.setValueAtTime(freq, state.ctx.currentTime);
+          state.oscillator.connect(state.gainNode);
+          state.oscillator.start();
+        }
+
+        dom.freqCircle.classList.add('playing');
+        dom.visualizerWrap.querySelectorAll('.pulse-ring').forEach(r => r.classList.add('playing'));
+        renderDots();
+      }
+
+
+
+      // =========================================
+      // TOGGLE PLAY
+      // =========================================
+      function togglePlay() {
+        if (!state.activeProgram) return;
+        const dict = i18n[state.lang] || i18n['en-US'];
+
+        if (state.isPlaying) {
+          // PAUSE
+          state.isPlaying = false;
+          stopAudio();
+          clearInterval(state.timer);
+          updatePlayBtn(false);
+          dom.freqCircle.classList.remove('playing');
+          dom.visualizerWrap.querySelectorAll('.pulse-ring').forEach(r => r.classList.remove('playing'));
+          log(dict.log_paused || 'Paused');
+        } else {
+          // PLAY
+          state.isPlaying = true;
+          updatePlayBtn(true);
+          playFrequency();
+          startTimer();
+          requestWakeLock();
+          logSession(state.activeProgram);
+        }
+      }
+
+      function updatePlayBtn(playing) {
+        dom.playBtn.querySelector('.play-icon').style.display = playing ? 'none' : '';
+        dom.playBtn.querySelector('.pause-icon').style.display = playing ? '' : 'none';
+        if (!playing) releaseWakeLock();
+      }
+
+      // =========================================
+      // TIMER
+      // =========================================
+      function startTimer() {
+        clearInterval(state.timer);
+        state.timer = setInterval(() => {
+          if (!state.isPlaying) return;
+          state.elapsedInFreq++;
+          const pct = (state.elapsedInFreq / state.durationPerFreq) * 100;
+          dom.progressFill.style.width = pct + '%';
+          dom.timeCurr.textContent = formatTime(state.elapsedInFreq);
+
+          if (state.elapsedInFreq >= state.durationPerFreq) {
+            navigateFreq(1);
+          }
+        }, 1000);
+      }
+
+      function navigateFreq(dir) {
+        if (!state.activeProgram) return;
+        state.activeFreqIndex += dir;
+        state.userWaveOverride = null;
+        state.elapsedInFreq = 0;
+        dom.progressFill.style.width = '0%';
+        dom.timeCurr.textContent = '00:00';
+
+        const freqs = state.activeProgram.frequencies;
+        const dict = i18n[state.lang] || i18n['en-US'];
+        if (state.activeFreqIndex >= freqs.length) {
+          // Program bitti
+          state.activeFreqIndex = 0;
+          if (state.isPlaying) {
+            togglePlay();
+            log(dict.log_completed || 'Program completed! 🎉');
+          }
+          return;
+        }
+        if (state.activeFreqIndex < 0) state.activeFreqIndex = 0;
+
+        const currentData = freqs[state.activeFreqIndex];
+        const freqVal = typeof currentData === 'object' ? currentData.f : currentData;
+        dom.currentFreq.textContent = parseFloat(freqVal).toFixed(2);
+
+        if (state.isPlaying) playFrequency();
+        else renderDots();
+      }
+
+      // =========================================
+      // TURBO MODE
+      // =========================================
+      window.toggleTurbo = function () {
+        state.powerBoost = !state.powerBoost;
+        localStorage.setItem('z_ultra', state.powerBoost);
+
+        const dict = i18n[state.lang] || i18n['en-US'];
+
+        if (state.powerBoost) {
+          dom.turboBtn.classList.add('active');
+          dom.volumeSlider.max = "2";
+          log(dict.log_ultra_on || 'ULTRA BOOST: ON ⚡');
+        } else {
+          dom.turboBtn.classList.remove('active');
+          dom.volumeSlider.max = "1";
+          // Cap volume at 1.0 if returning to standard
+          if (state.volume > 1.0) {
+            state.volume = 1.0;
+            dom.volumeSlider.value = 1.0;
+            if (state.gainNode) state.gainNode.gain.setValueAtTime(1.0, state.ctx.currentTime);
+          }
+          log(dict.log_ultra_off || 'ULTRA BOOST: OFF');
+        }
+
+        if (state.isPlaying) playFrequency();
+      };
+
+      // =========================================
+      // UTILS
+      // =========================================
+      function formatTime(s) {
+        const m = Math.floor(s / 60);
+        const sec = Math.floor(s % 60);
+        return m.toString().padStart(2, '0') + ':' + sec.toString().padStart(2, '0');
+      }
+
+      // =========================================
+      // SCREEN WAKE LOCK
+      // =========================================
+      async function requestWakeLock() {
+        if (!('wakeLock' in navigator)) return;
+        if (state.wakeLock) return;
+
+        try {
+          state.wakeLock = await navigator.wakeLock.request('screen');
+          state.wakeLock.addEventListener('release', () => {
+            state.wakeLock = null;
+          });
+          console.log("Wake Lock is active.");
+        } catch (err) {
+          console.error(`${err.name}, ${err.message}`);
+        }
+      }
+
+      function releaseWakeLock() {
+        if (state.wakeLock) {
+          state.wakeLock.release();
+          state.wakeLock = null;
+        }
+      }
+
+      // =========================================
+      // SESSION HISTORY
+      // =========================================
+      function logSession(p) {
+        if (!p) return;
+        const now = new Date();
+
+        // Check if program already exists in history
+        const existingIdx = state.history.findIndex(x => x.id === p.name_en);
+
+        if (existingIdx > -1) {
+          // Update existing
+          state.history[existingIdx].time = now.toLocaleString(state.lang);
+          state.history[existingIdx].ts = now.getTime();
+          state.history[existingIdx].count = (state.history[existingIdx].count || 1) + 1;
+
+          // Move to top
+          const entry = state.history.splice(existingIdx, 1)[0];
+          state.history.unshift(entry);
+        } else {
+          // Create new
+          const entry = {
+            id: p.name_en,
+            name: (p.names && p.names[state.lang]) || p.name_en,
+            time: now.toLocaleString(state.lang),
+            ts: now.getTime(),
+            count: 1
+          };
+          state.history.unshift(entry);
+        }
+
+        state.history = state.history.slice(0, 50);
+        localStorage.setItem('zapp_history', JSON.stringify(state.history));
+        console.log("Seans güncellendi / Session updated");
+      }
+
+      window.showHistory = function () {
+        const hist = JSON.parse(localStorage.getItem('zapp_history') || '[]');
+        const dict = i18n[state.lang] || i18n['en-US'];
+
+        let html = '<div style="padding:10px">';
+        if (hist.length === 0) {
+          html += `<p style="text-align:center; color:var(--text-muted); padding:20px;">${dict.history_empty || 'Henüz seans kaydı yok'}</p>`;
+        } else {
+          hist.forEach((item, index) => {
+            let displayName = item.name;
+            if (state.data) {
+              const prog = state.data.find(p => p.name_en === item.id);
+              if (prog) {
+                displayName = (prog.names && prog.names[state.lang]) || prog.name_en;
+              }
+            }
+
+            const countHtml = item.count > 1 ? `<span style="background:var(--tertiary); color:white; font-size:10px; padding:2px 6px; border-radius:10px; margin-left:8px;">${item.count}x</span>` : '';
+            html += `
+          <div style="padding:12px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; background: rgba(0,0,0,0.02); margin-bottom:4px; border-radius:8px;">
+            <div style="flex:1; cursor:pointer;" onclick="playHistoryEntry('${item.id}', '${displayName.replace(/'/g, "\\'")}')">
+              <div style="font-weight:700; color: #1a1a2e; font-size:14px; line-height:1.4; display:flex; align-items:center;">
+                ${displayName} ${countHtml}
+              </div>
+              <div style="font-size:11px; color: #6b7ba4; font-weight:500;">${item.time}</div>
+            </div>
+            <button onclick="deleteHistoryEntry(${index})" style="background:none; border:none; color:var(--danger); padding:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0.6;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+            </button>
+          </div>
+        `;
+          });
+        }
+        html += '</div>';
+
+        const modal = document.getElementById('listModal');
+        const title = modal.querySelector('.modal-title');
+        const inputGroup = modal.querySelector('.freq-input-group');
+        const waveTabs = modal.querySelector('#modalWaveTabs');
+        const listContainer = document.getElementById('pendingFreqsList');
+        const btnGroup = modal.querySelector('.modal-btns');
+
+        // Hide creation elements
+        document.getElementById('listNameInput').style.display = 'none';
+        const subTitle = modal.querySelector('[data-i18n="modal_add_freq"]');
+        if (subTitle) subTitle.style.display = 'none';
+        if (inputGroup) inputGroup.style.display = 'none';
+        if (waveTabs) waveTabs.style.display = 'none';
+
+        title.textContent = dict.history_title || 'Terapi Günlüğü / Session History';
+        listContainer.innerHTML = html;
+        listContainer.style.display = 'block';
+
+        // Temporary close button for history
+        btnGroup.innerHTML = `<button class="m-btn m-btn-confirm" style="width:100%; margin:0;" onclick="closeHistoryModal()">${dict.btn_close || 'Kapat'}</button>`;
+
+        openModal('listModal', true);
+      };
+
+      window.playHistoryEntry = function (id, name) {
+        const p = state.data.find(x => x.name_en === id);
+        if (p) {
+          closeHistoryModal();
+          selectObjectProgram(p);
+          log(`Geçmişten başlatıldı: ${name}`);
+        } else {
+          log(`Program bulunamadı: ${name}`);
+        }
+      };
+
+      window.deleteHistoryEntry = function (index) {
+        state.history.splice(index, 1);
+        localStorage.setItem('zapp_history', JSON.stringify(state.history));
+        window.showHistory(); // Refresh list
+      };
+
+      window.closeHistoryModal = function () {
+        closeModal('listModal');
+        // Restore creation elements after animation
+        setTimeout(() => {
+          document.getElementById('listNameInput').style.display = '';
+          const modal = document.getElementById('listModal');
+          const subTitle = modal.querySelector('[data-i18n="modal_add_freq"]');
+          if (subTitle) subTitle.style.display = '';
+          const inputGroup = modal.querySelector('.freq-input-group');
+          const waveTabs = modal.querySelector('#modalWaveTabs');
+          if (inputGroup) inputGroup.style.display = '';
+          if (waveTabs) waveTabs.style.display = '';
+          const dict = i18n[state.lang] || i18n['en-US'];
+          modal.querySelector('.modal-title').textContent = dict.modal_list_name;
+          modal.querySelector('.modal-btns').innerHTML = `
+        <button class="m-btn m-btn-cancel" onclick="closeModal('listModal')" data-i18n="btn_cancel">${dict.btn_cancel}</button>
+        <button class="m-btn m-btn-confirm" onclick="saveCustomList()" data-i18n="btn_save">${dict.btn_save}</button>
+      `;
+        }, 400);
+      };
+
+      // Handle visibility change to re-acquire wake lock
+      document.addEventListener('visibilitychange', async () => {
+        if (state.wakeLock !== null && document.visibilityState === 'visible') {
+          requestWakeLock();
+        }
+      });
+
+      // =========================================
+      // START
+      // =========================================
+      window.addEventListener('load', () => {
+        // Initial RTL check
+        if (state.lang === 'ar-SA') {
+          document.documentElement.dir = 'rtl';
+        }
+
+        const overlay = document.getElementById('loadingOverlay');
+        const loaderText = document.getElementById('loaderText');
+
+        // Dynamically load data.js so the page renders first (non-blocking)
+        const dataScript = document.createElement('script');
+        dataScript.src = 'data.js';
+        dataScript.onload = () => {
+          console.log('Data loaded, starting init...');
+          try {
+            if (typeof init === 'function') {
+              init();
+              console.log('Init success');
+            } else {
+              console.error('init function not found!');
+            }
+          } catch (e) {
+            console.error('init error:', e);
+            if (overlay) overlay.classList.add('hidden');
+            document.getElementById('programList').innerHTML =
+              `<div class="empty-state"><p style="color:#ff4757; font-weight:700;">Yükleme Hatası</p><p style="font-size:12px;">${e.message}</p></div>`;
+          }
+          if (overlay) overlay.classList.add('hidden');
+        };
+        dataScript.onerror = () => {
+          if (loaderText) loaderText.textContent = 'Veri yüklenemedi. Sayfayı yenileyin.';
+          setTimeout(() => {
+            if (overlay) overlay.classList.add('hidden');
+            document.getElementById('programList').innerHTML =
+              '<div class="empty-state"><p style="color:red">Veri yüklenemedi. Lütfen sayfayı yenileyin.</p></div>';
+          }, 2000);
+        };
+        document.head.appendChild(dataScript);
+      });
+    })();
+  </script>
+
+  <!-- Native Engine Active -->
+</body>
+
+</html>

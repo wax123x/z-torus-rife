@@ -1,0 +1,25 @@
+{
+  "name": "Z-TORUS FREQUENCY SYSTEM",
+  "short_name": "Z-Torus",
+  "description": "Profesyonel Biyorezonans & Otonom PEMF Frekans Sürücü Arayüzü",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0f19",
+  "theme_color": "#0b0f19",
+  "icons": [
+    {
+      "src": "icon-192.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Z-Torus — Key Üretici (ÖZEL)</title>
+  <link rel="icon" type="image/png" href="ztorus_key_icon.png">
+  <link rel="apple-touch-icon" href="ztorus_key_icon.png">
+  <link rel="manifest" href="key_generator_manifest.json">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0a0a0f;
+      color: #e0e0e0;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: linear-gradient(135deg, #12121f 0%, #1a1a2e 100%);
+      border: 1px solid rgba(100, 60, 200, 0.3);
+      border-radius: 20px;
+      padding: 40px;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo img {
+      width: 100px;
+      height: 100px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.6));
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+
+      0%,
+      100% {
+        filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.5));
+      }
+
+      50% {
+        filter: drop-shadow(0 0 32px rgba(168, 85, 247, 0.9));
+      }
+    }
+
+    .logo h1 {
+      font-size: 22px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #a855f7, #6366f1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+    }
+
+    .logo p {
+      font-size: 12px;
+      color: #f87171;
+      margin-top: 6px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #9ca3af;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    input,
+    select {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: #fff;
+      font-size: 14px;
+      font-family: 'Inter', monospace;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(168, 85, 247, 0.5);
+    }
+
+    select option {
+      background: #1a1a2e;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-generate {
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: #fff;
+    }
+
+    .btn-generate:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .result-box {
+      display: none;
+      margin-top: 24px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .result-label {
+      font-size: 11px;
+      color: #9ca3af;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .key-text {
+      font-family: monospace;
+      font-size: 13px;
+      color: #a78bfa;
+      word-break: break-all;
+      line-height: 1.6;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .expiry-info {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #6ee7b7;
+      font-weight: 500;
+    }
+
+    .expiry-info.lifetime {
+      color: #fbbf24;
+    }
+
+    .btn-copy {
+      background: rgba(99, 102, 241, 0.2);
+      color: #a78bfa;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      margin-top: 12px;
+      font-size: 13px;
+      padding: 12px;
+    }
+
+    .btn-copy:hover {
+      background: rgba(99, 102, 241, 0.35);
+    }
+
+    .warning {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 11px;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .warning span {
+      color: #f87171;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.06);
+      margin: 24px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="ztorus_key_icon.png" alt="Z-Torus Key Icon">
+      <h1>⚡ Z-TORUS KEY ÜRETİCİ ⚡</h1>
+      <p>⚠ SADECE SİZE ÖZEL</p>
+    </div>
+
+    <div class="form-group">
+      <label>Kullanıcı Cihaz ID'si</label>
+      <input type="text" id="deviceId" placeholder="Örn: STD-XXXX veya RODIN-XXXX şeklinde yapıştırın">
+    </div>
+
+    <div class="form-group">
+      <label>Lisans Türü</label>
+      <select id="duration">
+        <option value="30">🕐 30 Gün (Deneme)</option>
+        <option value="60">🕑 60 Gün (2 Ay)</option>
+        <option value="90">🕒 90 Gün (3 Ay)</option>
+        <option value="180">📅 180 Gün (6 Ay)</option>
+        <option value="365">📅 365 Gün (1 Yıl)</option>
+        <option value="0">♾️ Lifetime (Sonsuz)</option>
+      </select>
+    </div>
+
+    <button class="btn btn-generate" onclick="generateKey()">🔑 ANAHTAR ÜRET</button>
+
+    <div class="result-box" id="resultBox">
+      <div class="result-label">Aktivasyon Anahtarı</div>
+      <div class="key-text" id="keyText"></div>
+      <div class="expiry-info" id="expiryInfo"></div>
+      <button class="btn btn-copy" onclick="copyKey()">📋 Anahtarı Kopyala</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="warning">
+      Bu araç <span>yalnızca sizin kullanımınız</span> içindir.<br>
+      Bu HTML dosyasını kimseyle paylaşmayın.<br>
+      Üretilen anahtarlar cihaza özel ve süre sınırlıdır.
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ Bu değer security.js'deki MASTER_SALT ile AYNI olmalı
+    const MASTER_SALT = "Z-TORUS-VULT-SAFE-@2024!";
+
+    function xorCipher(text, key) {
+      let result = "";
+      for (let i = 0; i < text.length; i++) {
+        result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+      }
+      return result;
+    }
+
+    function utf8ToB64(str) {
+      try {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+          return String.fromCharCode('0x' + p1);
+        }));
+      } catch (e) {
+        return btoa(str);
+      }
+    }
+
+    function generateKey() {
+      let deviceId = document.getElementById('deviceId').value.trim().toUpperCase();
+      const days = parseInt(document.getElementById('duration').value);
+
+      if (!deviceId) {
+        alert('Lütfen Cihaz ID\'sini girin!');
+        return;
+      }
+
+      // Sadece kod girilmişse varsayılan ön ek ekle (Örn: ABC12345 -> STD-ABC12345)
+      if (!deviceId.includes('-')) {
+        deviceId = 'STD-' + deviceId;
+      }
+
+      // Bitiş tarihini hesapla (0 = lifetime)
+      let expiryTimestamp = 0;
+      let expiryText = '';
+
+      if (days > 0) {
+        const expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + days);
+        expiryDate.setHours(23, 59, 59, 999); // Günün sonuna yuvarla → aynı gün = aynı key
+        expiryTimestamp = expiryDate.getTime();
+        expiryText = `✅ Geçerli: ${days} gün — Bitiş: ${expiryDate.toLocaleDateString('tr-TR')}`;
+      } else {
+        expiryText = '♾️ Lifetime — Sonsuz Geçerli';
+      }
+
+      // Key üret: deviceId|expiryTimestamp → XOR → Base64 (UTF-8 Safe)
+      const payload = deviceId + '|' + expiryTimestamp;
+      const encrypted = xorCipher(payload, MASTER_SALT);
+      const key = utf8ToB64(encrypted);
+
+      document.getElementById('keyText').textContent = key;
+      document.getElementById('expiryInfo').textContent = expiryText;
+      document.getElementById('expiryInfo').className = 'expiry-info' + (days === 0 ? ' lifetime' : '');
+      document.getElementById('resultBox').style.display = 'block';
+    }
+
+    function copyKey() {
+      const key = document.getElementById('keyText').textContent;
+      navigator.clipboard.writeText(key).then(() => {
+        const btn = document.querySelector('.btn-copy');
+        btn.textContent = '✅ Kopyalandı!';
+        setTimeout(() => { btn.textContent = '📋 Anahtarı Kopyala'; }, 2000);
+      });
+    }
+  </script>
+</body>
+
+</html>

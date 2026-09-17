@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Z-TORUS RİFE</string>
+    <string name="title_activity_main">Z-TORUS RİFE</string>
+    <string name="package_name">com.ztorus.rife</string>
+    <string name="custom_url_scheme">com.ztorus.rife</string>
+</resources>

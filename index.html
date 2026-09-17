@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z-Torus Biyorezonans Sistemleri</title>
+    <!-- Open Graph (WhatsApp, Social Media Preview) -->
+    <meta property="og:title" content="Z-Torus BiyoFrekans Sistemleri" />
+    <meta property="og:description" content="Z-Torus esenlik ekosistemine hoş geldiniz. Rife, Rodin ve Standart PEMF frekans dengeleme uygulamaları." />
+    <meta property="og:image" content="https://www.lecheranteni.com/1/standart/images/yeni_logo_kare.jpg" />
+    <meta property="og:url" content="https://www.lecheranteni.com/1/" />
+    <meta property="og:type" content="website" />
+    <!-- Google Fonts: Outfit & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: radial-gradient(circle at center, #0f0729 0%, #050210 100%);
+            --card-bg: rgba(15, 12, 34, 0.45);
+            --card-border: rgba(255, 255, 255, 0.05);
+            --text-gold: #fbc02d;
+            --text-gold-hover: #fff59d;
+            --color-purple: #ab47bc;
+            --color-orange: #ff7043;
+            --color-blue: #00b0ff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 20px;
+            overflow-x: hidden;
+        }
+
+        /* Portal container */
+        .portal-wrapper {
+            max-width: 850px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin: auto 0;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* ── HEADER ── */
+        .portal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            filter: drop-shadow(0 0 8px rgba(251, 192, 45, 0.5));
+            animation: spinTorusLogo 25s linear infinite;
+        }
+
+        @keyframes spinTorusLogo {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--text-gold);
+            text-shadow: 0 0 12px rgba(251, 192, 45, 0.35);
+        }
+
+        /* Language selector */
+        .lang-selector-wrap {
+            position: relative;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        .lang-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: 52px;
+            right: 0;
+            background: rgba(18, 14, 40, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            width: 140px;
+            z-index: 100;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-dropdown.show {
+            display: flex;
+        }
+
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            cursor: pointer;
+            font-size: 13.5px;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+
+        .lang-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .lang-option img {
+            width: 18px;
+            border-radius: 2px;
+        }
+
+        /* ── PORTAL TITLE ── */
+        .portal-headline {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .portal-headline h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .portal-headline p {
+            font-size: 14.5px;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* ── APP CARDS GRID ── */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 10px;
+        }
+
+        .portal-card {
+            position: relative;
+            height: 320px;
+            border-radius: 28px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 25px;
+            background-color: var(--card-bg);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .card-bg-img {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: top center;
+            opacity: 0.58;
+            z-index: 0;
+            transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.5s ease;
+        }
+
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(6, 3, 18, 0.95) 0%, rgba(6, 3, 18, 0.25) 50%, rgba(6, 3, 18, 0.0) 100%);
+            z-index: 1;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+
+        .card-desc {
+            font-size: 13.5px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        /* Action button inside card */
+        .card-btn {
+            font-family: 'Outfit', sans-serif;
+            align-self: flex-start;
+            margin-top: 10px;
+            padding: 12px 28px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            font-size: 13.5px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        /* Card Hover States */
+        .portal-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .portal-card:hover .card-bg-img {
+            transform: scale(1.06);
+            opacity: 0.80;
+        }
+
+        /* Specific card hover glows */
+        .card-rife:hover {
+            box-shadow: 0 0 25px rgba(171, 71, 188, 0.2);
+            border-color: rgba(171, 71, 188, 0.45);
+        }
+        .card-rife:hover .card-btn {
+            background: var(--color-purple);
+            border-color: var(--color-purple);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(171, 71, 188, 0.4);
+        }
+
+        .card-rodin:hover {
+            box-shadow: 0 0 25px rgba(255, 112, 67, 0.25);
+            border-color: rgba(255, 112, 67, 0.55);
+        }
+        .card-rodin:hover .card-btn {
+            background: var(--color-orange);
+            border-color: var(--color-orange);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(255, 112, 67, 0.4);
+        }
+
+        .card-standart:hover {
+            box-shadow: 0 0 25px rgba(0, 176, 255, 0.25);
+            border-color: rgba(0, 176, 255, 0.55);
+        }
+        .card-standart:hover .card-btn {
+            background: var(--color-blue);
+            border-color: var(--color-blue);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(0, 176, 255, 0.4);
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .portal-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .portal-card {
+                height: 280px;
+                padding: 24px;
+            }
+            .portal-headline h2 {
+                font-size: 24px;
+            }
+            .portal-headline p {
+                font-size: 13.5px;
+            }
+        }
+
+        /* Footer disclaimer */
+        .portal-footer {
+            width: 100%;
+            max-width: 800px;
+            font-size: 11px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: center;
+            padding: 20px 10px 10px 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 30px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="portal-wrapper">
+        <!-- ── HEADER ── -->
+        <header class="portal-header">
+            <div class="logo-wrap">
+                <svg class="logo-icon" viewBox="0 0 100 100">
+                    <defs>
+                        <linearGradient id="gold-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fffde7" />
+                            <stop offset="40%" stop-color="#fbc02d" />
+                            <stop offset="100%" stop-color="#f57f17" />
+                        </linearGradient>
+                        <filter id="logo-glow">
+                            <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    <circle cx="50" cy="50" r="28" fill="none" stroke="url(#gold-grad-1)" stroke-width="0.8" stroke-dasharray="1 3" opacity="0.6"/>
+                    <g stroke="url(#gold-grad-1)" stroke-width="0.75" fill="none" filter="url(#logo-glow)">
+                        <ellipse cx="50" cy="50" rx="42" ry="13" transform="rotate(0 50 50)" />
+                        <ellipse cx="50" cy="50" rx="42" ry="13" transform="rotate(20 50 50)" />
+                        <ellipse cx="50" cy="50" rx="42" ry="13" transform="rotate(40 50 50)" />
+                        <ellipse cx="50" cy="50" rx="42" ry="13" transform="rotate(60 50 50)" />
+                        <ellipse cx="50" cy="50" rx="42" ry="13" transform="rotate(80 50 50)" />
+                        <ellipse cx="50" cy="50" rx="42" ry="13" transform="rotate(100 50 50)" />
+                        <ellipse cx="50" cy="50" rx="42" ry="13" transform="rotate(120 50 50)" />
+                        <ellipse cx="50" cy="50" rx="42" ry="13" transform="rotate(140 50 50)" />
+                        <ellipse cx="50" cy="50" rx="42" ry="13" transform="rotate(160 50 50)" />
+                    </g>
+                    <circle cx="50" cy="50" r="4" fill="#ffffff" filter="url(#logo-glow)"/>
+                </svg>
+                <h1 class="logo-text">Z-TORUS ENERGY</h1>
+            </div>
+
+            <!-- Language Dropdown Button -->
+            <div class="lang-selector-wrap">
+                <button class="lang-btn" onclick="toggleLangDropdown(event)">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95a15.65 15.65 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.92 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.34-.14 2 0 .66.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.987 7.987 0 0 1 5.08 16zm2.95-8H5.08a7.987 7.987 0 0 1 4.33-3.56A15.65 15.65 0 0 0 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.34-.16-2 0-.66.07-1.34.16-2h4.68c.09.66.16 1.34.16 2 0 .66-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56zM16.36 14c.08-.66.14-1.34.14-2 0-.66-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/>
+                    </svg>
+                </button>
+                <div class="lang-dropdown" id="langDropdown">
+                    <div class="lang-option" onclick="changeLanguage('tr')">
+                        <img src="https://flagcdn.com/w40/tr.png" alt="TR"> <span>Türkçe</span>
+                    </div>
+                    <div class="lang-option" onclick="changeLanguage('en')">
+                        <img src="https://flagcdn.com/w40/us.png" alt="EN"> <span>English</span>
+                    </div>
+                    <div class="lang-option" onclick="changeLanguage('de')">
+                        <img src="https://flagcdn.com/w40/de.png" alt="DE"> <span>Deutsch</span>
+                    </div>
+                    <div class="lang-option" onclick="changeLanguage('ru')">
+                        <img src="https://flagcdn.com/w40/ru.png" alt="RU"> <span>Русский</span>
+                    </div>
+                    <div class="lang-option" onclick="changeLanguage('ar')">
+                        <img src="https://flagcdn.com/w40/sa.png" alt="AR"> <span>العربية</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ── HEADLINE ── -->
+        <div class="portal-headline">
+            <h2 id="headlineTitle">Biyorezonans ve PEMF Sistemleri</h2>
+            <p id="headlineDesc">Z-Torus esenlik ekosistemine hoş geldiniz. Lütfen kullanmak istediğiniz elektromanyetik alan jeneratörünü seçin.</p>
+        </div>
+
+        <!-- ── CARDS GRID ── -->
+        <div class="portal-grid">
+            <!-- App 1: Z-Torus Standart -->
+            <a href="standart/index.html" class="portal-card card-standart">
+                <div class="card-bg-img" style="background-image: url('images/standart_card_bg.webp');"></div>
+                <div class="card-overlay"></div>
+                <div class="card-content">
+                    <h3 class="card-title" id="titleStandart">Z-Torus Standart</h3>
+                    <p class="card-desc" id="descStandart">Bireysel esenlik ve frekans dengeleme desteği. Maneviyat, hayvan sağlığı ve bolluk bereket hariç tüm standart PEMF programları.</p>
+                    <span class="card-btn" id="btnStandart">Uygulamayı Aç →</span>
+                </div>
+            </a>
+
+            <!-- App 2: Z-Torus Rife PEMF -->
+            <a href="rife/index.html" class="portal-card card-rife">
+                <div class="card-bg-img" style="background-image: url('images/pemf_card_bg.png');"></div>
+                <div class="card-overlay"></div>
+                <div class="card-content">
+                    <h3 class="card-title" id="titleRife">Z-Torus Rife PEMF</h3>
+                    <p class="card-desc" id="descRife">Rodin toroidal bobin entegrasyonu için gelişmiş biyorezonans uygulaması. 1500+ özel frekans programı ve çoklu fonksiyon desteği.</p>
+                    <span class="card-btn" id="btnRife">Uygulamayı Aç →</span>
+                </div>
+            </a>
+
+            <!-- App 3: Z-Torus Rodin PEMF -->
+            <a href="rodin/index.html" class="portal-card card-rodin">
+                <div class="card-bg-img" style="background-image: url('images/rodin_card_bg.jpg');"></div>
+                <div class="card-overlay"></div>
+                <div class="card-content">
+                    <h3 class="card-title" id="titleRodin">Z-Torus Rodin PEMF</h3>
+                    <p class="card-desc" id="descRodin">Hücresel esenlik ve frekans desteği. 5000+ programlı rife frekans motoru, çakra dengeleme ve özel kütüphane entegrasyonu.</p>
+                    <span class="card-btn" id="btnRodin">Uygulamayı Aç →</span>
+                </div>
+            </a>
+
+            <!-- App 4: Z-Torus WAV Export -->
+            <a href="wav-tool/index.html" class="portal-card card-wav">
+                <div class="card-bg-img" style="background-image: url('images/wav_export_card_bg.png');"></div>
+                <div class="card-overlay"></div>
+                <div class="card-content">
+                    <h3 class="card-title" id="titleWav">Z-Torus WAV Export Tool</h3>
+                    <p class="card-desc" id="descWav">Frekans dizilerini yüksek kaliteli WAV ses dosyalarına dönüştürme ve dışa aktarma aracı.</p>
+                    <span class="card-btn" id="btnWav">Aracı Aç →</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ── FOOTER disclaimer ── -->
+    <footer class="portal-footer" id="portalFooter">
+        ⚠️ Önemli Uyarı: Bu uygulamalar sadece kişisel esenlik (wellness), meditasyon ve zihinsel rahatlama amaçlı elektromanyetik alan ve ses dalgası destek yazılımlarıdır. Herhangi bir tıbbi tedavi veya teşhis yerine geçmez.
+    </footer>
+
+    <!-- ── SCRIPTS ── -->
+    <script>
+        const localDict = {
+            tr: {
+                headlineTitle: "Biyorezonans ve PEMF Sistemleri",
+                headlineDesc: "Z-Torus esenlik ekosistemine hoş geldiniz. Lütfen kullanmak istediğiniz elektromanyetik alan jeneratörünü seçin.",
+                titleRife: "Z-Torus Rife PEMF",
+                descRife: "Rodin toroidal bobin entegrasyonu için gelişmiş biyorezonans uygulaması. 1500+ özel frekans programı ve çoklu fonksiyon desteği.",
+                btnRife: "Uygulamayı Aç →",
+                titleRodin: "Z-Torus Rodin PEMF",
+                descRodin: "Hücresel esenlik ve frekans desteği. 5000+ programlı rife frekans motoru, çakra dengeleme ve özel kütüphane entegrasyonu.",
+                btnRodin: "Uygulamayı Aç →",
+                titleStandart: "Z-Torus Standart",
+                descStandart: "Bireysel esenlik ve frekans dengeleme desteği. Maneviyat, hayvan sağlığı ve bolluk bereket hariç tüm standart PEMF programları.",
+                btnStandart: "Uygulamayı Aç →",
+                titleWav: "Z-Torus WAV Export Tool",
+                descWav: "Frekans dizilerini yüksek kaliteli WAV ses dosyalarına dönüştürme ve dışa aktarma aracı.",
+                btnWav: "Aracı Aç →",
+                footer: "⚠️ Önemli Uyarı: Bu uygulamalar sadece kişisel esenlik (wellness), meditasyon ve zihinsel rahatlama amaçlı elektromanyetik alan ve ses dalgası destek yazılımlarıdır. Herhangi bir tıbbi tedavi veya teşhis yerine geçmez."
+            },
+            en: {
+                headlineTitle: "Bioresonance & PEMF Systems",
+                headlineDesc: "Welcome to the Z-Torus wellness ecosystem. Please select the electromagnetic field generator you wish to use.",
+                titleRife: "Z-Torus Rife PEMF",
+                descRife: "Advanced bioresonance application for Rodin toroidal coil integration. 1500+ special frequency programs and multi-function support.",
+                btnRife: "Open App →",
+                titleRodin: "Z-Torus Rodin PEMF",
+                descRodin: "Cellular wellness and frequency support. 5000+ programmed rife frequency engine, chakra balancing, and custom library integration.",
+                btnRodin: "Open App →",
+                titleStandart: "Z-Torus Standart",
+                descStandart: "Individual wellness and frequency balancing support. All standard PEMF programs except spiritual, animal health, and abundance.",
+                btnStandart: "Open App →",
+                titleWav: "Z-Torus WAV Export Tool",
+                descWav: "Tool for converting and exporting frequency sequences to high-quality WAV audio files.",
+                btnWav: "Open Tool →",
+                footer: "⚠️ Important Disclaimer: These applications are electromagnetic field and sound wave support software designed solely for personal wellness, meditation, and mental relaxation. They do not replace medical treatment or diagnosis."
+            },
+            de: {
+                headlineTitle: "Bioresonanz- & PEMF-Systeme",
+                headlineDesc: "Willkommen im Z-Torus Wellness-Ökosystem. Bitte wählen Sie den elektromagnetischen Feldgenerator aus, den Sie verwenden möchten.",
+                titleRife: "Z-Torus Rife PEMF",
+                descRife: "Fortgeschrittene Bioresonanzanwendung für die Integration von Rodin-Ringkernspulen. 1500+ spezielle Frequenzprogramme und Multifunktionsunterstützung.",
+                btnRife: "App Öffnen →",
+                titleRodin: "Z-Torus Rodin PEMF",
+                descRodin: "Zelluläres Wohlbefinden und Frequenzunterstützung. 5000+ programmierte Rife-Frequenzmaschine, Chakren-Ausgleich und Integration benutzerdefinierter Bibliotheken.",
+                btnRodin: "App Öffnen →",
+                titleStandart: "Z-Torus Standart",
+                descStandart: "Unterstützung für individuelles Wohlbefinden und Frequenzausgleich. Alle Standard-PEMF-Programme außer Spiritualität, Tiergesundheit und Fülle.",
+                btnStandart: "App Öffnen →",
+                titleWav: "Z-Torus WAV Export Tool",
+                descWav: "Werkzeug zum Konvertieren und Exportieren von Frequenzsequenzen in hochwertige WAV-Audiodateien.",
+                btnWav: "Werkzeug Öffnen →",
+                footer: "⚠️ Wichtiger Hinweis: Diese Anwendungen sind Software zur Unterstützung elektromagnetischer Felder und Schallwellen, die ausschließlich der persönlichen Wellness, Meditation und mentalen Entspannung dienen. Sie ersetzen keine medizinische Behandlung oder Diagnose."
+            },
+            ru: {
+                headlineTitle: "Системы Биорезонанса и PEMF",
+                headlineDesc: "Добро пожаловать в оздоровительную экосистему Z-Torus. Пожалуйста, выберите генератор электромагнитного поля, который вы хотите использовать.",
+                titleRife: "Z-Torus Rife PEMF",
+                descRife: "Усовершенствованное приложение биорезонанса для интеграции тороидальной катушки Родина. 1500+ специальных частотных программ и мультифункциональность.",
+                btnRife: "Открыть приложение →",
+                titleRodin: "Z-Torus Rodin PEMF",
+                descRodin: "Клеточное здоровье и частотная поддержка. Мотор частот Райфа с более чем 5000 программ, балансировка чакр и поддержка пользовательской библиотеки.",
+                btnRodin: "Открыть приложение →",
+                titleStandart: "Z-Torus Standart",
+                descStandart: "Поддержка индивидуального благополучия и балансировки частот. Все стандартные программы PEMF, кроме духовных, здоровья животных и изобилия.",
+                btnRodin: "Открыть приложение →",
+                titleStandart: "Z-Torus Standart",
+                btnStandart: "Открыть приложение →",
+                titleWav: "Z-Torus WAV Export Tool",
+                descWav: "Инструмент для конвертации и экспорта частотных последовательностей в высококачественные аудиофайлы WAV.",
+                btnWav: "Открыть инструмент →",
+                footer: "⚠️ Важное предупреждение: Данные приложения представляют собой программное обеспечение для поддержки электромагнитного поля и звуковых волн, предназначенное исключительно для личного благополучия, медитации и ментального расслабления. Они не заменяют медицинское лечение или диагностику."
+            },
+            ar: {
+                headlineTitle: "أنظمة الرنين الحيوي و PEMF",
+                headlineDesc: "مرحبًا بك في نظام عافية Z-Torus. يرجى اختيار مولد المجال الكهرومغناطيسي الذي ترغب في استخدامه.",
+                titleRife: "Z-Torus Rife PEMF",
+                descRife: "تطبيق متقدم للرنين الحيوي لتكامل ملف رودين الحلقي. أكثر من 1500 برنامج تردد خاص ودعم متعدد الوظائف.",
+                btnRife: "افتح التطبيق →",
+                titleRodin: "Z-Torus Rodin PEMF",
+                descRodin: "العافية الخلوية ودعم الترددات. محرك ترددات رايف بأكثر من 5000 برنامج، وموازنة الشاكرات، وتكامل المكتبة الخاصة بك.",
+                btnRodin: "افتح التطبيق →",
+                titleStandart: "Z-Torus Standart",
+                descStandart: "دعم العافية الشخصية وموازنة الترددات. جميع برامج PEMF القياسية باستثناء البرامج الروحية وصحة الحيوان والوفرة.",
+                btnStandart: "افتح التطبيق →",
+                titleWav: "أداة تصدير Z-Torus WAV",
+                descWav: "أداة لتحويل وتصدير تسلسلات التردد إلى ملفات صوتية WAV عالية الجودة.",
+                btnWav: "افتح الأداة →",
+                footer: "⚠️ تنويه هام: هذه التطبيقات هي برمجيات دعم للمجالات الكهرومغناطيسية والموجات الصوتية مصممة فقط للعافية الشخصية والتأمل والاسترخاء الذهني. ولا تغني عن العلاج أو التشخيص الطبي."
+            }
+        };
+
+        function getAppLanguage() {
+            let saved = localStorage.getItem('zt_lang');
+            if (saved) return saved;
+
+            const deviceLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+            const supported = ['tr', 'en', 'de', 'ru', 'ar'];
+            for (const lang of supported) {
+                if (deviceLang.startsWith(lang)) {
+                    return lang;
+                }
+            }
+            return 'en';
+        }
+
+        let currentLang = getAppLanguage();
+
+        function toggleLangDropdown(event) {
+            event.stopPropagation();
+            document.getElementById('langDropdown').classList.toggle('show');
+        }
+
+        document.addEventListener('click', () => {
+            document.getElementById('langDropdown').classList.remove('show');
+        });
+
+        function applyTranslations() {
+            const dict = localDict[currentLang] || localDict['tr'];
+            document.getElementById('headlineTitle').innerText = dict.headlineTitle;
+            document.getElementById('headlineDesc').innerText = dict.headlineDesc;
+            document.getElementById('titleRife').innerText = dict.titleRife;
+            document.getElementById('descRife').innerText = dict.descRife;
+            document.getElementById('btnRife').innerText = dict.btnRife;
+            document.getElementById('titleRodin').innerText = dict.titleRodin;
+            document.getElementById('descRodin').innerText = dict.descRodin;
+            document.getElementById('btnRodin').innerText = dict.btnRodin;
+
+            
+            // Standart App Translation
+
+            
+            document.getElementById('titleStandart').innerText = dict.titleStandart;
+
+            
+            document.getElementById('descStandart').innerText = dict.descStandart;
+
+            
+            document.getElementById('btnStandart').innerText = dict.btnStandart;
+
+
+            
+            // WAV App Translation
+
+            
+            document.getElementById('titleWav').innerText = dict.titleWav;
+
+            
+            document.getElementById('descWav').innerText = dict.descWav;
+
+            
+            document.getElementById('btnWav').innerText = dict.btnWav;
+            
+            document.getElementById('portalFooter').innerText = dict.footer;
+
+            if (currentLang === 'ar') {
+                document.documentElement.setAttribute('dir', 'rtl');
+            } else {
+                document.documentElement.removeAttribute('dir');
+            }
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('zt_lang', lang);
+            applyTranslations();
+        }
+
+        applyTranslations();
+
+        // Kill any rogue root service workers to prevent PWA caching conflicts
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    if (registration.scope.endsWith('/1/') || registration.scope.endsWith('/1')) {
+                        registration.unregister();
+                        console.log('Rogue Root SW unregistered.');
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+{
+  "appId": "com.ztorus.rife",
+  "appName": "Z-TORUS RİFE",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

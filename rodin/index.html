@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <!-- <base href="/"> kaldırıldı, alt klasörlerde yolların doğru çalışması için -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequency Master - v4.9 Library</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050505">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- PWA Add to Home Screen için -->
+    <link rel="apple-touch-icon" href="icons/ikon.jpg">
+    <!-- CryptoJS Kütüphanesi Eklenmesi (Yerel Dosya) -->
+    <script src="crypto-js.min.js"></script>
+    <!-- Dil Çeviri Kütüphanesi -->
+    <script src="translations.js"></script>
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <meta name="apple-mobile-web-app-title" content="Z-TORUS PEMF">
+    <meta name="application-name" content="Z-TORUS PEMF">
+    <meta name="description" content="Z-TORUS PEMF Frekans Uygulaması">
+    <!-- Eski Add to Home Screen promptunu tetiklemek için kısa ad -->
+    <meta name="short_name" content="Z-TORUS">
+    <meta name="name" content="Z-TORUS PEMF">
+    <style>
+        /* Mevcut CSS kodların buraya devam eder... */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #050505;
+            color: #00e676;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            margin: 0;
+        }
+
+        .container {
+            background: #111;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid #333;
+            width: 95%;
+            max-width: 600px;
+            box-shadow: 0 0 40px rgba(0, 230, 118, 0.2);
+            text-align: center;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Header ve Pop-up Butonu */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin: 0;
+            letter-spacing: 2px;
+            flex: 1;
+            text-align: left;
+        }
+
+        .open-popup-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Kütüphane Butonu */
+        .lib-toggle {
+            background: #17a2b8;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .osc-screen {
+            background: #000;
+            border: 2px solid #222;
+            border-radius: 10px;
+            height: 90px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .list-box {
+            height: 300px;
+            overflow-y: auto;
+            background: #080808;
+            border: 1px solid #222;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: left;
+            transition: 0.3s;
+        }
+
+        .list-item {
+            padding: 12px;
+            border-bottom: 1px solid #111;
+            font-size: 13px;
+            cursor: pointer;
+            color: #888;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .user-item {
+            border-left: 4px solid #17a2b8;
+            color: #fff;
+            background: #0d2124;
+        }
+
+        .delete-btn {
+            color: #ff5252;
+            padding: 5px 8px;
+            font-size: 10px;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+
+        .fav-btn {
+            background: #222;
+            color: #00e676;
+            border: 1px solid #00e676;
+            padding: 5px 10px;
+            font-size: 10px;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+        .selected {
+            background: #153321 !important;
+            color: #00e676 !important;
+            border-left: 4px solid #00e676 !important;
+            font-weight: bold;
+        }
+
+        .playing {
+            background: #ff1a1a !important;
+            color: #fff !important;
+            border-left: 4px solid #fff !important;
+        }
+
+        .play-icon {
+            color: #ff5252;
+            margin-right: 8px;
+            font-size: 18px;
+            vertical-align: middle;
+        }
+
+        /* Pop-up Stil */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #007bff;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .popup input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #222;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .play-btn {
+            background: #00e676;
+            color: #000;
+            font-weight: bold;
+            margin-top: 10px;
+            height: 55px;
+            width: 100%;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .stop-btn {
+            background: #333;
+            color: #ff5252;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00e676;
+        }
+
+        #listData {
+            display: none;
+        }
+
+        #toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(15, 15, 15, 0.95);
+            color: #00e676;
+            border: 1px solid #00e676;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            display: none;
+            box-shadow: 0 4px 20px rgba(0, 230, 118, 0.3);
+            z-index: 10000;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* YÜKLENİYOR EKRANI (ŞİFRE ÇÖZÜLÜRKEN) */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #050505;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #00e676;
+            font-family: monospace;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 230, 118, 0.3);
+            border-top: 5px solid #00e676;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 16px;
+            }
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin: 10px 0;
+            align-items: center;
+            justify-content: center;
+            background: #111;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .start-btn {
+            flex: 1.2;
+            background: #00e676;
+            color: #000;
+            border: none;
+            padding: 12px;
+            font-size: 12px;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .stop-btn {
+            flex: 1.2;
+            background: #ff5252;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            font-size: 12px;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .duration-wrap {
+            flex: 1.5;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            justify-content: center;
+        }
+
+        .duration-wrap input {
+            width: 45px;
+            text-align: center;
+            background: #222;
+            color: #00e676;
+            border: 1px solid #444;
+            padding: 6px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .big-start-btn:active {
+            transform: scale(0.98);
+        }
+
+        .status-panel {
+            background: #0a0a0a;
+            /* Koyu siyah arka plan */
+            border: 1px solid #222;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-item span {
+            color: #888;
+            font-size: 10px;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .status-item div {
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+            /* Dijital cihaz hissi için */
+        }
+
+        /* Kilit Ekranı Tasarımı */
+        #lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: #ff5252;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .device-id-box {
+            background: #111;
+            color: #007bff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed #007bff;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 18px;
+        }
+
+        /* Dil Seçici Stilleri */
+        .lang-selector-wrap {
+            position: relative;
+            display: inline-block;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .lang-sel-btn {
+            background: #111;
+            color: #00e676;
+            border: 1px solid #333;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .lang-sel-btn:hover {
+            border-color: #00e676;
+            background: #181818;
+        }
+
+        .lang-sel-dropdown {
+            position: absolute;
+            top: 105%;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid #333;
+            border-radius: 8px;
+            width: 140px;
+            max-height: 250px;
+            overflow-y: auto;
+            display: none;
+            z-index: 10000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .lang-sel-dropdown.show {
+            display: block;
+        }
+
+        .lang-sel-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            color: #888;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .lang-sel-option:hover {
+            background: #181818;
+            color: #00e676;
+        }
+
+        .lang-sel-option.active {
+            color: #00e676;
+            background: #0d2124;
+            font-weight: bold;
+        }
+
+        /* Sağdan Sola (RTL) Arapça Desteği */
+        html[dir="rtl"] body {
+            direction: rtl;
+            text-align: right;
+        }
+        html[dir="rtl"] h1 {
+            text-align: right;
+        }
+        html[dir="rtl"] .lang-sel-dropdown {
+            right: auto;
+            left: 0;
+        }
+        html[dir="rtl"] .list-item {
+            text-align: right;
+            flex-direction: row-reverse;
+        }
+        html[dir="rtl"] .header {
+            flex-direction: row-reverse;
+        }
+    </style>
+    <style>
+        /* Tanıtım turu rehber kutusu */
+        #tour-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 20000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #tour-box {
+            background: #fff;
+            color: #222;
+            border-radius: 16px;
+            padding: 32px 24px 24px 24px;
+            max-width: 320px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            position: relative;
+        }
+
+        #tour-box h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #007bff;
+        }
+
+        #tour-box p {
+            font-size: 15px;
+            margin: 16px 0;
+        }
+
+        #tour-box .tour-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 18px;
+        }
+
+        #tour-box button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        #tour-box button:last-child {
+            background: #888;
+        }
+    </style>
+    <!-- Vault Security -->
+    <script src="z_vault_core.js?v=2.5.1"></script>
+</head>
+
+<body data-zvault-block>
+    <!-- YÜKLENİYOR EKRANI -->
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <div style="font-size: 18px; font-weight: bold;" data-i18n="status_db_decrypted">Veritabanı Çözümleniyor...</div>
+        <div style="font-size: 12px; color: #888; margin-top: 8px;" data-i18n="status_wait">Lütfen bekleyin</div>
+    </div>
+
+    <!-- CİHAZ KİLİT EKRANI (Güvenlik Sistemi Aktifse) -->
+    <div id="lock-screen"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; color: #fff;">
+        <div style="background:white; padding:30px; border-radius:15px; text-align:center; max-width:400px;">
+            <h2 style="color:#d9534f;" data-i18n="security_title">⚠️ ERİŞİM YETKİSİ YOK</h2>
+            <p data-i18n="security_code_label">Giriş Kodunuz:</p>
+
+            <div id="display-device-id"
+                style="font-weight:bold; font-size:18px; margin:15px 0; padding:10px; background:#f8f9fa; border:1px dashed #ccc;">
+                Yükleniyor...
+            </div>
+
+            <button onclick="copyDeviceId()"
+                style="background:#28a745; color:white; border:none; padding:12px 25px; border-radius:5px; cursor:pointer; font-size:16px; font-weight:bold; width:100%;"
+                data-i18n="security_btn_copy">
+                Kodu Kopyala
+            </button>
+
+            <p style="margin-top:20px; font-size:13px; color:#666;" data-i18n="security_note">Onay almak için bu kodu yöneticiye gönderin.</p>
+        </div>
+    </div>
+    <div id="toast">✅ Eklendi</div>
+
+    <div class="container">
+        <!-- Tanıtım turu rehberi kutusu -->
+        <div id="tour-overlay">
+            <div id="tour-box">
+                <h2 data-i18n="tour_step_0_title">Hoş Geldiniz!</h2>
+                <p id="tour-text" data-i18n="tour_step_0_text">Bu uygulamanın temel özelliklerini size göstereceğiz.<br><br><b>Dikkat:</b> Her
+                    frekans setinden sonra su içmeyi ihmal etmeyin. En az yarım saat ara vererek toksinlerin atılmasına
+                    vakit tanıyın.</p>
+                <div class="tour-btns">
+                    <button id="tour-prev" data-i18n="tour_prev">Geri</button>
+                    <button id="tour-next" data-i18n="tour_next">İleri</button>
+                    <button id="tour-close" data-i18n="tour_close">Kapat</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="icons/icon-192.png" style="width: 30px; height: 30px; border-radius: 5px;">
+                <h1 data-i18n="app_title">Z-TORUS PEMF</h1>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end;">
+                <!-- Dil Seçici Dropdown -->
+                <div class="lang-selector-wrap" id="langSelectorWrap">
+                    <button class="lang-sel-btn" onclick="toggleLangSelectorDropdown(event)">
+                        <img id="current-lang-flag" src="https://flagcdn.com/w40/tr.png" width="20" style="border-radius:2px;">
+                        <span id="current-lang-name" style="margin-left: 5px;">TR</span>
+                        <span class="lang-arrow" style="font-size: 8px; margin-left: 4px;">▼</span>
+                    </button>
+                    <div class="lang-sel-dropdown" id="langSelDropdown">
+                        <div class="lang-sel-option active" onclick="selectAppLanguage('tr')">
+                            <img src="https://flagcdn.com/w40/tr.png" width="20" style="border-radius:2px;">
+                            <span>Türkçe</span>
+                        </div>
+                        <div class="lang-sel-option" onclick="selectAppLanguage('en')">
+                            <img src="https://flagcdn.com/w40/us.png" width="20" style="border-radius:2px;">
+                            <span>English</span>
+                        </div>
+                        <div class="lang-sel-option" onclick="selectAppLanguage('de')">
+                            <img src="https://flagcdn.com/w40/de.png" width="20" style="border-radius:2px;">
+                            <span>Deutsch</span>
+                        </div>
+                        <div class="lang-sel-option" onclick="selectAppLanguage('fr')">
+                            <img src="https://flagcdn.com/w40/fr.png" width="20" style="border-radius:2px;">
+                            <span>Français</span>
+                        </div>
+                        <div class="lang-sel-option" onclick="selectAppLanguage('es')">
+                            <img src="https://flagcdn.com/w40/es.png" width="20" style="border-radius:2px;">
+                            <span>Español</span>
+                        </div>
+                        <div class="lang-sel-option" onclick="selectAppLanguage('it')">
+                            <img src="https://flagcdn.com/w40/it.png" width="20" style="border-radius:2px;">
+                            <span>Italiano</span>
+                        </div>
+                        <div class="lang-sel-option" onclick="selectAppLanguage('pt')">
+                            <img src="https://flagcdn.com/w40/pt.png" width="20" style="border-radius:2px;">
+                            <span>Português</span>
+                        </div>
+                        <div class="lang-sel-option" onclick="selectAppLanguage('az')">
+                            <img src="https://flagcdn.com/w40/az.png" width="20" style="border-radius:2px;">
+                            <span>Azerbaycan</span>
+                        </div>
+                        <div class="lang-sel-option" onclick="selectAppLanguage('is')">
+                            <img src="https://flagcdn.com/w40/is.png" width="20" style="border-radius:2px;">
+                            <span>Íslenska</span>
+                        </div>
+                        <div class="lang-sel-option" onclick="selectAppLanguage('ar')">
+                            <img src="https://flagcdn.com/w40/sa.png" width="20" style="border-radius:2px;">
+                            <span>العربية</span>
+                        </div>
+                        <div class="lang-sel-option" onclick="selectAppLanguage('ru')">
+                            <img src="https://flagcdn.com/w40/ru.png" width="20" style="border-radius:2px;">
+                            <span>Русский</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="open-popup-btn" onclick="togglePopup(true)" data-i18n="btn_add_program">➕ PROGRAM EKLE</button>
+                <button id="helpBtn" title="Tanıtım Turunu Göster"
+                    style="background:#ffc107; color:#222; border:none; border-radius:5px; padding:8px 12px; font-weight:bold; cursor:pointer; font-size:18px;">!</button>
+            </div>
+        </div>
+
+        <div class="osc-screen"><canvas id="oscCanvas"></canvas></div>
+
+        <button class="lib-toggle" id="libToggle" onclick="toggleView()" data-i18n="btn_lib_open">📚 ÖZEL KÜTÜPHANEYİ AÇ</button>
+
+        <div style="display:flex; gap:8px; align-items:center;">
+            <input type="text" id="search" placeholder="Listede veya açıklamada ara..." data-i18n-ph="search_placeholder"
+                style="flex:1; padding:12px; background:#222; color:#ffff00; border-radius:8px; border:none; box-sizing:border-box;">
+            <button id="searchBtn" data-i18n="btn_search"
+                style="padding:12px 18px; background:#00e676; color:#000; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">ARA</button>
+        </div>
+        <div id="searchResults"
+            style="display:none; background:#181818; border-radius:8px; margin-top:4px; text-align:left; z-index:10; position:relative;">
+        </div>
+
+        <div class="list-box" id="listBox"></div>
+
+        <div class="button-group">
+            <button id="playBtn" class="start-btn" data-i18n="btn_start">BAŞLAT</button>
+
+            <div class="duration-wrap"><span data-i18n="label_duration_prefix">HER FRKNS</span>
+                <input type="number" id="duration" value="3" oninput="updateStatus()">
+                <span data-i18n="label_duration_suffix">DK</span>
+            </div>
+
+            <button id="stopBtn" class="stop-btn" data-i18n="btn_stop">DURDUR</button>
+        </div>
+
+        <div class="status-panel">
+            <div class="status-item">
+                <span data-i18n="label_list">LİSTE</span>
+                <div id="listCount">0 FRQ</div>
+            </div>
+            <div class="status-item">
+                <span data-i18n="label_frequency">FREKANS</span>
+                <div id="curFreq" style="color: #00e676;" data-i18n="status_stopped">DURDU</div>
+            </div>
+            <div class="status-item">
+                <span data-i18n="label_total_time">TOPLAM SÜRE</span>
+                <div id="totalTimeDisplay">0 DK</div>
+            </div>
+            <div class="status-item">
+                <span data-i18n="label_remaining">KALAN</span>
+                <div id="curTimer" style="color: #00e676;">00:00</div>
+            </div>
+        </div>
+
+        <div class="overlay" id="overlay">
+            <div class="popup">
+                <h3 id="popupTitle" style="color:#007bff; margin:0;" data-i18n="popup_add_title">Özel Program Ekle</h3>
+                <input type="hidden" id="editIndex" value="-1">
+                <input type="text" id="customName" placeholder="Program Adı" data-i18n-ph="placeholder_prog_name">
+                <input type="text" id="customFreqs" placeholder="Frekanslar (örn: 514, 832)" data-i18n-ph="placeholder_freqs">
+                <div style="display:flex; gap:10px;">
+                    <button onclick="saveCustom()" id="saveBtn"
+                        style="flex:2; background:#007bff; color:white; padding:12px; border:none; border-radius:5px; font-weight:bold;" data-i18n="btn_save">KAYDET</button>
+                    <button onclick="togglePopup(false)"
+                        style="flex:1; background:#333; color:white; padding:12px; border:none; border-radius:5px;" data-i18n="btn_cancel">İPTAL</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Dil Durumu ve Değişkenler
+            function getAppLanguage() {
+                let saved = localStorage.getItem('zt_lang');
+                if (saved) return saved;
+
+                const deviceLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+                const supported = ['tr', 'en', 'de', 'fr', 'es', 'it', 'pt', 'az', 'is', 'ar', 'ru'];
+                for (const lang of supported) {
+                    if (deviceLang.startsWith(lang)) {
+                        return lang;
+                    }
+                }
+                return 'en'; // Küresel varsayılan
+            }
+
+            const state = {
+                lang: getAppLanguage()
+            };
+            let isPlaying = false;
+            let isPaused = false;
+
+            // Arka planda çalmayı sürdürmek için sessiz ses döngüsü (Background Audio Loop)
+            let silentAudioEl = null;
+
+            function playSilentAudioLoop() {
+                if (!silentAudioEl) {
+                    silentAudioEl = document.createElement('audio');
+                    silentAudioEl.id = 'bg-silent-audio';
+                    silentAudioEl.loop = true;
+                    silentAudioEl.style.display = 'none';
+                    // Doğrulanmış sessiz WAV base64 verisi (RIFF/WAV)
+                    silentAudioEl.src = 'data:audio/wav;base64,UklGRjIAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAAABmYWN0BAAAAAAAAABkYXRhAAAAAA==';
+                    document.body.appendChild(silentAudioEl);
+                }
+                silentAudioEl.play().catch(e => console.log('[Z-TORUS] Sessiz ses arka plan oynatma yakalandı/izin bekleniyor:', e));
+            }
+
+            function stopSilentAudioLoop() {
+                if (silentAudioEl) {
+                    silentAudioEl.pause();
+                }
+            }
+
+            // Dil Seçici Dropdown Göster/Gizle
+            function toggleLangSelectorDropdown(event) {
+                event.stopPropagation();
+                document.getElementById('langSelDropdown').classList.toggle('show');
+            }
+
+            // Dropdown dışına tıklandığında kapat
+            document.addEventListener('click', () => {
+                const dropdown = document.getElementById('langSelDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+            });
+
+            // Arayüz Metinlerini Çevirme Fonksiyonu
+            function translateUI() {
+                const lang = state.lang;
+                const dict = i18n[lang] || i18n['tr'];
+                if (!dict) return;
+
+                // data-i18n etiketlerini çevir
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (dict[key]) {
+                        if (el.id === 'playBtn') {
+                            const btnText = el.innerText.trim();
+                            if (btnText === 'BAŞLAT' || btnText === 'START' || btnText === 'STARTEN' || btnText === 'LANCER' || btnText === 'INICIAR' || btnText === 'AVVIA' || btnText === 'INICIAR' || btnText === 'BAŞLAT' || btnText === 'RÆSA' || btnText === 'تشغيل') {
+                                el.innerText = dict['btn_start'];
+                            } else if (btnText === 'DURAKLAT' || btnText === 'PAUSE' || btnText === 'GERA HLÉ' || btnText === 'إيقاف مؤقت') {
+                                el.innerText = dict['btn_pause'];
+                            } else if (btnText === 'DEVAM ET' || btnText === 'RESUME' || btnText === 'FORTSETZEN' || btnText === 'REPRENDRE' || btnText === 'REANUDAR' || btnText === 'RIPRENDI' || btnText === 'RETOMAR' || btnText === 'DAVAM ET' || btnText === 'HALDA ÁFRAM' || btnText === 'استئناف') {
+                                el.innerText = dict['btn_resume'];
+                            }
+                        } else if (el.id === 'libToggle') {
+                            const btnText = el.innerText.trim();
+                            if (btnText.includes('📚')) {
+                                el.innerText = dict['btn_lib_open'];
+                            } else {
+                                el.innerText = dict['btn_lib_close'];
+                            }
+                        } else if (el.id === 'curFreq' && (el.innerText === 'DURDU' || el.innerText === 'STOPPED' || el.innerText === 'GESTOPPT' || el.innerText === 'ARRÊTÉ' || el.innerText === 'DETENIDO' || el.innerText === 'ARRESTATO' || el.innerText === 'PARADO' || el.innerText === 'DAYANDI' || el.innerText === 'STÖÐVAÐ' || el.innerText === 'متوقف')) {
+                            el.innerText = dict['status_stopped'];
+                        } else if (el.id === 'curFreq' && (el.innerText === 'BİTTİ' || el.innerText === 'DONE' || el.innerText === 'FERTIG' || el.innerText === 'FINI' || el.innerText === 'TERMINADO' || el.innerText === 'FINITO' || el.innerText === 'FIM' || el.innerText === 'BİTDİ' || el.innerText === 'LOKIÐ' || el.innerText === 'انتهى')) {
+                            el.innerText = dict['status_completed'];
+                        } else if (el.id === 'curFreq' && (el.innerText === 'HAZIR' || el.innerText === 'READY' || el.innerText === 'BEREIT' || el.innerText === 'PRÊT' || el.innerText === 'LISTO' || el.innerText === 'PRONTO' || el.innerText === 'HAZIR' || el.innerText === 'TILBÚIÐ' || el.innerText === 'جاهز')) {
+                            el.innerText = dict['status_ready'];
+                        } else if (el.id === 'curFreq' && (el.innerText === 'LİMİT DIŞI' || el.innerText === 'OUT OF LIMIT' || el.innerText === 'AUßERHALB LIMIT' || el.innerText === 'HORS LIMITE' || el.innerText === 'FUERA DE LÍMITE' || el.innerText === 'FUORI LIMITE' || el.innerText === 'FORA DO LIMITE' || el.innerText === 'LİMİTDƏN KƏNAR' || el.innerText === 'UTAN MARKA' || el.innerText === 'خارج الحدود')) {
+                            el.innerText = dict['status_limit_out'];
+                        } else {
+                            el.innerHTML = dict[key];
+                        }
+                    }
+                });
+
+                // data-i18n-ph placeholder'larını çevir
+                document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+                    const key = el.getAttribute('data-i18n-ph');
+                    if (dict[key]) {
+                        el.placeholder = dict[key];
+                    }
+                });
+
+                // Tarayıcı sekme başlığını çevir
+                document.title = dict['app_title'] || "Z-TORUS PEMF";
+            }
+
+            // Dili Uygula ve Kaydet
+            async function selectAppLanguage(lang) {
+                state.lang = lang;
+                localStorage.setItem('zt_lang', lang);
+
+                // UI güncelle
+                const flagImg = document.getElementById('current-lang-flag');
+                const langName = document.getElementById('current-lang-name');
+                const flagMap = {
+                    'tr': 'https://flagcdn.com/w40/tr.png',
+                    'en': 'https://flagcdn.com/w40/us.png',
+                    'de': 'https://flagcdn.com/w40/de.png',
+                    'fr': 'https://flagcdn.com/w40/fr.png',
+                    'es': 'https://flagcdn.com/w40/es.png',
+                    'it': 'https://flagcdn.com/w40/it.png',
+                    'pt': 'https://flagcdn.com/w40/pt.png',
+                    'az': 'https://flagcdn.com/w40/az.png',
+                    'is': 'https://flagcdn.com/w40/is.png',
+                    'ar': 'https://flagcdn.com/w40/sa.png',
+                    'ru': 'https://flagcdn.com/w40/ru.png'
+                };
+                if (flagImg) flagImg.src = flagMap[lang] || flagMap['tr'];
+                if (langName) langName.innerText = lang.toUpperCase();
+
+                document.querySelectorAll('.lang-sel-option').forEach(el => {
+                    el.classList.remove('active');
+                });
+                const selectedOpt = Array.from(document.querySelectorAll('.lang-sel-option')).find(el => {
+                    return el.getAttribute('onclick').includes(`'${lang}'`);
+                });
+                if (selectedOpt) selectedOpt.classList.add('active');
+
+                // Arapça için RTL yerleşimi
+                if (lang === 'ar') {
+                    document.documentElement.setAttribute('dir', 'rtl');
+                } else {
+                    document.documentElement.removeAttribute('dir');
+                }
+
+                translateUI();
+                
+                // Tanıtım turunu güncelle
+                updateTourStepsForLanguage();
+
+                // Veritabanını dile göre yeniden yükle
+                await reloadDatabase();
+            }
+
+            function initLanguageUI() {
+                const flagImg = document.getElementById('current-lang-flag');
+                const langName = document.getElementById('current-lang-name');
+                const flagMap = {
+                    'tr': 'https://flagcdn.com/w40/tr.png',
+                    'en': 'https://flagcdn.com/w40/us.png',
+                    'de': 'https://flagcdn.com/w40/de.png',
+                    'fr': 'https://flagcdn.com/w40/fr.png',
+                    'es': 'https://flagcdn.com/w40/es.png',
+                    'it': 'https://flagcdn.com/w40/it.png',
+                    'pt': 'https://flagcdn.com/w40/pt.png',
+                    'az': 'https://flagcdn.com/w40/az.png',
+                    'is': 'https://flagcdn.com/w40/is.png',
+                    'ar': 'https://flagcdn.com/w40/sa.png',
+                    'ru': 'https://flagcdn.com/w40/ru.png'
+                };
+                if (flagImg) flagImg.src = flagMap[state.lang] || flagMap['tr'];
+                if (langName) langName.innerText = state.lang.toUpperCase();
+
+                document.querySelectorAll('.lang-sel-option').forEach(el => {
+                    el.classList.remove('active');
+                });
+                const selectedOpt = Array.from(document.querySelectorAll('.lang-sel-option')).find(el => {
+                    return el.getAttribute('onclick').includes(`'${state.lang}'`);
+                });
+                if (selectedOpt) selectedOpt.classList.add('active');
+
+                if (state.lang === 'ar') {
+                    document.documentElement.setAttribute('dir', 'rtl');
+                } else {
+                    document.documentElement.removeAttribute('dir');
+                }
+
+                translateUI();
+            }
+
+            function updateTourStepsForLanguage() {
+                if (typeof tourSteps === 'undefined') return;
+                const lang = state.lang;
+                const dict = i18n[lang] || i18n['tr'];
+                for (let i = 0; i <= 8; i++) {
+                    if (dict[`tour_step_${i}_title`] && tourSteps[i]) {
+                        tourSteps[i].title = dict[`tour_step_${i}_title`];
+                        tourSteps[i].text = dict[`tour_step_${i}_text`];
+                    }
+                }
+            }
+
+            async function reloadDatabase() {
+                const SECRET_KEY = "Z-Torus-Pro-Security-Key-2026";
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) loadingScreen.style.display = 'flex';
+
+                try {
+                    let listsPath = './data/lists_encrypted.txt';
+                    let descsPath = './data/descriptions_encrypted.txt';
+
+                    if (state.lang !== 'tr') {
+                        const testLists = `./data/lists_encrypted_${state.lang}.txt`;
+                        const checkRes = await fetch(testLists).catch(() => null);
+                        if (checkRes && checkRes.ok) {
+                            listsPath = testLists;
+                            descsPath = `./data/descriptions_encrypted_${state.lang}.txt`;
+                        }
+                    }
+
+                    let freqRes = await fetch(listsPath);
+                    if (freqRes.ok) {
+                        let encryptedText = await freqRes.text();
+                        let decryptedBytes = CryptoJS.AES.decrypt(encryptedText, SECRET_KEY);
+                        let decryptedData = JSON.parse(decryptedBytes.toString(CryptoJS.enc.Utf8));
+                        if (decryptedData && Array.isArray(decryptedData)) {
+                            decryptedData.sort((a, b) => {
+                                const nameA = a.name || '';
+                                const nameB = b.name || '';
+                                return nameA.localeCompare(nameB, 'tr', { sensitivity: 'base' });
+                            });
+                        }
+                        mainList = decryptedData.map(item => item.name + ': ' + item.frequencies.join(', '));
+                        // Her dilde en başta Rife Sıfırlama Programı olmasını sağla
+                        mainList.unshift("Rife Sıfırlama Programı: Bu program, rife'ın faydalarını en üst düzeye çıkarmak için vücudu sıfırlamaya yardımcı olur. Yaklaşık altı haftada bir uygulanması tavsiye edilir.: 7, 9.4, 9.45, 10.5, 15, 15.2, 17, 17.5, 19.5, 19.75, 25.5, 40, 40.5, 46, 47.5, 48, 50, 52.5, 58, 85.5, 93");
+                        searchIndex = mainList.map(item => toLocaleSafe(item));
+                    } else {
+                        throw new Error(`Dosya bulunamadı: ${listsPath}`);
+                    }
+
+                    window.descriptions = {};
+                    try {
+                        const descRes = await fetch(descsPath);
+                        if (descRes.ok) {
+                            let encryptedDescText = await descRes.text();
+                            let decryptedDescBytes = CryptoJS.AES.decrypt(encryptedDescText, SECRET_KEY);
+                            window.descriptions = JSON.parse(decryptedDescBytes.toString(CryptoJS.enc.Utf8));
+                        }
+                    } catch (e) { console.warn("Açıklamalar dosyası okunamadı:", e); }
+
+                    const saved = localStorage.getItem('freq_user_list');
+                    if (saved) userList = JSON.parse(saved);
+
+                    refreshDisplay();
+
+                    // URL Arama Entegrasyonu
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const searchQuery = urlParams.get('search');
+                    if (searchQuery) {
+                        const searchInput = document.getElementById('search');
+                        if (searchInput) {
+                            searchInput.value = searchQuery;
+                            setTimeout(() => {
+                                const searchBtn = document.getElementById('searchBtn');
+                                if (searchBtn) searchBtn.click();
+                            }, 100);
+                        }
+                    }
+                } catch (e) {
+                    console.error('[Z-TORUS] Veritabanı yükleme hatası:', e);
+                    const saved = localStorage.getItem('freq_user_list');
+                    if (saved) userList = JSON.parse(saved);
+                    refreshDisplay();
+                } finally {
+                    if (loadingScreen) loadingScreen.style.display = 'none';
+                }
+            }
+
+            // --------------------------------------- GÜVENLİK AYARLARI ---------------------------------------------------
+            const SECURITY_ACTIVE = false;
+            const SHEET_BASE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzo-4xAGk2j1NyUTCxVrIvWZnGVsnsX2TWF8ylK0mXeS2U7PxvLC2-aQE4kHXmr6Nvb5IV-i42b96m/pub";
+            const APP_VERSION = "1.1.4"; // Bu sürümü her güncellemede artır
+
+            // Arama Performansı için Debounce Fonksiyonu
+            function debounce(func, timeout = 300) {
+                let timer;
+                return (...args) => {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => { func.apply(this, args); }, timeout);
+                };
+            }
+
+            // Güvenli Küçük Harf Dönüşümü (iOS/Safari uyumluluğu için)
+            function toLocaleSafe(str) {
+                try {
+                    return str.toLocaleLowerCase('tr');
+                } catch (e) {
+                    return str.toLowerCase();
+                }
+            }
+
+            // Global Değişkenler
+            let audioCtx, analyser, dataArray, source, currentFreqs = [], freqIndex = 0, timerInterval, oscillator, gainNode, pulseTimer, wAnim, wellnessOsc1, wellnessOsc2, wellnessGain1, wellnessGain2;
+            let mainList = [], userList = [], isLibView = false;
+            let searchIndex = []; // Arama için optimize edilmiş liste
+
+            let currentProgramName = "";
+            let wakeLock = null;
+            let totalRemSeconds = 0; // Toplam geri sayım (tüm program)
+            let oscDrawActive = false; // Canvas draw loop tek sefer başlasın
+
+            // ========== WELLNESS ANİMASYON DEĞİŞKENLERİ ==========
+             let isWellnessMode = false;
+            let wellnessDisplayInterval = null;
+
+            const DEFAULT_ATTACK_MS = 100;
+            const DEFAULT_AMPLITUDE = 1.0;
+
+            function stopPulseMode() {
+                if (pulseTimer) { clearInterval(pulseTimer); pulseTimer = null; }
+            }
+
+            window.playFrequencyZ = function (frequency) {
+                if (isWellnessMode) {
+                    startWellnessSweep();
+                    return;
+                }
+
+                window.stopFrequencyZ();
+
+                if (window.Android && typeof window.Android.playNativeFrequency === 'function') {
+                    window.Android.playNativeFrequency(frequency, 'square', false);
+                    return;
+                }
+
+                oscillator = audioCtx.createOscillator();
+                gainNode = audioCtx.createGain();
+
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+
+                const attackSec = DEFAULT_ATTACK_MS / 1000;
+                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(DEFAULT_AMPLITUDE, audioCtx.currentTime + attackSec);
+
+                oscillator.connect(gainNode);
+                gainNode.connect(analyser);
+                oscillator.start();
+            };
+
+            window.stopFrequencyZ = function () {
+                if (window.Android && typeof window.Android.stopNativeFrequency === 'function') {
+                    window.Android.stopNativeFrequency();
+                }
+                if (pulseTimer) { clearInterval(pulseTimer); pulseTimer = null; }
+                if (oscillator) { try { oscillator.stop(); oscillator.disconnect(); } catch (e) { } oscillator = null; }
+                if (gainNode) { try { gainNode.disconnect(); } catch (e) { } gainNode = null; }
+                stopWellnessSweep();
+            };
+
+            // --- WELLNESS SWEEP FONKSİYONLARI (KESİN YAPI: 10-200-10, SQUARE+SQUARE) ---
+            function startWellnessSweep() {
+                stopWellnessSweep();
+                // Seçimde zaten başlatıldıysa unfreeze et, yoksa yenile
+                if (wAnim) {
+                    wAnim.frozen = false;
+                    wAnim.startTime = Date.now();
+                    wAnim.nextKillIdx = 0;
+                } else {
+                    initWellnessAnim(false);
+                }
+                const startRealTime = Date.now() / 1000;
+                const F_START = 10;
+                const F_END = 200;
+                const SECONDS_PER_WAY = 30; // TOPLAM 60 SANİYE
+
+                const isAndroid = window.Android && typeof window.Android.playNativeFrequency === 'function';
+                if (!isAndroid) {
+                    const startTime = audioCtx.currentTime;
+                    // 1. Süpürme Yapan Frekans (OSC 1)
+                    wellnessOsc1 = audioCtx.createOscillator();
+                    wellnessGain1 = audioCtx.createGain();
+                    wellnessOsc1.type = 'square';
+                    wellnessGain1.gain.setValueAtTime(0.12, startTime);
+
+                    // 2. Sabit Taşıyıcı Frekans (10Hz - OSC 2)
+                    wellnessOsc2 = audioCtx.createOscillator();
+                    wellnessGain2 = audioCtx.createGain();
+                    wellnessOsc2.type = 'square';
+                    wellnessGain2.frequency.setValueAtTime(F_START, startTime);
+                    wellnessGain2.gain.setValueAtTime(0.18, startTime);
+
+                    // Bağlantılar
+                    wellnessOsc1.connect(wellnessGain1);
+                    wellnessOsc2.connect(wellnessGain2);
+                    wellnessGain1.connect(analyser);
+                    wellnessGain2.connect(analyser);
+
+                    wellnessOsc1.start();
+                    wellnessOsc2.start();
+                } else {
+                    window.Android.playNativeFrequency(F_START, 'square', false);
+                }
+
+                // EKRAN VE FREKANS GÜNCELLEME (requestAnimationFrame mantığıyla)
+                if (wellnessDisplayInterval) clearInterval(wellnessDisplayInterval);
+                wellnessDisplayInterval = setInterval(() => {
+                    const elapsed = (Date.now() / 1000) - startRealTime;
+                    let currentFreq = F_START;
+
+                    if (elapsed <= SECONDS_PER_WAY) {
+                        let pct = elapsed / SECONDS_PER_WAY;
+                        currentFreq = F_START + (F_END - F_START) * pct;
+                    } else if (elapsed <= (SECONDS_PER_WAY * 2)) {
+                        let pct = (elapsed - SECONDS_PER_WAY) / SECONDS_PER_WAY;
+                        currentFreq = F_END - (F_END - F_START) * pct;
+                    } else {
+                        currentFreq = F_START;
+                        const stopBtn = document.getElementById('stopBtn');
+                        if (stopBtn) stopBtn.click();
+                        const freqEl = document.getElementById('curFreq');
+                        if (freqEl) { freqEl.innerText = '✅ BİTTİ'; freqEl.style.color = '#00e676'; }
+                        return;
+                    }
+
+                    // Frekansı uygula
+                    if (isAndroid) {
+                        window.Android.playNativeFrequency(currentFreq, 'square', false);
+                    } else if (wellnessOsc1) {
+                        const now = audioCtx.currentTime;
+                        wellnessOsc1.frequency.setTargetAtTime(currentFreq, now, 0.05);
+                    }
+
+                    // Ekranı güncelle (Math.round yerine toFixed(2))
+                    const freqEl = document.getElementById('curFreq');
+                    if (freqEl) freqEl.innerText = currentFreq.toFixed(2) + " Hz";
+
+                    // Bilgi panelini güncelle (YENİ İSTEK ÜZERİNE SABİT METİN)
+                    const textEl = document.getElementById('infoText');
+                    if (textEl) {
+                        textEl.innerText = "Frekansın sürekli değişmesi, Uygulanan frekans seti sonrası kalan canlı patojenleri hedefleyen ek süpürme. mikroorganizmaların savunma mekanizması geliştirmesini imkansız kılar.";
+                    }
+                }, 100);
+            }
+
+            function stopWellnessSweep() {
+                wAnim = null; // Animasyonu sıfırla
+                if (wellnessDisplayInterval) { clearInterval(wellnessDisplayInterval); wellnessDisplayInterval = null; }
+                if (wellnessOsc1) { try { wellnessOsc1.stop(); wellnessOsc1.disconnect(); } catch (e) { } wellnessOsc1 = null; }
+                if (wellnessOsc2) { try { wellnessOsc2.stop(); wellnessOsc2.disconnect(); } catch (e) { } wellnessOsc2 = null; }
+                if (wellnessGain1) { try { wellnessGain1.disconnect(); } catch (e) { } wellnessGain1 = null; }
+                if (wellnessGain2) { try { wellnessGain2.disconnect(); } catch (e) { } wellnessGain2 = null; }
+            }
+
+            // ========== WELLNESS ANİMASYON FONKSİYONLARI ==========
+            const W_VIRUS_COUNT = 12, W_BACT_COUNT = 8, W_WBC_COUNT = 0;
+            const SWEEP_TOTAL = 60; // saniye
+            const KILL_WINDOW = 58; // bu saniyeye kadar hepsi ölmeli
+
+            function initWellnessAnim(frozen = false) {
+                const viruses = [], bacteria = [], wbcs = [], sparks = [], waves = [];
+                const totalPathogens = W_VIRUS_COUNT + W_BACT_COUNT;
+
+                for (let i = 0; i < W_VIRUS_COUNT; i++) {
+                    viruses.push({
+                        x: Math.random() * 800, y: Math.random() * 80 + 5,
+                        vx: (Math.random() - 0.5) * 0.6, vy: (Math.random() - 0.5) * 0.6,
+                        r: 5 + Math.random() * 3, spikes: 6 + Math.floor(Math.random() * 4),
+                        hue: Math.random() < 0.5 ? 0 : 25, alive: true, dying: false, dyingTimer: 0, alpha: 1
+                    });
+                }
+                for (let i = 0; i < W_BACT_COUNT; i++) {
+                    bacteria.push({
+                        x: Math.random() * 800, y: Math.random() * 80 + 5,
+                        vx: (Math.random() - 0.5) * 0.4, vy: (Math.random() - 0.5) * 0.4,
+                        rx: 8 + Math.random() * 3, ry: 3 + Math.random() * 2,
+                        angle: Math.random() * Math.PI, alive: true, dying: false, dyingTimer: 0, alpha: 1
+                    });
+                }
+                for (let i = 0; i < W_WBC_COUNT; i++) {
+                    wbcs.push({
+                        x: (800 / (W_WBC_COUNT + 1)) * (i + 1), y: 40 + (Math.random() - 0.5) * 20,
+                        r: 6, vx: (Math.random() - 0.5) * 0.2, vy: (Math.random() - 0.5) * 0.2,
+                        target: null, pulse: Math.random() * Math.PI * 2,
+                        driftAngle: Math.random() * Math.PI * 2,
+                        cooldown: 0  // Hedefe çok yaklaşınca serbest gezme süresi
+                    });
+                }
+
+                wAnim = {
+                    viruses, bacteria, wbcs, sparks, waves,
+                    tick: 0, waveTimer: 0, startTime: Date.now(), totalPathogens,
+                    forceKillSchedule: [], frozen
+                };
+
+                // Öldürme takvimi: 0-56. sn arası eşit dağılımlı (toplamPatojen sayısı kadar)
+                const killTimes = [];
+                for (let i = 0; i < totalPathogens; i++) {
+                    killTimes.push((KILL_WINDOW / totalPathogens) * (i + 0.5) + Math.random() * 1.5 - 0.75);
+                }
+                killTimes.sort((a, b) => a - b);
+                wAnim.forceKillSchedule = killTimes;
+                wAnim.nextKillIdx = 0;
+            }
+
+            function wAddSpark(x, y) {
+                const a = wAnim;
+                for (let i = 0; i < 7; i++) {
+                    const ang = (Math.PI * 2 / 7) * i;
+                    a.sparks.push({ x, y, vx: Math.cos(ang) * 1.8, vy: Math.sin(ang) * 1.8, life: 1 });
+                }
+            }
+
+            function wFindTarget(wbc) {
+                const a = wAnim;
+                let best = null, bestDist = 9999;
+                [...a.viruses, ...a.bacteria].forEach(p => {
+                    if (!p.alive || p.dying) return;
+                    const dx = p.x - wbc.x, dy = p.y - wbc.y;
+                    const d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < bestDist) { bestDist = d; best = p; }
+                });
+                return bestDist < 350 ? best : null;
+            }
+
+            function drawWellnessAnim(ctx, W, H) {
+                const a = wAnim;
+                if (!a) return;
+                a.tick++;
+
+                const elapsed = (Date.now() - a.startTime) / 1000;
+
+                // Zamanlı öldürme — sadece frozen değilse
+                if (a.frozen) {
+                    a.startTime = Date.now(); // Dondurulmuş: süreyi sürekli sıfırla
+                } else {
+                    while (a.nextKillIdx < a.forceKillSchedule.length &&
+                        elapsed >= a.forceKillSchedule[a.nextKillIdx]) {
+                        const all = [...a.viruses, ...a.bacteria].filter(p => p.alive && !p.dying);
+                        if (all.length) {
+                            const victim = all[Math.floor(Math.random() * all.length)];
+                            victim.dying = true;
+                            victim.dyingTimer = 50;
+                        }
+                        a.nextKillIdx++;
+                    }
+                }
+
+                // Patojen güncelle
+                a.viruses.forEach(v => {
+                    if (v.dying) { v.dyingTimer--; if (v.dyingTimer <= 0) { v.dying = false; v.alive = false; wAddSpark(v.x, v.y); } return; }
+                    if (!v.alive) { v.alpha = Math.max(0, v.alpha - 0.04); return; }
+                    v.x += v.vx; v.y += v.vy;
+                    if (v.x < 0 || v.x > W) v.vx *= -1; if (v.y < 2 || v.y > H - 2) v.vy *= -1;
+                });
+                a.bacteria.forEach(b => {
+                    if (b.dying) { b.dyingTimer--; if (b.dyingTimer <= 0) { b.dying = false; b.alive = false; wAddSpark(b.x, b.y); } return; }
+                    if (!b.alive) { b.alpha = Math.max(0, b.alpha - 0.04); return; }
+                    b.x += b.vx; b.y += b.vy; b.angle += 0.005;
+                    if (b.x < 0 || b.x > W) b.vx *= -1; if (b.y < 2 || b.y > H - 2) b.vy *= -1;
+                });
+
+                // WBC güncelle — cooldown sistemi
+                a.wbcs.forEach(wbc => {
+                    if (wbc.cooldown > 0) {
+                        // Soğuma: serbest gezinme modu
+                        wbc.cooldown--;
+                        wbc.driftAngle += (Math.random() - 0.5) * 0.12;
+                        wbc.vx += Math.cos(wbc.driftAngle) * 0.04;
+                        wbc.vy += Math.sin(wbc.driftAngle) * 0.04;
+                        wbc.vx *= 0.94; wbc.vy *= 0.94;
+                    } else {
+                        wbc.target = wFindTarget(wbc);
+                        if (wbc.target) {
+                            const dx = wbc.target.x - wbc.x, dy = wbc.target.y - wbc.y;
+                            const d = Math.sqrt(dx * dx + dy * dy);
+                            if (wbc.target.dying) { wbc.vx *= 0.85; wbc.vy *= 0.85; }
+                            else if (d > 10) { wbc.vx += (dx / d) * 0.22; wbc.vy += (dy / d) * 0.22; wbc.vx *= 0.88; wbc.vy *= 0.88; }
+                            else {
+                                // Çok yakın — cooldown başlat, geri it
+                                wbc.cooldown = 130; // ~2 sn (60fps'de)
+                                wbc.vx -= (dx / d) * 0.6;
+                                wbc.vy -= (dy / d) * 0.6;
+                            }
+                        } else {
+                            wbc.driftAngle += (Math.random() - 0.5) * 0.08;
+                            wbc.vx += Math.cos(wbc.driftAngle) * 0.02; wbc.vy += Math.sin(wbc.driftAngle) * 0.02;
+                            wbc.vx *= 0.96; wbc.vy *= 0.96;
+                        }
+                    }
+                    wbc.x += wbc.vx; wbc.y += wbc.vy;
+                    wbc.x = Math.max(8, Math.min(W - 8, wbc.x)); wbc.y = Math.max(8, Math.min(H - 8, wbc.y));
+                });
+
+                // Dalgalar
+                a.waveTimer++;
+                if (a.waveTimer % 25 === 0) a.waves.push({ r: 4, alpha: 1 });
+                a.waves.forEach(w => { w.r += 2; w.alpha -= 0.025; });
+                while (a.waves.length && a.waves[0].alpha <= 0) a.waves.shift();
+
+                // Kıvılcımlar
+                for (let i = a.sparks.length - 1; i >= 0; i--) {
+                    const s = a.sparks[i]; s.x += s.vx; s.y += s.vy; s.life -= 0.07;
+                    if (s.life <= 0) a.sparks.splice(i, 1);
+                }
+
+                // ── ÇİZİM ─────────────────────────────────────────
+                ctx.clearRect(0, 0, W, H);
+                const bg = ctx.createLinearGradient(0, 0, 0, H);
+                bg.addColorStop(0, '#030310'); bg.addColorStop(1, '#080820');
+                ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+                // Dalgalar
+                a.waves.forEach(w => {
+                    ctx.save(); ctx.globalAlpha = w.alpha * 0.4;
+                    ctx.beginPath(); ctx.arc(W / 2, H / 2, w.r, 0, Math.PI * 2);
+                    ctx.strokeStyle = `hsl(${190 + w.r * 0.3},100%,60%)`; ctx.lineWidth = 1.2;
+                    ctx.shadowColor = '#00cfff'; ctx.shadowBlur = 5; ctx.stroke(); ctx.restore();
+                });
+
+                // Virüsler
+                a.viruses.forEach(v => {
+                    if (!v.alive && !v.dying && v.alpha <= 0) return;
+                    ctx.save(); ctx.globalAlpha = v.alpha; ctx.translate(v.x, v.y);
+                    if (v.dying) { const sh = (v.dyingTimer / 20) * 3; ctx.translate((Math.random() - 0.5) * sh * 2, (Math.random() - 0.5) * sh * 2); }
+                    ctx.beginPath();
+                    for (let s = 0; s < v.spikes; s++) {
+                        const ang = (Math.PI * 2 / v.spikes) * s + a.tick * 0.01;
+                        const midA = ang + Math.PI / v.spikes;
+                        ctx.lineTo(Math.cos(ang) * (v.r + 3), Math.sin(ang) * (v.r + 3));
+                        ctx.lineTo(Math.cos(midA) * v.r, Math.sin(midA) * v.r);
+                    }
+                    ctx.closePath();
+                    ctx.fillStyle = `hsl(${v.hue},90%,55%)`; ctx.shadowColor = `hsl(${v.hue},100%,60%)`; ctx.shadowBlur = 7; ctx.fill();
+                    ctx.beginPath(); ctx.arc(0, 0, v.r * 0.6, 0, Math.PI * 2); ctx.fillStyle = `hsl(${v.hue},60%,30%)`; ctx.fill();
+                    ctx.restore();
+                });
+
+                // Bakteriler
+                a.bacteria.forEach(b => {
+                    if (!b.alive && !b.dying && b.alpha <= 0) return;
+                    ctx.save(); ctx.globalAlpha = b.alpha; ctx.translate(b.x, b.y); ctx.rotate(b.angle);
+                    if (b.dying) { const sh = (b.dyingTimer / 20) * 3; ctx.translate((Math.random() - 0.5) * sh * 2, (Math.random() - 0.5) * sh * 2); }
+                    ctx.beginPath(); ctx.ellipse(0, 0, b.rx, b.ry, 0, 0, Math.PI * 2);
+                    ctx.fillStyle = '#3ddc84'; ctx.shadowColor = '#00ff88'; ctx.shadowBlur = 5; ctx.fill();
+                    ctx.beginPath(); ctx.moveTo(b.rx, 0);
+                    for (let t = 0; t <= 1; t += 0.1) { ctx.lineTo(b.rx + t * 10, Math.sin(t * Math.PI * 2 + a.tick * 0.05) * 3); }
+                    ctx.strokeStyle = '#3ddc84'; ctx.lineWidth = 1; ctx.shadowBlur = 3; ctx.stroke();
+                    ctx.restore();
+                });
+
+                // WBC'ler
+                a.wbcs.forEach(wbc => {
+                    wbc.pulse += 0.07;
+                    const glowR = wbc.r + 1.5 + Math.sin(wbc.pulse) * 1;
+                    ctx.save(); ctx.translate(wbc.x, wbc.y);
+                    const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, glowR * 2.2);
+                    grad.addColorStop(0, 'rgba(100,180,255,0.22)'); grad.addColorStop(1, 'rgba(0,0,0,0)');
+                    ctx.beginPath(); ctx.arc(0, 0, glowR * 2.2, 0, Math.PI * 2); ctx.fillStyle = grad; ctx.fill();
+                    ctx.beginPath(); ctx.arc(0, 0, glowR, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(180,220,255,0.9)'; ctx.shadowColor = '#64b4ff'; ctx.shadowBlur = 8; ctx.fill();
+                    ctx.beginPath(); ctx.arc(-1, 1, glowR * 0.4, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(80,120,200,0.8)'; ctx.shadowBlur = 3; ctx.fill();
+                    ctx.restore();
+                });
+
+                // Kıvılcımlar
+                a.sparks.forEach(s => {
+                    ctx.save(); ctx.globalAlpha = s.life;
+                    ctx.beginPath(); ctx.arc(s.x, s.y, 2, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffcc00'; ctx.shadowColor = '#ff8800'; ctx.shadowBlur = 6; ctx.fill();
+                    ctx.restore();
+                });
+
+                // Çerçeve
+                ctx.strokeStyle = 'rgba(0,150,255,0.12)'; ctx.lineWidth = 1; ctx.strokeRect(0, 0, W, H);
+            }
+
+            // --- GÜVENLİK VE BAŞLATICI ---
+
+            function getStaticDeviceId() {
+                const info = [navigator.userAgent.length, navigator.hardwareConcurrency || 4, window.screen.width * window.screen.height, navigator.language, navigator.platform].join("-");
+                let hash = 0;
+                for (let i = 0; i < info.length; i++) { hash = ((hash << 5) - hash) + info.charCodeAt(i); hash |= 0; }
+                return "ID-" + Math.abs(hash).toString(16).toUpperCase();
+            }
+
+            async function checkSecurity() {
+                if (!SECURITY_ACTIVE) return true;
+                const deviceId = getStaticDeviceId();
+                const displayEl = document.getElementById('display-device-id');
+                if (displayEl) displayEl.innerText = deviceId;
+
+                // Offline Kontrolü: Daha önce onaylanmış mı?
+                const isApprovedLocally = localStorage.getItem('zt_auth_status') === 'approved';
+                const lastAuthId = localStorage.getItem('zt_auth_device_id');
+
+                try {
+                    const finalUrl = SHEET_BASE_URL + "?output=csv&v=" + new Date().getTime();
+                    const response = await fetch(finalUrl).catch(() => null); // İnternet yoksa null döner
+
+                    if (response && response.ok) {
+                        const text = await response.text();
+                        const allowedList = text.split(/\r?\n/).map(row => {
+                            const columns = row.split(',');
+                            return columns[0].replace(/["']/g, "").trim().toUpperCase();
+                        }).filter(item => item !== "" && item !== "CIHAZID");
+
+                        const currentId = deviceId.trim().toUpperCase();
+                        if (allowedList.includes(currentId)) {
+                            localStorage.setItem('zt_auth_status', 'approved');
+                            localStorage.setItem('zt_auth_device_id', currentId);
+                            document.getElementById('lock-screen').style.display = 'none';
+                            return true;
+                        } else {
+                            localStorage.setItem('zt_auth_status', 'blocked');
+                            document.getElementById('lock-screen').style.display = 'flex';
+                            return false;
+                        }
+                    } else {
+                        // İnternet yoksa veya hata oluştuysa yerel başarıya güven
+                        if (isApprovedLocally && lastAuthId === deviceId.trim().toUpperCase()) {
+                            document.getElementById('lock-screen').style.display = 'none';
+                            return true;
+                        }
+                        throw new Error("Çevrimdışı ve yetkisiz");
+                    }
+                } catch (e) {
+                    // Yerel onay varsa internet hatasını göz ardı et
+                    if (isApprovedLocally && lastAuthId === deviceId.trim().toUpperCase()) {
+                        document.getElementById('lock-screen').style.display = 'none';
+                        return true;
+                    }
+                    document.getElementById('lock-screen').style.display = 'flex';
+                    return false;
+                }
+            }
+
+            function copyDeviceId() {
+                const deviceId = document.getElementById('display-device-id').innerText;
+                const dict = i18n[state.lang] || i18n['tr'];
+                navigator.clipboard.writeText(deviceId).then(() => { alert((dict["toast_copied"] || "Giriş Kodu Kopyalandı: ") + deviceId); });
+            }
+
+            // ========== GÜNCELLEME BİLDİRİM SİSTEMİ ==========
+            function showUpdateBanner(mesaj, link) {
+                if (document.getElementById('update-banner')) return;
+                const banner = document.createElement('div');
+                banner.id = 'update-banner';
+                banner.style.cssText = [
+                    'position:fixed', 'top:0', 'left:0', 'width:100%', 'z-index:99999',
+                    'background:linear-gradient(90deg,#ff6f00,#ffc107)',
+                    'color:#000', 'padding:12px 16px',
+                    'display:flex', 'align-items:center', 'gap:10px',
+                    'box-shadow:0 2px 12px rgba(0,0,0,0.4)', 'font-family:sans-serif',
+                    'font-size:13px', 'font-weight:bold'
+                ].join(';');
+                banner.innerHTML = `
+                    <span style="flex:1">&#x1F4E2; ${mesaj}</span>
+                    ${link ? `<a href="${link}" target="_blank"
+                        style="background:#000;color:#00e676;padding:12px 20px;
+                        border-radius:8px;text-decoration:none;white-space:nowrap;font-size:16px;font-weight:bold;box-shadow:0 4px 6px rgba(0,0,0,0.3);border:2px solid #00e676;display:inline-block;">
+                        ⬇️ GÜNCELLEMEYİ İNDİR</a>` : ''}
+                    <button onclick="this.parentElement.remove()"
+                        style="background:none;border:none;font-size:20px;
+                        cursor:pointer;color:#000;padding:0 4px;line-height:1;">&times;</button>
+                `;
+                document.body.prepend(banner);
+            }
+
+            async function checkForUpdates() {
+                try {
+                    const url = SHEET_BASE_URL + "?output=csv&v=" + Date.now();
+                    const res = await fetch(url);
+                    if (!res.ok) return;
+                    const text = await res.text();
+                    let sheetVersion = null, sheetMesaj = null, sheetLink = null;
+                    text.split(/\r?\n/).forEach(row => {
+                        const cols = row.split(',');
+                        const key = cols[0].replace(/["']/g, '').trim().toUpperCase();
+                        const val = cols.slice(1).join(',').replace(/^"|"$/g, '').trim();
+                        if (key === 'VERSION') sheetVersion = val;
+                        if (key === 'MESAJ') sheetMesaj = val;
+                        if (key === 'LINK') sheetLink = val;
+                    });
+                    if (sheetVersion && sheetVersion !== APP_VERSION) {
+                        showUpdateBanner(sheetMesaj || 'Güncel bir sürüm mevcut!', sheetLink);
+                    }
+                } catch (e) { /* sessiz hata */ }
+            }
+
+            window.addEventListener('DOMContentLoaded', async () => {
+                initLanguageUI();
+                updateTourStepsForLanguage();
+                checkForUpdates(); // Güncelleme tablodan kontrol et
+                const access = await checkSecurity();
+                if (!access) return;
+
+                await reloadDatabase();
+            });
+
+            // Arka Plan Modu Kapatıldı
+
+            function togglePopup(show) {
+                document.getElementById('overlay').style.display = show ? 'flex' : 'none';
+                if (!show) {
+                    // Popup kapatılınca edit modunu sıfırla
+                    document.getElementById('editIndex').value = '-1';
+                    document.getElementById('popupTitle').innerText = 'Özel Program Ekle';
+                    document.getElementById('customName').value = '';
+                    document.getElementById('customFreqs').value = '';
+                    document.getElementById('saveBtn').style.background = '#007bff';
+                    document.getElementById('saveBtn').style.color = 'white';
+                }
+            }
+            function toggleView() {
+                isLibView = !isLibView;
+                const dict = i18n[state.lang] || i18n['tr'];
+                document.getElementById('libToggle').innerText = isLibView ? (dict["btn_lib_close"] || "📖 ANA LİSTEYE DÖN") : (dict["btn_lib_open"] || "📚 ÖZEL KÜTÜPHANEYİ AÇ");
+                document.getElementById('libToggle').style.background = isLibView ? "#6c757d" : "#17a2b8";
+                refreshDisplay();
+            }
+
+            function saveCustom() {
+                const name = document.getElementById('customName').value.trim();
+                const freqs = document.getElementById('customFreqs').value.trim();
+                const editIdx = parseInt(document.getElementById('editIndex').value);
+                const dict = i18n[state.lang] || i18n['tr'];
+                if (name && freqs) {
+                    if (editIdx >= 0) {
+                        // Düzenleme modu — mevcut kaydı güncelle
+                        userList[editIdx] = { name, freqs };
+                        showToast(dict["toast_updated"] || "✏️ Program güncellendi");
+                    } else {
+                        // Yeni ekleme modu
+                        userList.unshift({ name, freqs });
+                        showToast(dict["toast_added"] || "✅ Kütüphaneye kaydedildi");
+                    }
+                    localStorage.setItem('freq_user_list', JSON.stringify(userList));
+                    togglePopup(false);
+                    // refreshDisplay zaten global isLibView değişkenine bakıyor.
+                    // Eğer kullanıcı kütüphanedeyse, kütüphaneyi yenileyecektir.
+                    refreshDisplay(document.getElementById('search').value);
+                }
+            }
+
+            window.editUserItem = (index, event) => {
+                event.stopPropagation();
+                const item = userList[index];
+                if (!item) return;
+                const dict = i18n[state.lang] || i18n['tr'];
+                document.getElementById('popupTitle').innerText = dict["popup_edit_title"] || '✏️ Programı Düzenle';
+                document.getElementById('editIndex').value = index;
+                document.getElementById('customName').value = item.name;
+                document.getElementById('customFreqs').value = item.freqs;
+                document.getElementById('saveBtn').style.background = '#ffc107';
+                document.getElementById('saveBtn').style.color = '#000';
+                togglePopup(true);
+            };
+
+            function showToast(mesaj) {
+                const toast = document.getElementById('toast');
+                toast.innerText = mesaj;
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 3000);
+            }
+
+            window.addToFavorites = (line, event) => {
+                event.stopPropagation();
+                const parts = line.split(':');
+                const name = parts.slice(0, -1).join(':').trim();
+                const freqs = parts[parts.length - 1].trim();
+                const dict = i18n[state.lang] || i18n['tr'];
+                if (userList.some(item => item.name === name)) return showToast(dict["toast_exists"] || "⚠️ Zaten kütüphanede!");
+                userList.unshift({ name, freqs });
+                localStorage.setItem('freq_user_list', JSON.stringify(userList));
+                showToast(dict["toast_added"] || "✅ Kütüphaneye eklendi");
+                refreshDisplay();
+            };
+
+            function refreshDisplay(filterTerm = "") {
+                const listBox = document.getElementById('listBox');
+                if (!listBox) return;
+                listBox.innerHTML = "";
+                const term = toLocaleSafe(filterTerm);
+                const fragment = document.createDocumentFragment();
+                let renderCount = 0;
+                const dict = i18n[state.lang] || i18n['tr'];
+
+                if (isLibView) {
+                    // 1. COİL TEST
+                    const coilDiv = document.createElement('div');
+                    coilDiv.className = 'list-item user-item';
+                    coilDiv.style.borderLeft = "4px solid #ffc107";
+                    const labelCoil = dict["lib_coil_test"] || "⚡ COİL TEST (SABİT)";
+                    coilDiv.innerHTML = `<div style="flex:1;"><b>${labelCoil}</b><br><small style="color:#17a2b8">1, 20, 30</small></div>`;
+                    coilDiv.onclick = () => {
+                        if (isPlaying) return showToast(dict["toast_stop_first"] || "⚠️ Lütfen önce çalışan programı durdurun!");
+                        isWellnessMode = false;
+                        highlight(coilDiv, false);
+                        currentFreqs = [1, 20, 30];
+                        currentProgramName = labelCoil.replace(/⚡\s*/, '');
+                        freqIndex = 0;
+                        updateInfoText("COIL TEST");
+                        document.getElementById('duration').value = "0.3";
+                        updateStatus();
+                    };
+                    fragment.appendChild(coilDiv);
+
+                    // 2. WELLNESS TARAMA
+                    const wellnessDiv = document.createElement('div');
+                    wellnessDiv.className = 'list-item user-item';
+                    wellnessDiv.style.borderLeft = "4px solid #00e676";
+                    const labelWellness = dict["lib_wellness_scan"] || "🌿 WELLNESS TARAMA (SWEEP)";
+                    wellnessDiv.innerHTML = `<div style="flex:1;"><b>${labelWellness}</b><br><small style="color:#00e676">10Hz Carrier + 10-200Hz Sweep</small></div>`;
+                    wellnessDiv.onclick = () => {
+                        if (isPlaying) return showToast(dict["toast_stop_first"] || "⚠️ Lütfen önce çalışan programı durdurun!");
+                        isWellnessMode = true;
+                        highlight(wellnessDiv, false);
+                        currentFreqs = [10];
+                        currentProgramName = labelWellness.replace(/🌿\s*/, '');
+                        freqIndex = 0;
+                        updateInfoText("WELLNESS TARAMA");
+                        document.getElementById('duration').value = "1";
+                        updateStatus();
+                        initWellnessAnim(true);
+                        startOscDraw();
+                    };
+                    fragment.appendChild(wellnessDiv);
+
+                    // 3. KİŞİSEL KÜTÜPHANE
+                    for (let i = 0; i < userList.length; i++) {
+                        const item = userList[i];
+                        if (toLocaleSafe(item.name).includes(term)) {
+                            const div = document.createElement('div');
+                            div.className = 'list-item user-item';
+                            div.innerHTML = `<div style="flex:1;"><b>${item.name}</b><br><small style="color:#17a2b8">${item.freqs}</small></div>
+                                 <div style="display:flex; gap:6px; flex-shrink:0;">
+                                   <span class="edit-btn" onclick="editUserItem(${i}, event)" style="color:#ffc107; padding:5px 8px; font-size:10px; font-weight:bold; border:1px solid #ffc107; border-radius:4px; cursor:pointer; background:transparent;">${dict["btn_edit"] || "DÜZENLE"}</span>
+                                   <span class="delete-btn" onclick="deleteUserItem(${i}, event)">${dict["btn_delete"] || "SİL"}</span>
+                                 </div>`;
+                            div.onclick = () => {
+                                if (isPlaying) return showToast(dict["toast_stop_first"] || "⚠️ Lütfen önce çalışan programı durdurun!");
+                                isWellnessMode = false;
+                                highlight(div, false);
+                                currentFreqs = parseFreqs(item.freqs);
+                                currentProgramName = item.name;
+                                freqIndex = 0;
+                                updateInfoText(item.name);
+                                updateStatus();
+                            };
+                            fragment.appendChild(div);
+                            renderCount++;
+                        }
+                    }
+                } else {
+                    // 3. ANA LİSTE
+                    for (let i = 0; i < mainList.length; i++) {
+                        const line = mainList[i];
+                        const searchLine = searchIndex[i];
+
+                        if (searchLine.includes(term)) {
+                            const div = document.createElement('div');
+                            div.className = 'list-item';
+                            const parts = line.split(':');
+                            const pName = parts.slice(0, -1).join(':').trim();
+                            div.innerHTML = `<span style="flex:1;">${line.trim()}</span>
+                                 <button class="fav-btn" onclick="addToFavorites(\`${line.replace(/`/g, '')}\`, event)">${dict["btn_add_to_lib"] || "📚 EKLE"}</button>`;
+                            div.onclick = () => {
+                                if (isPlaying) return showToast(dict["toast_stop_first"] || "⚠️ Lütfen önce çalışan programı durdurun!");
+                                isWellnessMode = false;
+                                highlight(div, false);
+                                currentFreqs = parseFreqs(line);
+                                currentProgramName = pName;
+                                freqIndex = 0;
+                                isPaused = false;
+                                updateInfoText(pName);
+                                document.getElementById('duration').value = "3";
+                                updateStatus();
+                            };
+                            fragment.appendChild(div);
+                            renderCount++;
+                        }
+                    }
+                }
+                listBox.appendChild(fragment);
+            }
+
+            const debouncedSearch = debounce((val) => refreshDisplay(val), 300);
+            document.getElementById('search').oninput = (e) => debouncedSearch(e.target.value);
+            document.getElementById('playBtn').onclick = () => {
+                const btn = document.getElementById('playBtn');
+                const dict = i18n[state.lang] || i18n['tr'];
+                if (isPlaying) {
+                    clearInterval(timerInterval);
+                    window.stopFrequencyZ();
+                    stopSilentAudioLoop();
+                    btn.innerText = dict['btn_resume'] || "DEVAM ET";
+                    btn.style.background = "#007bff";
+                    isPaused = true;
+                    isPlaying = false;
+                } else {
+                    if (currentFreqs.length === 0) return showToast("⚠️ Program seçilmedi!");
+                    
+                    // iOS etkileşim zincirini korumak için AudioContext'i hemen en başta senkron başlatıyoruz
+                    initAudio();
+                    
+                    // wakeLock talebini asenkron olarak arka planda yapıyoruz (initAudio'yu engellememesi için)
+                    if ('wakeLock' in navigator) { 
+                        navigator.wakeLock.request('screen').then(wl => { wakeLock = wl; }).catch(err => {}); 
+                    }
+                    
+                    // Sessiz arka plan döngüsünü başlat
+                    playSilentAudioLoop();
+
+                    btn.innerText = dict['btn_pause'] || "DURAKLAT";
+                    btn.style.background = "#ffc107";
+
+                    // Eğer sıfırdan başlıyorsa süreleri hesapla
+                    if (!isPaused) {
+                        const dv = parseFloat(document.getElementById('duration').value) || 3;
+                        totalRemSeconds = Math.round(currentFreqs.length * dv * 60);
+                        currentFreqRemSeconds = Math.round(dv * 60);
+                    }
+                    isPaused = false;
+                    isPlaying = true;
+                    run();
+                }
+            };
+
+            document.getElementById('stopBtn').onclick = () => {
+                const dict = i18n[state.lang] || i18n['tr'];
+                stop();
+                freqIndex = 0;
+                isPaused = false;
+                isPlaying = false;
+                if (wakeLock) { try { wakeLock.release(); } catch (e) { } wakeLock = null; }
+                document.getElementById('playBtn').innerText = dict['btn_start'] || "BAŞLAT";
+                document.getElementById('playBtn').style.background = "#00e676";
+            };
+
+            function run() {
+                if (freqIndex < currentFreqs.length) {
+                    const f = currentFreqs[freqIndex];
+                    window.playFrequencyZ(f);
+                    if (!isWellnessMode) {
+                        document.getElementById('curFreq').innerText = f + " Hz";
+                    }
+                    const listBox = document.getElementById('listBox');
+                    if (listBox) {
+                        for (let i = 0; i < listBox.children.length; i++) {
+                            if (listBox.children[i].innerText.includes(currentProgramName)) {
+                                highlight(listBox.children[i], true);
+                                break;
+                            }
+                        }
+                    }
+
+                    clearInterval(timerInterval);
+                    timerInterval = setInterval(() => {
+                        currentFreqRemSeconds--;   // O anki frekansın geçişini kontrol eder
+                        totalRemSeconds--;         // Toplam geri sayım
+
+                        // KALAN'da toplam süreyi göster
+                        const rem = Math.max(0, totalRemSeconds);
+                        const m = Math.floor(rem / 60).toString().padStart(2, '0');
+                        const s = (rem % 60).toString().padStart(2, '0');
+                        document.getElementById('curTimer').innerText = `${m}:${s}`;
+
+                        if (currentFreqRemSeconds <= 0) {
+                            clearInterval(timerInterval);
+                            freqIndex++;
+                            // Yeni frekansa geçerken sadece o frekansın süresini sıfırla/yenile
+                            const dv = parseFloat(document.getElementById('duration').value) || 3;
+                            currentFreqRemSeconds = Math.round(dv * 60);
+                            run();
+                        }
+                    }, 1000);
+                } else {
+                    stop();
+                    const dict = i18n[state.lang] || i18n['tr'];
+                    document.getElementById('curFreq').innerText = dict['status_completed'] || "BİTTİ";
+                    document.getElementById('playBtn').innerText = dict['btn_start'] || "BAŞLAT";
+                    document.getElementById('playBtn').style.background = "#00e676";
+                    freqIndex = 0;
+                }
+            }
+
+            function stop() {
+                clearInterval(timerInterval);
+                window.stopFrequencyZ();
+                stopSilentAudioLoop();
+                const dict = i18n[state.lang] || i18n['tr'];
+                document.getElementById('curFreq').innerText = dict['status_stopped'] || "DURDU";
+                document.getElementById('curTimer').innerText = "00:00";
+                document.querySelectorAll('.list-item').forEach(el => {
+                    el.classList.remove('playing');
+                    const icon = el.querySelector('.play-icon');
+                    if (icon) icon.remove();
+                });
+                isPlaying = false;
+            }
+
+            function parseFreqs(metin) {
+                const veri = metin.toString().includes(':') ? metin.split(':').pop() : metin;
+                const matches = veri.match(/[\d.]+/g);
+                return matches ? matches.map(Number).filter(f => f >= 0.45 && f <= 20000) : [];
+            }
+
+            function updateStatus() {
+                const freqCount = currentFreqs.length;
+                const durationPerFreq = parseInt(document.getElementById('duration').value) || 0;
+                document.getElementById('listCount').innerText = freqCount + " FRQ";
+                document.getElementById('totalTimeDisplay').innerText = (freqCount * durationPerFreq) + " DK";
+                const el = document.getElementById('curFreq');
+                if (el) { el.innerText = freqCount > 0 ? "HAZIR" : "LİMİT DIŞI"; el.style.color = freqCount > 0 ? "#00e676" : "#ff5252"; }
+            }
+
+            function highlight(el, isPlaying = false) {
+                document.querySelectorAll('.list-item').forEach(i => { i.classList.remove('selected', 'playing'); const icon = i.querySelector('.play-icon'); if (icon) icon.remove(); });
+                el.classList.add('selected');
+                if (isPlaying) {
+                    el.classList.add('playing');
+                    if (!el.querySelector('.play-icon')) {
+                        const icon = document.createElement('span');
+                        icon.className = 'play-icon'; icon.innerText = '▶️'; icon.style.marginRight = '8px';
+                        el.insertBefore(icon, el.firstChild);
+                    }
+                }
+            }
+
+            document.getElementById('searchBtn').onclick = () => {
+                const searchResultsDiv = document.getElementById('searchResults');
+                const q = document.getElementById('search').value.trim().toLowerCase();
+                searchResultsDiv.innerHTML = '';
+                if (!q) { searchResultsDiv.style.display = 'none'; return; }
+
+                // Frekanslar: sadece adda eşleşen
+                const freqMatches = mainList.filter(line => toLocaleSafe(line).includes(q));
+                // Açıklamalar: adda eşleşmeyen ama açıklamada eşleşen
+                const descMatches = window.descriptions ?
+                    Object.entries(window.descriptions).filter(([k, v]) => toLocaleSafe(k).includes(q) || toLocaleSafe(v).includes(q)) : [];
+
+                const dict = i18n[state.lang] || i18n['tr'];
+                const labelFreqs = dict['search_header_freqs'] || "🎵 Frekanslar";
+                const labelDescs = dict['search_header_descs'] || "📖 Açıklamalar";
+                const labelNoResults = dict['search_no_results'] || "Sonuç bulunamadı.";
+
+                let html = '';
+                if (freqMatches.length > 0) {
+                    html += `<div style='color:#00e676;font-weight:bold;padding:6px 10px;'>${labelFreqs}</div>`;
+                    html += freqMatches.map(line => {
+                        const pName = line.split(':').slice(0, -1).join(':').trim();
+                        return `<div class='list-item' style='cursor:pointer;' onclick='window._searchSelectFreq("${pName.replace(/"/g, '&quot;')}")'>${line.trim()}</div>`;
+                    }).join('');
+                }
+                if (descMatches.length > 0) {
+                    html += `<div style='color:#ffc107;font-weight:bold;padding:6px 10px;margin-top:4px;'>${labelDescs}</div>`;
+                    html += descMatches.map(([k, v]) =>
+                        `<div class='list-item' style='cursor:pointer;color:#ffc107;' onclick='window._searchSelectDesc("${k.replace(/"/g, '&quot;')}")'>${k} <span style='font-size:11px;color:#888;'>${v.length > 100 ? v.slice(0, 100) + '...' : v}</span></div>`
+                    ).join('');
+                }
+                if (!html) html = `<div style='color:#888;padding:10px;'>${labelNoResults}</div>`;
+                searchResultsDiv.innerHTML = html;
+                searchResultsDiv.style.display = 'block';
+            };
+
+            window._searchSelectFreq = function (pName) {
+                const searchResultsDiv = document.getElementById('searchResults');
+                searchResultsDiv.style.display = 'none';
+                refreshDisplay(pName);
+                setTimeout(() => {
+                    const listBox = document.getElementById('listBox');
+                    for (let el of listBox.children) {
+                        if (el.innerText && el.innerText.includes(pName)) { el.click(); break; }
+                    }
+                }, 100);
+            };
+
+            window._searchSelectDesc = function (descKey) {
+                const searchResultsDiv = document.getElementById('searchResults');
+                searchResultsDiv.style.display = 'none';
+                // Açıklamada eşleşen en yakın program adını bul ve seç
+                let match = mainList.find(line => {
+                    const n = line.split(':').slice(0, -1).join(':').trim();
+                    return toLocaleSafe(n) === toLocaleSafe(descKey);
+                });
+
+                if (!match) {
+                    match = mainList.find(line => {
+                        const n = line.split(':').slice(0, -1).join(':').trim();
+                        return toLocaleSafe(n).includes(toLocaleSafe(descKey)) || toLocaleSafe(descKey).includes(toLocaleSafe(n));
+                    });
+                }
+
+                if (match) {
+                    const pName = match.split(':').slice(0, -1).join(':').trim();
+                    refreshDisplay(pName);
+                    setTimeout(() => {
+                        const listBox = document.getElementById('listBox');
+                        for (let el of listBox.children) {
+                            if (el.innerText && el.innerText.includes(pName)) { el.click(); break; }
+                        }
+                    }, 100);
+                } else {
+                    updateInfoText(descKey);
+                }
+            };
+
+            document.addEventListener('click', (e) => {
+                const sr = document.getElementById('searchResults');
+                const si = document.getElementById('search');
+                const sb = document.getElementById('searchBtn');
+                if (sr && !sr.contains(e.target) && e.target !== si && e.target !== sb) {
+                    sr.style.display = 'none';
+                }
+            });
+            window.deleteUserItem = (index, event) => { event.stopPropagation(); if (confirm("Kütüphaneden silinsin mi?")) { userList.splice(index, 1); localStorage.setItem('freq_user_list', JSON.stringify(userList)); refreshDisplay(); } };
+
+            // ── OSİLASKOP DRAW LOOP (audio bağımsız, tek sefer başlar) ──
+            let oscTime = 0; // Zaman ismini değiştirdim ki çakışmasın
+
+            function drawWaveLayer(ctx, w, h, freq, timeOffset, amplitudeMultiplier, alpha, color) {
+                ctx.beginPath();
+                // 90px yüksekliğe göre genliği uyarla
+                let amplitude = h * 0.4 * amplitudeMultiplier;
+
+                for (let x = 0; x <= w; x += 3) {
+                    let normalizedX = (x / w) * 2 - 1;
+                    let centerForce = Math.cos(normalizedX * Math.PI / 2);
+
+                    let yOffset = Math.sin(x * 0.015 + timeOffset) * amplitude * centerForce;
+
+                    // 100 Hz üstünde ufak ufak titremeler başlasın
+                    if (freq > 100) {
+                        let logFreq = Math.max(0, Math.log10(freq));
+                        let jitter = Math.min((freq - 100) / 1000, 3) + (logFreq * 0.5);
+                        yOffset += (Math.sin(x * 0.5 + oscTime * 10) * jitter) * centerForce;
+                    }
+
+                    let y = h / 2 + yOffset;
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+
+                ctx.strokeStyle = color;
+                ctx.globalAlpha = alpha;
+                // Çizgi kalınlığı 90px ekranda daha zarif dursun diye 1.5
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            }
+
+            function startOscDraw() {
+                if (oscDrawActive) return;
+                oscDrawActive = true;
+                const canvas = document.getElementById('oscCanvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = canvas.offsetWidth || 838;
+                canvas.height = canvas.offsetHeight || 90;
+
+                function draw() {
+                    requestAnimationFrame(draw);
+                    // ── WELLNESS ANİMASYON MODU ──────────────────────────
+                    if (isWellnessMode && wAnim) {
+                        drawWellnessAnim(ctx, canvas.width, canvas.height);
+                        return;
+                    }
+                    // ── NORMAL OSİLASKOP MODU (SİMETRİK ENERJİ) ──────────
+                    // Eğer audio başlamadıysa veya frekans yoksa boş siyah ekran yerine hafif düz çigi verelim
+                    let currentF = (currentFreqs && currentFreqs[freqIndex] && analyser) ? currentFreqs[freqIndex] : 0;
+                    let isPlayingState = document.getElementById('playBtn').innerText === "DURAKLAT";
+
+                    const w = canvas.width;
+                    const h = canvas.height;
+
+                    ctx.globalAlpha = 1.0;
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                    ctx.fillRect(0, 0, w, h);
+
+                    // Eger duraklatildiysa veya durdurulduysa (BAŞLAT veya DEVAM ET yazıyorsa) sabit cizgi goster
+                    if (!isPlayingState || currentF === 0) {
+                        ctx.beginPath();
+                        ctx.moveTo(0, h / 2);
+                        ctx.lineTo(w, h / 2);
+                        ctx.strokeStyle = '#00e676';
+                        ctx.globalAlpha = 0.3;
+                        ctx.lineWidth = 1.5;
+                        ctx.stroke();
+                        ctx.globalAlpha = 1.0;
+                        return;
+                    }
+
+                    // 1-1000 Hz arasında ciddi bir hız farkı yaratmak için Logaritmik (Log10) çarpan ekleyelim
+                    // Math.log10(1) = 0, Math.log10(100) = 2, Math.log10(1000) = 3
+                    let logSpeedTemp = Math.max(0, Math.log10(currentF));
+                    let mappedSpeed = 0.05 + (logSpeedTemp * 0.08) + (currentF / 50000);
+                    oscTime += mappedSpeed;
+
+                    // 1-1000 Hz arasında renklerin hızla Mavi'den Yeşile ve Sarıya dönmesi için:
+                    // 1 Hz = Mavi (240), 1000 Hz = Sarı/Turuncu (30-40)
+                    let hue = Math.max(0, 240 - (currentF / 5) - (logSpeedTemp * 20));
+                    let baseColor = `hsl(${hue}, 100%, 60%)`;
+
+                    ctx.shadowBlur = 8; // 90px'e göre blur
+                    ctx.shadowColor = baseColor;
+                    ctx.globalCompositeOperation = 'lighter';
+
+                    // 3 Katman
+                    drawWaveLayer(ctx, w, h, currentF, oscTime, 1.0, 1.0, baseColor);
+                    drawWaveLayer(ctx, w, h, currentF, -oscTime * 0.8, 0.6, 0.5, baseColor);
+                    drawWaveLayer(ctx, w, h, currentF, oscTime + Math.PI, 0.8, 0.7, baseColor);
+
+                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.globalAlpha = 1.0;
+                    ctx.shadowBlur = 0;
+                }
+                draw();
+            }
+
+            function initAudio() {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    analyser = audioCtx.createAnalyser();
+                    analyser.fftSize = 2048;
+                    dataArray = new Uint8Array(analyser.frequencyBinCount);
+                    analyser.connect(audioCtx.destination);
+                    startOscDraw(); // Draw loop zaten başladıysa tekrar başlamaz
+                }
+
+                return audioCtx.state === 'suspended' ? audioCtx.resume() : Promise.resolve();
+            }
+
+            const infoPanelContainer = document.createElement('div');
+            infoPanelContainer.id = 'info-panel-box';
+            infoPanelContainer.style.cssText = "margin:15px; padding:15px; background:#111; border:1px solid #333; border-radius:10px; border-left: 5px solid #ffc107;";
+            infoPanelContainer.innerHTML = `<div style="color:#ffc107; font-family:sans-serif; font-size:12px; font-weight:bold; margin-bottom:5px;" data-i18n="analysis_title">⚡ PROGRAM ANALİZİ</div><div id="infoText" style="color:#00e676; font-family:monospace; font-size:14px;" data-i18n="analysis_ready">Sistem hazır. Lütfen listeden bir program seçin.</div>`;
+            document.body.appendChild(infoPanelContainer);
+
+             function updateInfoText(pName) {
+                const textEl = document.getElementById('infoText');
+                if (!textEl) return;
+                const n = pName.toLowerCase('tr').trim();
+                let foundDesc = "";
+                if (n === "rife sıfırlama programı" || n.includes("rife sıfırlama")) {
+                    foundDesc = "Bu program, Rife'ın faydalarını en üst düzeye çıkarmak için vücudu sıfırlamaya yardımcı olur. Yaklaşık altı haftada bir uygulanması tavsiye edilir.";
+                }
+                if (!foundDesc && window.descriptions) {
+                    for (let key in window.descriptions) { if (n === key.toLowerCase('tr').trim()) { foundDesc = window.descriptions[key]; break; } }
+                }
+                const dict = i18n[state.lang] || i18n['tr'];
+                if (!foundDesc) {
+                    if (n.includes("wellness")) {
+                        foundDesc = dict["wellness_desc"] || "Frekansın sürekli değişmesi, uygulanan frekans seti sonrası kalan canlı patojenleri hedefleyen ek süpürme. Mikroorganizmaların savunma mekanizması geliştirmesini imkansız kılar.";
+                    } else if (n.includes("coil")) {
+                        foundDesc = dict["coil_test_desc"] || "Coil (Bobin) bağlantısını ve çalışmasını test etmek için kullanılan sabit frekans programı.";
+                    }
+                }
+                if (foundDesc) {
+                    textEl.innerText = foundDesc;
+                } else {
+                    let activeMsg = dict["analysis_active"] || "Program: {name} aktif.";
+                    textEl.innerText = activeMsg.replace("{name}", pName.toUpperCase());
+                }
+            }
+
+            // ========== TANITIM TURU (REHBER) SİSTEMİ ==========
+            const tourSteps = [
+                { title: 'Hoş Geldiniz!', text: 'Bu uygulamanın temel özelliklerini size göstereceğiz.' },
+                { title: 'Dikkat', text: 'Rahat bir pozisyonda oturun veya uzanın. <span style="white-space:nowrap">Z-Torus</span> PEMF cihazınızı vücudunuzun merkezine yakın veya uygulama istediğiniz bölgeye yerleştirin. <br><br> Her frekans setinden sonra su içmeyi ihmal etmeyin. En az yarım saat ara vererek toksinlerin atılmasına vakit tanıyın.' },
+                { title: 'Program Ekle', text: 'Size özel bir frekans programı eklemek için sağ üstteki “➕ PROGRAM EKLE” butonunu kullanabilirsiniz.' },
+                { title: 'Arama', text: 'Listede veya açıklamada arama yapmak için üstteki arama kutusunu kullanın.' },
+                { title: 'Başlat/Durdur', text: 'Bir programı başlatmak için “BAŞLAT”, durdurmak için “DURDUR” butonunu kullanın.' },
+                { title: 'Frekans Süresi', text: 'Seçtiğiniz frekans setinde her frekansın çalma süresini ayarlayabilirsiniz.' },
+                { title: 'Frekans Seti Ekle', text: 'Frekans setlerini sağındaki 📚 EKLE butonu ile özel kütüphaneye ekleyebilirsiniz. Frekans ismine tıklayarak eklemeden de çalabilirsiniz.' },
+                { title: 'Kütüphane', text: 'Kendi eklediğiniz programları görmek için “ÖZEL KÜTÜPHANEYİ AÇ” butonuna tıklayın.' },
+                { title: '⚠️ Dikkat', text: 'Bu bir wellness (esenlik) protokolüdür. Tıbbi teşhis veya tedavi yerine geçmez. Bir rahatsızlığınız olduğundan şüpheleniyorsanız aile hekiminize müracaat ediniz.' }
+            ];
+            let tourIndex = 0;
+
+            function showTourStep(idx) {
+                const overlay = document.getElementById('tour-overlay');
+                const box = document.getElementById('tour-box');
+                const title = box.querySelector('h2');
+                const text = document.getElementById('tour-text');
+                if (overlay && title && text) {
+                    title.textContent = tourSteps[idx].title;
+                    text.innerHTML = tourSteps[idx].text;
+                    overlay.style.display = 'flex';
+                }
+            }
+
+            function closeTour() {
+                const overlay = document.getElementById('tour-overlay');
+                if (overlay) overlay.style.display = 'none';
+                localStorage.setItem('freq_tour_shown', '1');
+            }
+
+            document.getElementById('tour-next').onclick = () => { tourIndex++; if (tourIndex < tourSteps.length) showTourStep(tourIndex); else closeTour(); };
+            document.getElementById('tour-prev').onclick = () => { tourIndex--; if (tourIndex < 0) tourIndex = 0; showTourStep(tourIndex); };
+            document.getElementById('tour-close').onclick = () => closeTour();
+            document.getElementById('helpBtn').onclick = () => { tourIndex = 0; showTourStep(0); };
+
+            // İlk girişte göster (Opsiyonel)
+            if (!localStorage.getItem('freq_tour_shown')) {
+                setTimeout(() => { tourIndex = 0; showTourStep(0); }, 1000);
+            }
+
+            // PWA Service Worker Registration
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('sw.js')
+                        .then(reg => console.log('Service Worker registered successfully.', reg))
+                        .catch(err => console.error('Service Worker registration failed.', err));
+                });
+            }
+        </script>
+</body>
+
+</html>
