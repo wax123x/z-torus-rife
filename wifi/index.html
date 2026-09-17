@@ -1102,7 +1102,161 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: inherit;
+    /* ════════════════════════════════════════════════════
+       GİZLİ SES VE SİSTEM AYARLARI MODALI (3 TIKLAMA)
+    ════════════════════════════════════════════════════ */
+    .audio-settings-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .audio-settings-modal.show {
+      display: flex;
+      opacity: 1;
+    }
+    .audio-modal-card {
+      background: #0f172a;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 28px;
+      width: 100%;
+      max-width: 440px;
+      padding: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(139, 92, 246, 0.25);
+      animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes modalPop {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .audio-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .audio-modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .audio-modal-close {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .setting-info h4 {
+      font-size: 14.5px;
+      font-weight: 700;
+      margin-bottom: 2px;
+      color: #f1f5f9;
+    }
+    .setting-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      padding-right: 10px;
+    }
+    .switch-toggle {
+      position: relative;
+      width: 50px;
+      height: 28px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .switch-toggle input { opacity: 0; width: 0; height: 0; }
+    .slider-toggle {
+      position: absolute;
+      inset: 0;
+      background-color: rgba(255, 255, 255, 0.15);
+      border-radius: 34px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .slider-toggle:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+    .switch-toggle input:checked + .slider-toggle {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+    .switch-toggle input:checked + .slider-toggle:before {
+      transform: translateX(22px);
+    }
+    .volume-slider-box {
+      margin-top: 14px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .volume-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13.5px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .range-input {
+      width: 100%;
+      accent-color: #8b5cf6;
+      cursor: pointer;
+    }
+    .test-audio-btn {
+      width: 100%;
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+      color: white;
+      font-size: 14.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .test-audio-btn:hover {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.35) 0%, rgba(59, 130, 246, 0.35) 100%);
     }
   </style>
 </head>
@@ -1253,8 +1407,54 @@
       </div>
       <div class="modal-actions">
         <button class="modal-btn modal-btn-cancel" onclick="closeWifiModal()">İptal</button>
-        <button class="modal-btn modal-btn-confirm" onclick="submitHomeWifi()">Kaydet & Gönder ➔</button>
+  <!-- Modal: Gizli Sesli Bildirim ve Ses Ayarları (3 Tıklama) -->
+  <div class="audio-settings-modal" id="secretAudioModal" onclick="if(event.target===this) closeSecretAudioModal()">
+    <div class="audio-modal-card">
+      <div class="audio-modal-header">
+        <div class="audio-modal-title">
+          <span>🔊</span>
+          <span>Sesli Bildirim &amp; Sistem Ayarları</span>
+        </div>
+        <button class="audio-modal-close" onclick="closeSecretAudioModal()">✕</button>
       </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <h4>Sesli Bildirimler</h4>
+          <p>Seans başlangıcı ve frekans geçişlerinde sesli Türkçe konuşma ve çan uyarısı.</p>
+        </div>
+        <label class="switch-toggle">
+          <input type="checkbox" id="toggleAudioNotify" onchange="updateAudioSettings()">
+          <span class="slider-toggle"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <h4>Titreşimli Bildirim</h4>
+          <p>Seans ve uyarı anlarında cihaz içi titreşim desteği.</p>
+        </div>
+        <label class="switch-toggle">
+          <input type="checkbox" id="toggleVibeNotify" onchange="updateAudioSettings()">
+          <span class="slider-toggle"></span>
+        </label>
+      </div>
+
+      <div class="volume-slider-box">
+        <div class="volume-header">
+          <span>🔊 Konuşma ve Çan Ses Seviyesi</span>
+          <span id="volumeValText" style="color:var(--primary); font-weight:800;">%100</span>
+        </div>
+        <input type="range" id="volumeSlider" class="range-input" min="0" max="100" value="100" oninput="updateAudioSettings()">
+      </div>
+
+      <button class="test-audio-btn" onclick="testAudioSystem()">
+        ▶️ Ses ve Konuşma Sistemini Test Et
+      </button>
+
+      <button onclick="closeSecretAudioModal()" style="width:100%; margin-top:14px; padding:14px; border-radius:16px; border:none; background:var(--primary-grad); color:white; font-size:15px; font-weight:800; cursor:pointer;">
+        ✓ AYARLARI KAYDET VE KAPAT
+      </button>
     </div>
   </div>
 
@@ -1268,9 +1468,9 @@
       <div class="welcome-hero">
         <div class="logo-wrapper">
           <div class="logo-glow"></div>
-          <img src="ztorus_logo.webp" alt="Z-Torus Logo" class="app-logo-img"
+          <img src="ztorus_logo.webp" alt="Z-Torus Logo" class="app-logo-img" onclick="handleTitleTripleClick()" style="cursor:pointer;" title="Ayarlar İçin 3 Kez Tıklayın"
             onerror="this.style.display='none'; document.getElementById('svgFallback').style.display='flex';">
-          <div id="svgFallback" class="app-logo-img" style="display:none; align-items:center; justify-content:center;">
+          <div id="svgFallback" class="app-logo-img" style="display:none; align-items:center; justify-content:center;" onclick="handleTitleTripleClick()">
             <svg width="50" height="50" viewBox="0 0 40 40" fill="none" stroke="#8b5cf6" stroke-width="2">
               <circle cx="20" cy="20" r="10" />
               <ellipse cx="20" cy="20" rx="18" ry="8" />
@@ -1278,7 +1478,7 @@
             </svg>
           </div>
         </div>
-        <h1 class="welcome-title">Z-TORUS<span>ENERGY</span></h1>
+        <h1 class="welcome-title" onclick="handleTitleTripleClick()" style="cursor:pointer;" title="Ayarlar İçin 3 Kez Tıklayın">Z-TORUS<span>ENERGY</span></h1>
         <p class="welcome-sub">Profesyonel Bio-frekans ve Darbeli Manyetik Alan Sistemi</p>
       </div>
 
@@ -1330,7 +1530,7 @@
         <div class="topbar-left">
           <button class="back-icon-btn" onclick="showWelcomeScreen()" title="Bilgi Ekranına Dön">‹</button>
           <div>
-            <div class="topbar-title">Z-TORUS APP</div>
+            <div class="topbar-title" onclick="handleTitleTripleClick()" style="cursor:pointer;" title="Ayarlar İçin 3 Kez Tıklayın">Z-TORUS APP</div>
             <div class="topbar-sub">Frekans Kontrol Merkezi</div>
           </div>
         </div>
@@ -3785,67 +3985,6 @@
     // ── ESP32 Ortak Mesaj İşleyici (BLE Notify & WiFi WebSocket) ──
     function handleDeviceMessage(msg) {
       console.log('[ESP32 Mesajı]:', msg);
-
-      if (msg === 'DONE' || msg === 'FIN' || msg === 'STOPPED' || msg === 'IDLE') {
-        currentActiveIndex = -1;
-        renderQueue();
-        const banner = document.getElementById('esp32Banner');
-        if (banner) banner.style.display = 'none';
-        if (msg === 'DONE' || msg === 'FIN') {
-          triggerCompletionAlert('Z-TORUS: Frekans terapiniz başarıyla tamamlandı!');
-        }
-      } else if (msg.startsWith('PLAYING:')) {
-        const banner = document.getElementById('esp32Banner');
-        if (banner) banner.style.display = 'flex';
-        
-        const rawInfo = msg.replace('PLAYING:', '');
-        const parts = rawInfo.split(',');
-        
-        let hzStr = '';
-        let kalanSec = -1;
-        let modeStr = '';
-
-        parts.forEach(p => {
-          if (p.includes('Hz')) hzStr = p.replace('Hz', '').trim();
-          else if (p.includes('kalan:')) kalanSec = parseInt(p.replace('kalan:', '').replace('sn', '').trim());
-          else if (p === 'SQUARE' || p === 'PULSE') modeStr = p;
-        });
-
-        const savedProg = localStorage.getItem('ztorus_active_prog_name');
-        const progTitle = activeProgramName || savedProg || 'Frekans Terapisi';
-        const savedCount = localStorage.getItem('ztorus_active_queue_count') || '';
-        const countText = savedCount ? ` (${savedCount} Frekans)` : '';
-
-        document.getElementById('esp32BannerText').textContent = `🟢 Aktif Program: ${progTitle}${countText}`;
-
-        let subDetails = [];
-        if (hzStr) subDetails.push(`⚡ Frekans: ${hzStr} Hz`);
-        const totalRemText = getFormattedTotalRemainingTime();
-        if (totalRemText) {
-          subDetails.push(`⏳ Toplam Kalan Süre: ${totalRemText}`);
-        } else if (kalanSec >= 0) {
-          const m = Math.floor(kalanSec / 60);
-          const s = kalanSec % 60;
-          subDetails.push(`⏳ Kalan Süre: ${m > 0 ? m + ' dk ' : ''}${s} sn`);
-        }
-        const waveLabel = (modeStr === 'PULSE' || currentWaveMode === 'w2') ? '⚡ Pulse (%20)' : '🔳 Kare (%50)';
-        subDetails.push(`Mod: ${waveLabel}`);
-
-        document.getElementById('esp32BannerSub').textContent = subDetails.join(' · ');
-      } else if (msg === 'MODE:SQUARE' || msg === 'WAVE:SQUARE') {
-        currentWaveMode = 'w1';
-        updateWaveModeUI();
-      } else if (msg === 'MODE:PULSE' || msg === 'WAVE:PULSE') {
-        currentWaveMode = 'w2';
-        updateWaveModeUI();
-      } else if (msg === 'SHORT_CIRCUIT') {
-        showToast('⚠️ KISA DEVRE! Propları Birbirinden Ayırın.', 'err');
-        triggerCompletionAlert('⚠️ UYARI: Proplarda kısa devre algılandı!');
-      } else if (msg.startsWith('Q_BAT:') || msg.startsWith('BAT:')) {
-        const parts = msg.split(':');
-        if (parts.length > 1) {
-          const pct = parseInt(parts[1]);
-          updateBatteryUI(pct);
         }
       } else if (msg.startsWith('STATUS:')) {
         const parts = msg.split(',');
@@ -3880,9 +4019,32 @@
       }
     }
 
-    // ── ESP32 Bluetooth (Web BLE) Komut Gönderme ──
+    let nativeBleDevice = null;
+
+    // ── ESP32 Bluetooth (Web & Native BLE) Komut Gönderme ──
     async function sendCmd(cmdStr) {
       console.log('[Gönderilen Komut]:', cmdStr);
+
+      // 1. Native Capacitor Mobile App Mode (Android / iOS)
+      const capBle = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.BluetoothLe;
+      if (capBle && nativeBleDevice && isConnected) {
+        try {
+          const encoder = new TextEncoder();
+          const dataArray = Array.from(encoder.encode(cmdStr));
+          const base64Data = btoa(String.fromCharCode(...dataArray));
+          await capBle.write({
+            deviceId: nativeBleDevice.deviceId,
+            service: SERVICE_UUID,
+            characteristic: CHAR_WRITE_UUID,
+            value: base64Data
+          });
+          return true;
+        } catch (e) {
+          console.log('Native BLE Cmd Send Error:', e);
+        }
+      }
+
+      // 2. Standard Web Bluetooth Browser Mode
       if (writeChar && bleDevice && bleDevice.gatt && bleDevice.gatt.connected) {
         const encoder = new TextEncoder();
         await writeChar.writeValue(encoder.encode(cmdStr));
@@ -3891,24 +4053,66 @@
       return false;
     }
 
-    // ── BLE Bluetooth Bağlantı Butonu (Tam Kablosuz Web Bluetooth) ──
+    // ── BLE Bluetooth Bağlantı Butonu (Hem Mobil Uygulama Hem Web Bluetooth) ──
     async function toggleBLE() {
       if (isConnected) {
         if (bleDevice && bleDevice.gatt && bleDevice.gatt.connected) {
           try { bleDevice.gatt.disconnect(); } catch(e){}
         }
-        isConnected = false; bleDevice = null; writeChar = null;
+        const capBle = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.BluetoothLe;
+        if (capBle && nativeBleDevice) {
+          try { await capBle.disconnect({ deviceId: nativeBleDevice.deviceId }); } catch(e){}
+        }
+        isConnected = false; bleDevice = null; writeChar = null; nativeBleDevice = null;
         updateBLEUI();
         showToast('Bluetooth Bağlantısı Kesildi', 'ok');
         return;
       }
 
-      if (!navigator.bluetooth) {
-        showToast('Web Bluetooth bu tarayıcıda desteklenmiyor. Lütfen Chrome/Edge kullanın.', 'err');
+      const capBle = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.BluetoothLe;
+
+      if (!navigator.bluetooth && !capBle) {
+        showToast('Web Bluetooth bu tarayıcıda desteklenmiyor. Lütfen Chrome/Edge veya Mobil Uygulamayı kullanın.', 'err');
         updateBLEUI();
         return;
       }
 
+      // A) NATIVE CAPACITOR MOBILE APP MODE (iOS & Android Uygulaması)
+      if (capBle) {
+        try {
+          showToast('Bluetooth cihazı aranıyor (Mobil Uygulama)...', 'ok');
+          await capBle.initialize();
+
+          const result = await capBle.requestDevice({
+            displayMode: 'scan',
+            scanMode: 2
+          });
+
+          if (!result || !result.deviceId) {
+            showToast('Cihaz seçilmedi.', 'err');
+            return;
+          }
+
+          nativeBleDevice = result;
+          await capBle.connect({ deviceId: result.deviceId });
+
+          isConnected = true;
+          bleDevice = { name: result.name || 'Z-TORUS Cihazı' };
+          updateBLEUI();
+          showToast(`✓ Cihaz Bağlandı: ${bleDevice.name}`, 'ok');
+          speakTurkish('Cihazınıza kablosuz bağlantı kuruldu.');
+          setTimeout(() => sendCmd('STATUS'), 400);
+          return;
+        } catch (capErr) {
+          console.log('Native BLE Error:', capErr);
+          if (!navigator.bluetooth) {
+            showToast('Bağlantı başlatılamadı: ' + (capErr.message || capErr), 'err');
+            return;
+          }
+        }
+      }
+
+      // B) STANDARD WEB BLUETOOTH MODE (Chrome, Edge, Bluefy vb.)
       try {
         showToast('Bluetooth cihazı aranıyor...', 'ok');
         bleDevice = await navigator.bluetooth.requestDevice({
@@ -3936,6 +4140,7 @@
         isConnected = true;
         updateBLEUI();
         showToast('Bluetooth ile Cihaza Bağlandı! ✓', 'ok');
+        speakTurkish('Cihazınıza kablosuz bağlantı kuruldu.');
 
         setTimeout(() => sendCmd('STATUS'), 300);
       } catch (err) {
@@ -4127,8 +4332,88 @@
       }
     }
 
+    // ── 3 Click Secret Audio Settings Menu Trigger ──
+    let titleClickCount = 0;
+    let titleClickTimer = null;
+
+    function handleTitleTripleClick() {
+      titleClickCount++;
+      if (titleClickTimer) clearTimeout(titleClickTimer);
+
+      if (titleClickCount === 3) {
+        titleClickCount = 0;
+        openSecretAudioModal();
+      } else {
+        titleClickTimer = setTimeout(() => {
+          titleClickCount = 0;
+        }, 1500);
+      }
+    }
+
+    function openSecretAudioModal() {
+      const modal = document.getElementById('secretAudioModal');
+      if (modal) {
+        initAudioSettingsUI();
+        modal.classList.add('show');
+        if (isVibrationEnabled && navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        speakTurkish("Sistem sesli bildirim ayarları menüsü.");
+      }
+    }
+
+    function closeSecretAudioModal() {
+      const modal = document.getElementById('secretAudioModal');
+      if (modal) modal.classList.remove('show');
+    }
+
+    let isAudioEnabled = localStorage.getItem('zt_audio_enabled') !== 'false';
+    let audioVolumeLevel = parseFloat(localStorage.getItem('zt_audio_volume') || '1.0');
+    let isVibrationEnabled = localStorage.getItem('zt_vibe_enabled') !== 'false';
+
+    function initAudioSettingsUI() {
+      const toggleAudio = document.getElementById('toggleAudioNotify');
+      const toggleVibe = document.getElementById('toggleVibeNotify');
+      const sliderVol = document.getElementById('volumeSlider');
+      const textVol = document.getElementById('volumeValText');
+
+      if (toggleAudio) toggleAudio.checked = isAudioEnabled;
+      if (toggleVibe) toggleVibe.checked = isVibrationEnabled;
+      if (sliderVol) sliderVol.value = Math.round(audioVolumeLevel * 100);
+      if (textVol) textVol.textContent = `%${Math.round(audioVolumeLevel * 100)}`;
+    }
+
+    function updateAudioSettings() {
+      const toggleAudio = document.getElementById('toggleAudioNotify');
+      const toggleVibe = document.getElementById('toggleVibeNotify');
+      const sliderVol = document.getElementById('volumeSlider');
+      const textVol = document.getElementById('volumeValText');
+
+      if (toggleAudio) {
+        isAudioEnabled = toggleAudio.checked;
+        localStorage.setItem('zt_audio_enabled', isAudioEnabled ? 'true' : 'false');
+      }
+      if (toggleVibe) {
+        isVibrationEnabled = toggleVibe.checked;
+        localStorage.setItem('zt_vibe_enabled', isVibrationEnabled ? 'true' : 'false');
+      }
+      if (sliderVol) {
+        const val = parseInt(sliderVol.value) || 0;
+        audioVolumeLevel = val / 100.0;
+        localStorage.setItem('zt_audio_volume', audioVolumeLevel.toString());
+        if (textVol) textVol.textContent = `%${val}`;
+      }
+    }
+
+    function testAudioSystem() {
+      updateAudioSettings();
+      playCompletionChime();
+      speakTurkish("Z-TORUS Sesli bildirim sistemi aktif. Ses seviyesi yüzde " + Math.round(audioVolumeLevel * 100));
+      if (isVibrationEnabled && navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      showToast("🔊 Test Sesi ve Konuşması Çalınıyor...", "ok");
+    }
+
     // ── Completion Sound, Vibration & Notification Alerts ──
     function playCompletionChime() {
+      if (!isAudioEnabled || audioVolumeLevel <= 0) return;
       try {
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         if (!AudioCtx) return;
@@ -4137,6 +4422,7 @@
           ctx.resume();
         }
         const now = ctx.currentTime;
+        const gainVal = 0.3 * audioVolumeLevel;
 
         // 5 Notalı Huzur Verici Rezonans Melodisi (C5 -> E5 -> G5 -> B5 -> C6) ~2.5 saniye
         const notes = [
@@ -4155,7 +4441,7 @@
           osc.frequency.setValueAtTime(n.f, now + n.time);
 
           gain.gain.setValueAtTime(0, now + n.time);
-          gain.gain.linearRampToValueAtTime(0.3, now + n.time + 0.05);
+          gain.gain.linearRampToValueAtTime(gainVal, now + n.time + 0.05);
           gain.gain.exponentialRampToValueAtTime(0.0001, now + n.time + n.dur);
 
           osc.connect(gain);
@@ -4169,6 +4455,7 @@
 
     // ── Turkish Text-to-Speech (Canlı & Dinamik Türkçe Konuşma) ──
     function speakTurkish(text) {
+      if (!isAudioEnabled || audioVolumeLevel <= 0) return;
       if ('speechSynthesis' in window) {
         try {
           if (window.speechSynthesis.paused) {
@@ -4180,6 +4467,7 @@
           utterance.lang = 'tr-TR';
           utterance.rate = 1.0;   // Doğal konuşma hızı
           utterance.pitch = 1.1;  // Doğal ton
+          utterance.volume = audioVolumeLevel; // Ses seviyesi
 
           // En canlı Türkçe kadın sesini otomatik bul ve seç
           if (window.speechSynthesis.getVoices) {
@@ -4199,7 +4487,7 @@
     function triggerCompletionAlert(msg) {
       playCompletionChime();
       speakTurkish("Terapiniz başarıyla sona erdi. Sağlıklı günler dileriz.");
-      if (navigator.vibrate) navigator.vibrate([400, 200, 400, 200, 600]);
+      if (isVibrationEnabled && navigator.vibrate) navigator.vibrate([400, 200, 400, 200, 600]);
 
       // Terapi bitince kutu ekrandan kalkar, ekran tamamen temiz kalır
       const banner = document.getElementById('esp32Banner');
