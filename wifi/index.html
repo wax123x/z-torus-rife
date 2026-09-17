@@ -94,23 +94,16 @@
     }
 
     .screen {
-      display: none;
+      display: none !important;
       flex-direction: column;
       width: 100%;
       min-height: 100vh;
       padding: 20px 16px 40px;
       opacity: 1;
-      transition: opacity 0.35s ease, transform 0.35s ease;
     }
 
     .screen.active {
-      display: flex;
-      opacity: 1;
-    }
-
-    /* Default: show welcome screen even before JS loads */
-    #screenWelcome {
-      display: flex;
+      display: flex !important;
       opacity: 1;
     }
 
