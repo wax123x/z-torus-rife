@@ -1,6 +1,6 @@
-// Z-TORUS RİFE - Tam Çevrimdışı Service Worker v10
-// İnterneT OLMADAN da çalışır (ESP32 WiFi, BLE, frekans listesi)
-const CACHE_NAME = 'zt-rife-v10';
+// Z-TORUS RİFE - Tam Çevrimdışı Service Worker v11
+// İnternet OLMADAN da çalışır (ESP32 WiFi, BLE, frekans listesi)
+const CACHE_NAME = 'zt-rife-v11';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -51,6 +51,7 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   const url = event.request.url;
+  if (!url.startsWith('http://') && !url.startsWith('https://')) return;
 
   // WebSocket, ESP32 API ve yerel ağ isteklerini ASLA önbelleğe alma
   if (
