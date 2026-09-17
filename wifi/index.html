@@ -4788,10 +4788,34 @@
       localStorage.setItem('pwa_rife_dismissed', '1');
     }
 
+    // Eski önbellekleri temizle ve Service Worker'ı yenile
     if ('serviceWorker' in navigator) {
+      // Önce tüm eski önbellekleri sil
+      if (window.caches) {
+        caches.keys().then(keys => {
+          keys.forEach(key => {
+            if (key !== 'zt-rife-v10') {
+              caches.delete(key);
+              console.log('[Z-TORUS] Eski önbellek silindi:', key);
+            }
+          });
+        });
+      }
+      // Service Worker'ı kaydet ve güncelle
       navigator.serviceWorker.register('sw.js').then(reg => {
         reg.update();
-      }).catch(err => console.log('SW Reg Error:', err));
+        // Yeni SW aktif olduğunda sayfayı otomatik yenile
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if (newWorker) {
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'activated') {
+                console.log('[Z-TORUS] Service Worker güncellendi.');
+              }
+            });
+          }
+        });
+      }).catch(err => console.log('SW Kayıt Hatası:', err));
     }
   </script>
 </body>
