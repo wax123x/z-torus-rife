@@ -16,8 +16,11 @@
   <meta name="application-name" content="Z-TORUS RİFE">
   <link rel="apple-touch-icon" href="icon-192.webp">
   <link rel="icon" type="image/webp" sizes="192x192" href="icon-192.webp">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
+  <!-- Font: Tamamen çevrimdışı - internet gerekmez, sistem fontları kullanılır -->
+  <style>
+    /* System-UI = iPhone'da San Francisco, Android'de Roboto - internet gerekmez */
+    :root { --font-system: system-ui, -apple-system, 'SF Pro Display', BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; }
+  </style>
   <style>
     :root {
       --bg: #0b0f19;
@@ -47,7 +50,7 @@
       height: 100%;
       width: 100%;
       background: var(--bg);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: var(--font-system);
       color: var(--text);
       overflow-x: hidden;
     }
